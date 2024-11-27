@@ -16,7 +16,8 @@ class UserFixtures extends Fixture
         $user->setEmail("admin@ongoing.ch");
         $user->setFirstName("Admin");
         $user->setLastName("Istrator");
-        $user->setPassword("hashme");
+        $user->setPassword('$2y$13$zZ.jB42PpLqc/15EPO5j1eB1jlZ2o/nMPLUEOehszKacrzf59y5HG');
+        $user->setRoles( ['ROLE_USER']);
 
         //$user = FakeUserFactory::createOne();
 
