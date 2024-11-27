@@ -7,5 +7,8 @@
        <h1>
            Welcome
        </h1>
+       <div class="mb-3">
+           You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
+       </div>
    </div>
 {% endblock %}
