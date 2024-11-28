@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Form;
+
+use App\Entity\WorkStatus;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
+class EmployeeFormType extends AbstractType
+{
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('firstName', null, [
+                'label' => 'First Name',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter the first name',
+                    ]),
+                ],
+            ])
+            ->add('lastName', null, [
+                'label' => 'Last Name',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter the last name',
+                    ]),
+                ],
+            ])
+            ->add('firstWorkingDay', DateTimeType::class, [
+                'label' => 'First Working Day',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter the first working day',
+                    ]),
+                ],
+            ])
+            ->add('lastWorkingDay', DateTimeType::class, [
+                'label' => 'Last Working Day',
+                'required'   => false,
+
+            ])
+            ->add('workStatus', EnumType::class, [
+                'class' => WorkStatus::class,
+                'label' => 'work status',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please choose the work Status',
+                    ]),
+                ],
+            ])
+            ->add('email', null, [
+                'label' => 'Email',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter email',
+                    ]),
+                ],
+            ])
+            ->add('businessNumber', null, [
+                'label' => 'Business Number',
+                'required'   => false,
+            ])
+            ->add('privateNumber', null, [
+                'label' => 'Private Number',
+                'required'   => false,
+            ])
+            ->add('streetAndNumber', null, [
+                'label' => 'Street and Number',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a street and number',
+                    ]),
+                ],
+            ])
+            ->add('city', null, [
+                'label' => 'City',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a city',
+                    ]),
+                ],
+            ])
+            ->add('postalCode', null, [
+                'label' => 'Postal Code',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a postal code',
+                    ]),
+                ],
+            ])
+            ->add('monthlySalary', null, [
+                'label' => 'Monthly Salary',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter  monthly salary',
+                    ]),
+                ],
+            ])
+            ->add('jobTitle', null, [
+                'label' => 'Job Title',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter the job title',
+                    ]),
+                ],
+            ])
+        ;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([]);
+    }
+}
