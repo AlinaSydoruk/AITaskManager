@@ -15,9 +15,12 @@
                        {{ employee.firstname }}  {{ employee.lastName }}, {{ employee.email }}
                    </div>
                </a>
+               <a href="{{ path('app_employee_delete' ,{"id" : employee.id} ) }}"> Delete </a>
            </div>
        {% endfor %}
-
        {{ pagerfanta(pagerfanta) }}
+
+       <a href="{{ path('app_employee_create') }}"> Create new Employee</a>
+
    </div>
 {% endblock %}

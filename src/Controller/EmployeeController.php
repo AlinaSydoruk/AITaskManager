@@ -6,15 +6,10 @@ use App\Entity\Employee;
 use App\Form\EmployeeFormType;
 use App\Repository\EmployeeRepository;
 use App\Service\EmployeeService;
-use BabDev\PagerfantaBundle\Serializer\Handler\PagerfantaHandler;
-
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[Route('/employee', name: 'app_employee_')]
 class EmployeeController extends AbstractController
 {
@@ -26,12 +21,8 @@ class EmployeeController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(EmployeeRepository $employeeRepository, Request $request): Response
     {
-        $queryBuilder = $employeeRepository->createEmployeesQueryBuilder();
-        $pagerfanta = new Pagerfanta(
-            new QueryAdapter($queryBuilder)
-        );
-        $pagerfanta->setMaxPerPage(10);
-        $pagerfanta->setCurrentPage($request->query->get('page', 1));
+        $page = $request->query->getInt('page', 1);
+        $pagerfanta = $this->employeeService->paginateEmployees($page,10);
         return $this->render('employee/index.html.twig',[
             'pagerfanta' => $pagerfanta,
         ]);
@@ -55,7 +46,7 @@ class EmployeeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
             $this->employeeService->updateEmployee($updatedEmployee);
-
+            $this->addFlash('success', 'Employee has been updated');
             return $this->redirectToRoute('app_employee_show', [
                 'id' => $employee->getId()
             ]);
@@ -67,4 +58,30 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+    #[Route('/{id}/delete', name: 'delete')]
+    public function delete(Employee $employee): Response
+    {
+        $this->employeeService->deleteEmployee($employee);
+        $this->addFlash('success', 'Employee has been deleted');
+        return $this->redirectToRoute('app_employee_index');
+    }
+
+    #[Route('/create', name: 'create')]
+    public function create(Request $request): Response
+    {
+        dd($request);
+        $form = $this->createForm(EmployeeFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $employee = $form->getData();
+            dd($employee);
+            $this->employeeService->createEmployee($employee);
+            $this->addFlash('success', 'Employee has been created');
+            return $this->redirectToRoute('app_employee_index');
+        }
+
+        return $this->render('employee/edit.html.twig', [
+            'form' => $form,
+        ]);
+    }
 }

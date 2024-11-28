@@ -9,10 +9,10 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 trait EntityManagerRepoTrait
 {
-    public function update($entity): void
+    public function save($entity): void
     {
         $entityManager = $this->getEntityManager();
-        $entityManager->persist($entity);
+        $entityManager-> persist($entity);
         $entityManager->flush();
 
     }

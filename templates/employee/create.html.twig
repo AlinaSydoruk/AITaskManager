@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}  Edit  {% endblock %}
+
+{% block body %}
+   <div>
+       <h1>
+           Create new Employee
+       </h1>
+       {{ form_start(form) }}
+       <div class="mb-3">
+           <div class="m-2 p-2 bg-gray">
+                 {{ form_row(form.firstName) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.lastName) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.firstWorkingDay) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.lastWorkingDay) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.workStatus) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.email) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.businessNumber) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.privateNumber) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.streetAndNumber) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.city) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.postalCode) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.monthlySalary) }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               {{ form_row(form.jobTitle) }}
+           </div>
+       </div>
+   </div>
+
+    <button type="submit">Create</button>
+
+    {{ form_end(form) }}
+
+    <a href="{{  path('app_employee_index')}}"> Back </a>
+{% endblock %}
