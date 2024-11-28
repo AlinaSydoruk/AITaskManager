@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ employee.firstname }} {% endblock %}
+
+{% block body %}
+   <div>
+       <h1>
+           Employees {{ employee.id}}
+       </h1>
+       <div class="mb-3">
+           <div class="m-2 p-2 bg-gray">
+               First name : {{ employee.firstname }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Last name : {{ employee.lastName }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               First Working Day :  {{ employee.firstWorkingDay |date("m/d/Y") }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Last Working Day : {{ employee.lastWorkingDay |date("m/d/Y") }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+                Work Status : {{ employee.workStatus.value }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Email : {{ employee.email }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Business Number : {{ employee.businessNumber }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Private Number : {{ employee.privateNumber}}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Street And Number : {{ employee.streetAndNumber}}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               City : {{ employee.city}}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Postal Code : {{ employee.postalCode}}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Monthly Salary : {{ employee.monthlySalary}}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               Job Title : {{ employee.jobTitle}}
+           </div>
+       </div>
+   </div>
+
+    <a href="{{ path('app_employee_index') }}"> Back </a>
+{% endblock %}

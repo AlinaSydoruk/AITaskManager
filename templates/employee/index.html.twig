@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Employees{% endblock %}
+
+{% block body %}
+   <div>
+       <h1>
+           Employees
+       </h1>
+
+       {% for employee in pagerfanta %}
+           <div class="m-2 bg-gray">
+               <a href="{{ path("app_employee_show" , {'id' : employee.id}) }}">
+                   <div class="mb-3">
+                       {{ employee.firstname }}  {{ employee.lastName }}, {{ employee.email }}
+                   </div>
+               </a>
+           </div>
+       {% endfor %}
+
+       {{ pagerfanta(pagerfanta) }}
+   </div>
+{% endblock %}

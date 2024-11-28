@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,6 +16,15 @@ class EmployeeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Employee::class);
     }
+
+    public function createEmployeesQueryBuilder(): QueryBuilder
+    {
+        return $this->createQueryBuilder('e')
+            ->orderBy('e.id', 'ASC');
+
+    }
+
+
 
 //    /**
 //     * @return Employee[] Returns an array of Employee objects
