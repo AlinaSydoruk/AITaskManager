@@ -19,7 +19,7 @@ class EmployeeController extends AbstractController
     {}
 
     #[Route('/', name: 'index')]
-    public function index(EmployeeRepository $employeeRepository, Request $request): Response
+    public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
         $pagerfanta = $this->employeeService->paginateEmployees($page,10);
@@ -28,6 +28,23 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+    #[Route('/create', name: 'create')]
+    public function create(Request $request): Response
+    {
+        $employee = new Employee();
+        $form = $this->createForm(EmployeeFormType::class, $employee);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $employee = $form->getData();
+            $this->employeeService->saveEmployee($employee);
+            $this->addFlash('success', 'Employee has been created');
+            return $this->redirectToRoute('app_employee_index');
+        }
+
+        return $this->render('employee/create.html.twig', [
+            'form' => $form,
+        ]);
+    }
 
     #[Route('/{id}', name: 'show')]
     public function show(Employee $employee): Response
@@ -37,18 +54,26 @@ class EmployeeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'edit')]
-    public function edit (Employee $employee , Request $request , ): Response
+   #[Route('/delete/{id}', name: 'delete')]
+    public function delete(Employee $employee): Response
     {
+        $this->employeeService->deleteEmployee($employee);
+        $this->addFlash('success', 'Employee has been deleted');
+        return $this->redirectToRoute('app_employee_index');
+    }
+
+    #[Route('/edit/{id}', name: 'edit')]
+    public function edit(int $id , Request $request): Response
+    {
+        $employee = $this->employeeService->getEmployeeById($id);
         $form = $this->createForm(EmployeeFormType::class, $employee);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
-            $this->employeeService->updateEmployee($updatedEmployee);
+            $this->employeeService->saveEmployee($updatedEmployee);
             $this->addFlash('success', 'Employee has been updated');
             return $this->redirectToRoute('app_employee_show', [
-                'id' => $employee->getId()
+                'id' => $id
             ]);
         }
 
@@ -58,30 +83,4 @@ class EmployeeController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'delete')]
-    public function delete(Employee $employee): Response
-    {
-        $this->employeeService->deleteEmployee($employee);
-        $this->addFlash('success', 'Employee has been deleted');
-        return $this->redirectToRoute('app_employee_index');
-    }
-
-    #[Route('/create', name: 'create')]
-    public function create(Request $request): Response
-    {
-        dd($request);
-        $form = $this->createForm(EmployeeFormType::class);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $employee = $form->getData();
-            dd($employee);
-            $this->employeeService->createEmployee($employee);
-            $this->addFlash('success', 'Employee has been created');
-            return $this->redirectToRoute('app_employee_index');
-        }
-
-        return $this->render('employee/edit.html.twig', [
-            'form' => $form,
-        ]);
-    }
 }

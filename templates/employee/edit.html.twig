@@ -6,7 +6,7 @@
    <div>
 
        <h1>
-           Employees {{ id}}
+           Employee {{ id }}
        </h1>
        {{ form_start(form) }}
        <div class="mb-3">
@@ -56,5 +56,5 @@
 
     {{ form_end(form) }}
 
-    <a href="{{ path('app_employee_show' , {"id" : id }) }}"> Back </a>
+        <a href="{{ path('app_employee_show' , {"id" : id }) }}"> Back </a>
 {% endblock %}

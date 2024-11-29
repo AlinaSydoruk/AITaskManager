@@ -14,11 +14,6 @@ readonly class EmployeeService
     ) { }
 
 
-    public function updateEmployee(Employee $employee): void
-    {
-        $this->employeeRepository->save($employee);
-    }
-
     public function paginateEmployees($page, $maxEmployeesPerPage): Pagerfanta
     {
         $queryBuilder = $this->employeeRepository->createEmployeesQueryBuilder();
@@ -35,8 +30,13 @@ readonly class EmployeeService
         $this->employeeRepository->remove($employee);
     }
 
-    public function createEmployee(Employee $employee): void
+    public function saveEmployee(Employee $employee): void
     {
         $this->employeeRepository->save($employee);
+    }
+
+    public function getEmployeeById(int $id): Employee
+    {
+        return $this->employeeRepository->find($id);
     }
 }
