@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Absence  {% endblock %}
+
+{% block body %}
+   <div>
+       <h1>
+           Absence {{ absence.id}}  , {{ absence.startDate |date("m/d/Y")  }}  -  {{ absence.endDate |date("m/d/Y")  }}
+       </h1>
+       <div class="mb-3">
+           <div class="m-2 p-2 bg-gray">
+               start date  : {{ absence.startDate |date("m/d/Y")  }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               end date : {{ absence.endDate |date("m/d/Y")  }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               absence type : {{ absence.absenceType.value }}
+           </div>
+           <div class="m-2 p-2 bg-gray">
+               comment: {{ absence.comment }}
+           </div>
+       </div>
+   </div>
+
+    <a href="{{ path('app_absence_edit' , {"employeeId" : employeeId , "id" : absence.id }) }}"> Edit </a>
+    <br>
+    <a href="{{ path('app_absence_delete' , {"employeeId" : employeeId , "id" : absence.id }) }}"> Delete this absence</a>
+    <br>
+    <a href="{{ path('app_employee_show' , {"id" : employeeId }) }}"> Back </a>
+{% endblock %}
