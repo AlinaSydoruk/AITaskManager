@@ -4,7 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Form\EmployeeFormType;
-use App\Service\EmployeeService;
+use App\Repository\EmployeeRepository;
+use App\Service\PaginateEmployeesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,7 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class EmployeeController extends AbstractController
 {
     public function __construct(
-        private readonly EmployeeService $employeeService
+        private readonly PaginateEmployeesService $paginateEmployeesService,
+        private readonly EmployeeRepository       $employeeRepository
     )
     {}
 
@@ -21,7 +23,7 @@ class EmployeeController extends AbstractController
     public function index(Request $request): Response
     {
         $page = $request->query->getInt('page', 1);
-        $pagerfanta = $this->employeeService->paginateEmployees($page,10);
+        $pagerfanta = $this->paginateEmployeesService->paginateEmployees($page,10);
         return $this->render('employee/index.html.twig',[
             'pagerfanta' => $pagerfanta,
         ]);
@@ -35,7 +37,7 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $employee = $form->getData();
-            $this->employeeService->saveEmployee($employee);
+            $this->employeeRepository->save($employee);
             $this->addFlash('success', 'Employee has been created');
             return $this->redirectToRoute('app_employee_index');
         }
@@ -56,7 +58,7 @@ class EmployeeController extends AbstractController
    #[Route('/delete/{id}', name: 'delete')]
     public function delete(Employee $employee): Response
     {
-        $this->employeeService->deleteEmployee($employee);
+        $this->employeeRepository->remove($employee);
         $this->addFlash('success', 'Employee has been deleted');
         return $this->redirectToRoute('app_employee_index');
     }
@@ -64,12 +66,12 @@ class EmployeeController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(int $id , Request $request): Response
     {
-        $employee = $this->employeeService->getEmployeeById($id);
+        $employee = $this->employeeRepository->find($id);
         $form = $this->createForm(EmployeeFormType::class, $employee);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
-            $this->employeeService->saveEmployee($updatedEmployee);
+            $this->employeeRepository->save($updatedEmployee);
             $this->addFlash('success', 'Employee has been updated');
             return $this->redirectToRoute('app_employee_show', [
                 'id' => $id

@@ -7,7 +7,7 @@ use App\Repository\EmployeeRepository;
 use Pagerfanta\Doctrine\ORM\QueryAdapter;
 use Pagerfanta\Pagerfanta;
 
-readonly class EmployeeService
+readonly class PaginateEmployeesService
 {
     public function __construct(
         private EmployeeRepository        $employeeRepository
@@ -23,20 +23,5 @@ readonly class EmployeeService
         $pagerfanta->setMaxPerPage($maxEmployeesPerPage);
         $pagerfanta->setCurrentPage($page);
         return $pagerfanta;
-    }
-
-    public function deleteEmployee(Employee $employee): void
-    {
-        $this->employeeRepository->remove($employee);
-    }
-
-    public function saveEmployee(Employee $employee): void
-    {
-        $this->employeeRepository->save($employee);
-    }
-
-    public function getEmployeeById(int $id): Employee
-    {
-        return $this->employeeRepository->find($id);
     }
 }
