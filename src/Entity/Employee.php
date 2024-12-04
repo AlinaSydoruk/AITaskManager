@@ -7,52 +7,67 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
 class Employee
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $firstWorkingDay = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastWorkingDay = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?WorkStatus $workStatus = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private ?string $email = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    //#[AssertPhoneNumber(defaultRegion: "CH")]
     private ?string $businessNumber = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    //#[AssertPhoneNumber(defaultRegion: "CH")]
     private ?string $privateNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $streetAndNumber = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $postalCode = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank]
+    #[Assert\Positive]
     private ?int $monthlySalary = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $jobTitle = null;
 
     /**

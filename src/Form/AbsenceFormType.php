@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AbsenceFormType extends AbstractType
@@ -26,6 +27,10 @@ class AbsenceFormType extends AbstractType
                     new NotBlank([
                         'message' => 'Please enter the first absence day',
                     ]),
+                    new GreaterThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'The start date cannot be earlier than today',
+                    ]),
                 ],
             ])
             ->add('endDate', DateTimeType::class, [
@@ -33,6 +38,10 @@ class AbsenceFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the last absence day',
+                    ]),
+                    new GreaterThanOrEqual([
+                        'propertyPath' => 'parent.all[startDate].data',
+                        'message' => 'The start date cannot be earlier than start date',
                     ]),
                 ],
             ])
@@ -54,6 +63,6 @@ class AbsenceFormType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults([]);
+        $resolver->setDefaults(['data_class' => Absence::class]);
     }
 }

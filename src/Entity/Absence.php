@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AbsenceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
 class Absence
@@ -14,20 +15,24 @@ class Absence
         $this->employee = $employee;
     }
     #[ORM\Id]
-    #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     private ?int $id = null;
-
+    #[Assert\GreaterThanOrEqual ( 'today' ) ]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $startDate = null;
 
+    #[Assert\GreaterThanOrEqual ( propertyPath : 'startDate' ) ]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $comment = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?AbsenceType $absenceType = null;
 
     #[ORM\ManyToOne(inversedBy: 'absences')]
