@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 
@@ -41,11 +42,21 @@ class EmployeeFormType extends AbstractType
                     new NotBlank([
                         'message' => 'Please enter the first working day',
                     ]),
+                    new GreaterThanOrEqual([
+                        'value' => 'today',
+                        'message' => 'First working day cannot be earlier than today',
+                    ]),
                 ],
             ])
             ->add('lastWorkingDay', DateTimeType::class, [
                 'label' => 'Last Working Day',
                 'required'   => false,
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'propertyPath' => 'parent.all[firstWorkingDay].data',
+                        'message' => 'Last working day cannot be earlier than First working date',
+                    ]),
+                ],
 
             ])
             ->add('workStatus', EnumType::class, [

@@ -41,7 +41,7 @@ class AbsenceFormType extends AbstractType
                     ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[startDate].data',
-                        'message' => 'The start date cannot be earlier than start date',
+                        'message' => 'The end date cannot be earlier than start date',
                     ]),
                 ],
             ])

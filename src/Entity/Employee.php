@@ -27,8 +27,10 @@ class Employee
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
+    #[Assert\GreaterThanOrEqual ( 'today' ) ]
     private ?\DateTimeInterface $firstWorkingDay = null;
 
+    #[Assert\GreaterThanOrEqual ( propertyPath : 'firstWorkingDay' ) ]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastWorkingDay = null;
 
