@@ -28,32 +28,7 @@ Start async message consumer
 ddev php bin/console messenger:consume async
 ```
 
-Start scheduler 
-- Check HPD reminder email
-
-
-```bash
-ddev php bin/console messenger:consume scheduler_default
-```
-
-# Translations (Intl ICU)
-
-```bash
-ddev php bin/console jms:translation:extract --dir "src" --output-dir "translations" --default-output-format yaml --intl-icu
-```
 # Clear cache
 ```bash
 ddev php bin/console cache:clear
-```
-
-# run tests
-Setup test DB if you haven't already
-```bash
-ddev php bin/console doct:database:create --env=test
-ddev php bin/console doct:schema:update --force --env=test
-```
-
-Run PHPUnit tests
-```bash
-ddev test
 ```
