@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Absence;
 use App\Form\AbsenceFormType;
-use App\Service\AbsenceService;
-use App\Service\EmployeeService;
+use App\Repository\AbsenceRepository;
+use App\Repository\EmployeeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +14,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class AbsenceController extends AbstractController
 {
     public function __construct(
-        private readonly AbsenceService $absenceService,
-        private readonly EmployeeService $employeeService,
+        private readonly AbsenceRepository  $absenceRepository,
+        private readonly EmployeeRepository $employeeRepository,
     )
     {}
 
@@ -27,15 +27,15 @@ class AbsenceController extends AbstractController
         $isEdit = true;
         if(!$id){
             $isEdit=false;
-            $absence = new Absence($this->employeeService->getEmployeeById($employeeId));
+            $absence = new Absence($this->employeeRepository->find($employeeId));
         }else{
-            $absence = $this->absenceService->getAbsenceById($id);
+            $absence = $this->absenceRepository->find($id);
         }
         $form = $this->createForm(AbsenceFormType::class, $absence);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedAbsence = $form->getData();
-            $this->absenceService->saveAbsence($updatedAbsence);
+            $this->absenceRepository->save($updatedAbsence);
             if ($isEdit){
                 $this->addFlash('success', 'Absence has been updated');
                 return $this->redirectToRoute('app_absence_show', [
@@ -60,8 +60,8 @@ class AbsenceController extends AbstractController
     #[Route('/delete/{employeeId}/{id}', name: 'delete')]
     public function delete(int $id, int $employeeId): Response
     {
-        $absence = $this->absenceService->getAbsenceById($id);
-        $this->absenceService->deleteAbsence($absence);
+        $absence = $this->absenceRepository->find($id);
+        $this->absenceRepository->remove($absence);
         $this->addFlash('success', 'Absence has been deleted');
         return $this->redirectToRoute('app_employee_show', [
             'id' => $employeeId
@@ -71,7 +71,7 @@ class AbsenceController extends AbstractController
     #[Route('/{employeeId}/{id}', name: 'show')]
     public function show(int $id, int $employeeId): Response
     {
-        $absence = $this->absenceService->getAbsenceById($id);
+        $absence = $this->absenceRepository->find($id);
         return $this->render("absence/show.html.twig", [
             'absence' => $absence,
             'employeeId' => $employeeId
