@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Repository\AbsenceRepository;
 use App\Repository\EmployeeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -15,8 +16,6 @@ class ExportService
     )
     {
     }
-
-
     public function exportEmployeeData(): string
     {
 
@@ -92,7 +91,8 @@ class ExportService
         }
 
         $fileName = 'employee.xlsx';
-        $writer = new Xlsx($spreadsheet);
+
+        $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($fileName);
 
         return $fileName;
