@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Repository\AbsenceRepository;
 use App\Repository\EmployeeRepository;
+use App\UploaderHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -13,19 +14,17 @@ class ExportService
 {
     public function __construct(
         private readonly EmployeeRepository $employeeRepository,
+        private readonly UploaderHelper     $uploaderHelper,
     )
     {
     }
-    public function exportEmployeeData(): string
+    public function exportEmployeeData(string $fileName): string
     {
 
         $spreadsheet = new Spreadsheet();
 
-        $employeeSheet = $spreadsheet->createSheet(0);
-        $employeeSheet->setTitle('Employees');
-
-        $absenceSheet = $spreadsheet->createSheet(1);
-        $absenceSheet->setTitle('Absences');
+        $employeeSheet = $spreadsheet->getSheet(0)->setTitle('Employees');
+        $absenceSheet = $spreadsheet->createSheet(1)->setTitle('Absences');
 
         // headers for Employee
         $employeeSheet->setCellValue('A1', 'ID')
@@ -90,18 +89,9 @@ class ExportService
             $rowAbsence++;
         }
 
-        $fileName = 'employee.xlsx';
-
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
-        $writer->save($fileName);
+        $writer->save($this->uploaderHelper->getPublicPathWithFileName($fileName));
 
         return $fileName;
     }
-
-
-   /* public function exportAbsenceData(): string
-    {
-
-
-    }*/
 }

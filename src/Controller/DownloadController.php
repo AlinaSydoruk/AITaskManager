@@ -26,11 +26,8 @@ class DownloadController extends AbstractController
     #[Route('/employees', name: 'employees')]
     public function downloadEmployees(UploaderHelper $uploaderHelper): Response
     {
-        $fileName = $this->exportService->exportEmployeeData();
-        $filePath = $this->getParameter('kernel.project_dir') . $uploaderHelper->getPublicPath($fileName);
-        return $this->file( $filePath, $fileName);
-
-
-
+        $fileName = $this->exportService->exportEmployeeData('employee.xlsx');
+        $filePath = $uploaderHelper->getPublicPathWithFileName($fileName);
+        return $this->file($filePath, $fileName);
     }
 }

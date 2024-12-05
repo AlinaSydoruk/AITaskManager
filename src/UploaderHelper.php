@@ -2,12 +2,18 @@
 
 namespace App;
 
-class UploaderHelper
-{
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-    public function getPublicPath(string $path): string
+readonly class UploaderHelper
+{
+    public function __construct(
+        private ParameterBagInterface $parameterBag
+    )
     {
-        return '/public/uploads/' . $path;
+    }
+    public function getPublicPathWithFileName(string $fileName): string
+    {
+        return $this->parameterBag->get('kernel.project_dir') . '/public/uploads/' . $fileName;
     }
 
 }
