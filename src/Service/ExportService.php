@@ -90,7 +90,7 @@ class ExportService
         }
 
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
-        $writer->save($this->uploaderHelper->getPublicPathWithFileName($fileName));
+        $writer->save($this->uploaderHelper->getPublicDownloadsPath() . $fileName);
 
         return $fileName;
     }

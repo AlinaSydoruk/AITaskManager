@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Form\EmployeeFormType;
+use App\Form\UploadFormType;
 use App\Repository\EmployeeRepository;
 use App\Service\PaginateEmployeesService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -51,8 +52,10 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'show')]
     public function show(Employee $employee): Response
     {
+        $uploadForm = $this->createForm(UploadFormType::class);
         return $this->render("employee/show.html.twig", [
             'employee' => $employee,
+            'uploadForm' => $uploadForm,
         ]);
     }
 
