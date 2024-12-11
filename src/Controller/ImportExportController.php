@@ -34,8 +34,8 @@ class ImportExportController extends AbstractController
         return $this->file($filePath, $fileName);
     }
 
-    #[Route('/upload/{employeeId}/absences', name: 'app_upload_absences')]
-    public function uploadAbsences(Request $request, int $employeeId ): Response
+    #[Route('/upload/absences', name: 'app_upload_absences')]
+    public function uploadAbsences(Request $request ): Response
     {
 
         $uploadForm = $this->createForm(UploadFormType::class);
@@ -43,10 +43,9 @@ class ImportExportController extends AbstractController
         if ($uploadForm->isValid()) {
             /**@var UploadedFile $uploadedFile */
             $uploadedFile = $uploadForm['uploadFile']->getData();
-            $newFileName = $this->uploaderHelper->createUniqueFilename($uploadedFile);
-            $uploadedFile->move($this->uploaderHelper->getUploadsPath(), $newFileName);
+            $this->uploaderHelper->UploadFile($uploadedFile);
             $this->addFlash('success' , 'absences uploaded successfully');
-            return $this->redirectToRoute("app_employee_show", ['id' => $employeeId]);
+            return $this->redirectToRoute("app_employee_index");
         }
         return new Response('something went wrong ... ', Response::HTTP_BAD_REQUEST);
 

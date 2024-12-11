@@ -23,10 +23,12 @@ class EmployeeController extends AbstractController
     #[Route('/', name: 'index')]
     public function index(Request $request): Response
     {
+        $uploadForm = $this->createForm(UploadFormType::class);
         $page = $request->query->getInt('page', 1);
         $pagerfanta = $this->paginateEmployeesService->paginateEmployees($page,10);
         return $this->render('employee/index.html.twig',[
             'pagerfanta' => $pagerfanta,
+            'uploadForm' => $uploadForm,
         ]);
     }
 
@@ -38,7 +40,6 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $employee = $form->getData();
-            dd($employee);
             $this->employeeRepository->save($employee);
             $this->addFlash('success', 'Employee has been created');
             return $this->redirectToRoute('app_employee_index');
@@ -52,10 +53,8 @@ class EmployeeController extends AbstractController
     #[Route('/{id}', name: 'show')]
     public function show(Employee $employee): Response
     {
-        $uploadForm = $this->createForm(UploadFormType::class);
         return $this->render("employee/show.html.twig", [
             'employee' => $employee,
-            'uploadForm' => $uploadForm,
         ]);
     }
 

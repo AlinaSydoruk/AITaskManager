@@ -22,3 +22,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+
+    App\UploaderHelper:
+        arguments:
+            $publicDownloadsDir: '%kernel.project_dir%%env(PUBLIC_DOWNLOADS_DIR)%'
+            $uploadsDir: '%kernel.project_dir%%env(UPLOADS_DIR)%'

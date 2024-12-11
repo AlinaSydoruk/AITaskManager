@@ -32,3 +32,8 @@ ddev php bin/console messenger:consume async
 ```bash
 ddev php bin/console cache:clear
 ```
+
+
+Problems 
+
+-- upload file , form errors aren`t displayed 

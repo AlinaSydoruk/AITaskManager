@@ -22,5 +22,13 @@
 
        <a href="{{ path('app_employee_create') }}"> Create new Employee</a>
        <a href="{{ path('app_download_employees') }}">Download File</a>
+
+       <div>
+           {{ form_start (uploadForm, {'action': path('app_upload_absences' )} )  }}
+           {{ form_errors(uploadForm) }}
+           {{ form_row(uploadForm.uploadFile)}}
+           <button type="submit">Upload Absences</button>
+           {{ form_end(uploadForm) }}
+       </div>
    </div>
 {% endblock %}

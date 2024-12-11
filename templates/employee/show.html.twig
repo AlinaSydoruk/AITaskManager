@@ -69,12 +69,7 @@
     <br>
     <a href="{{ path('app_absence_create' , {"employeeId" : employee.id }) }}"> Add new absence</a>
 
-    {{ form_start (uploadForm, {'action': path('app_upload_absences' , { "employeeId" : employee.id } ) }) }}
-    {{ form_row(uploadForm.uploadFile)  }}
 
-    <button type="submit">Upload Absence</button>
-
-    {{ form_end(uploadForm) }}
 
 
 
