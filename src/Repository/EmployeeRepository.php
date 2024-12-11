@@ -89,6 +89,15 @@ class EmployeeRepository extends ServiceEntityRepository
     }
 
 
+    public function findEmployeeByEmail($value): ?Employee
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.email = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
 
 
 //    /**
@@ -106,13 +115,5 @@ class EmployeeRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Employee
-//    {
-//        return $this->createQueryBuilder('e')
-//            ->andWhere('e.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+
 }

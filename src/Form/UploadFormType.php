@@ -2,21 +2,11 @@
 
 namespace App\Form;
 
-use App\Entity\Absence;
-use App\Entity\AbsenceType;
-use App\Entity\WorkStatus;
+
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\File;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class UploadFormType extends AbstractType
 {
@@ -30,7 +20,8 @@ class UploadFormType extends AbstractType
                     new File([
                         'maxSize' => '16M',
                         'mimeTypes' => [
-                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+                            'application/vnd.ms-excel', // xls
+                            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // xlsx
                         ],
                         'mimeTypesMessage' => 'Please upload a valid XLSX',
                         'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}',

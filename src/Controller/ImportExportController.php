@@ -43,11 +43,16 @@ class ImportExportController extends AbstractController
         if ($uploadForm->isValid()) {
             /**@var UploadedFile $uploadedFile */
             $uploadedFile = $uploadForm['uploadFile']->getData();
-            $this->uploaderHelper->UploadFile($uploadedFile);
+            try {
+                $this->uploaderHelper->UploadExcelFile($uploadedFile);
+            }catch (\LogicException $exception){
+                return new Response( $exception->getMessage(), Response::HTTP_BAD_REQUEST);
+            }
+
             $this->addFlash('success' , 'absences uploaded successfully');
             return $this->redirectToRoute("app_employee_index");
         }
-        return new Response('something went wrong ... ', Response::HTTP_BAD_REQUEST);
+        return new Response( $uploadForm->getErrors(), Response::HTTP_BAD_REQUEST);
 
     }
 }
