@@ -38,6 +38,7 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('firstWorkingDay', DateTimeType::class, [
                 'label' => 'First Working Day',
+                //'format' => 'dd-MM-yyyy',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the first working day',
@@ -49,7 +50,9 @@ class EmployeeFormType extends AbstractType
                 ],
             ])
             ->add('lastWorkingDay', DateTimeType::class, [
+                'widget' => 'single_text',
                 'label' => 'Last Working Day',
+              //  'format' => 'dd-MM-yyyy',
                 'required'   => false,
                 'constraints' => [
                     new GreaterThanOrEqual([

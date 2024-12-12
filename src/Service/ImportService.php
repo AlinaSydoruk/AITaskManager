@@ -6,10 +6,13 @@ use App\Entity\Absence;
 use App\Entity\AbsenceType;
 use App\Repository\AbsenceRepository;
 use App\Repository\EmployeeRepository;
+use DateTime;
+use Gedmo\Translator\TranslationInterface;
 use Pagerfanta\Exception\LogicException;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class ImportService
 {
@@ -17,6 +20,7 @@ readonly class ImportService
         private EmployeeRepository      $employeeRepository,
         private AbsenceRepository       $absenceRepository,
         private ValidatorInterface      $validator,
+        private TranslatorInterface     $translator,
     )
     {
     }
@@ -26,14 +30,6 @@ readonly class ImportService
         $spreadsheet = IOFactory::load($filePath);
         $worksheet = $spreadsheet->getActiveSheet();
 
-
-        /*$requiredColumns = ['Email', 'Art' , 'Kommentar' , 'Von' , 'Bis'];
-        foreach ($requiredColumns as $column) {
-            if (trim($worksheet->getCell($column . '1')->getValue()) !== $column) {
-                throw new \LogicException("Missing or incorrect required column: $column");
-
-            }
-        }*/
 
         $absences = [];
         foreach ($worksheet->getRowIterator(2) as $row) {
@@ -48,12 +44,20 @@ readonly class ImportService
 
             //email
             $employee = $this->employeeRepository->findEmployeeByEmail($cells[0]);
+
             if (!$employee) {
-                throw new LogicException("Missing or incorrect email : $cells[0]");
+                throw new LogicException("Unable to find employee with email : $cells[0]");
             }
 
             //AbsenceType
+             // for future
+            // $type =  $this->translator->trans('absence.type_'. strtolower( str_replace( ' ', '_' ,$cells[1])));
+
+
+
+
             $absenceType = AbsenceType::tryFrom(trim($cells[1]));
+
             if (!$absenceType) {
                 throw new \LogicException("Missing or incorrect Absence Type : $cells[1] , only ".  implode(', ', array_map(fn($case) => $case->value, AbsenceType::cases())) ."are allowed ");
             }
@@ -64,26 +68,30 @@ readonly class ImportService
             //StartDate
             $startDate = null;
 
-            try {
-                $dateString = trim($cells[3]);
-                $startDate = Date::excelToDateTimeObject($dateString);
+            $date = ($cells[3]);
+            if (is_int($date) && Date::isDateTimeFormat($date)) {
+                $startDate = Date::excelToDateTimeObject($date);
                 $absence->setStartDate($startDate);
-            } catch (\Exception $e) {
-                throw new \LogicException("Incorrect date type: $dateString, try dd.mm.yyyy. Error: " . $e->getMessage());
-            }
+            } else if($startDate = DateTime::createFromFormat('d.m.Y', $date)){
+                    $absence->setStartDate($startDate);
+            } else throw new \LogicException("Incorrect date type: $date, try dd.mm.yyyy.  " );
+
 
             //EndDate
             $endDate = null;
 
-            if(trim($cells[4])) {
+            $dateString = trim($cells[4]);
+            if (is_int($date) && Date::isDateTimeFormat($dateString)) {
+                $endDate = Date::excelToDateTimeObject($dateString);
+                $absence->setEndDate($endDate);
+            } else
                 try {
-                    $dateString = trim($cells[4]);
-                    $endDate = Date::excelToDateTimeObject($dateString);
+                    $endDate = DateTime::createFromFormat('d.m.Y', $dateString);
                     $absence->setEndDate($endDate);
                 } catch (\Exception $e) {
                     throw new \LogicException("Incorrect date type: $dateString, try dd.mm.yyyy. Error: " . $e->getMessage());
                 }
-            }
+
 
             $absence->setAbsenceType($absenceType);
             $absence->setComment($comment);

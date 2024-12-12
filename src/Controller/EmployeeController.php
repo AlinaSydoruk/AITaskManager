@@ -7,7 +7,10 @@ use App\Form\EmployeeFormType;
 use App\Form\UploadFormType;
 use App\Repository\EmployeeRepository;
 use App\Service\PaginateEmployeesService;
+use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,7 +19,8 @@ class EmployeeController extends AbstractController
 {
     public function __construct(
         private readonly PaginateEmployeesService $paginateEmployeesService,
-        private readonly EmployeeRepository       $employeeRepository
+        private readonly EmployeeRepository       $employeeRepository,
+        private readonly UploaderHelper           $uploaderHelper,
     )
     {}
 
@@ -26,6 +30,19 @@ class EmployeeController extends AbstractController
         $uploadForm = $this->createForm(UploadFormType::class);
         $page = $request->query->getInt('page', 1);
         $pagerfanta = $this->paginateEmployeesService->paginateEmployees($page,10);
+
+        $uploadForm->handleRequest($request);
+        if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
+            /**@var UploadedFile $uploadedFile */
+            $uploadedFile = $uploadForm['uploadFile']->getData();
+            try {
+                $this->uploaderHelper->UploadExcelFile($uploadedFile);
+            }catch (\LogicException $exception){
+                $uploadForm->addError(new FormError($exception->getMessage()));
+            }
+            $this->addFlash('success' , 'absences uploaded successfully');
+        }
+
         return $this->render('employee/index.html.twig',[
             'pagerfanta' => $pagerfanta,
             'uploadForm' => $uploadForm,
