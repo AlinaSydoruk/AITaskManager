@@ -13,11 +13,15 @@
    1. run `ddev php bin/console doctrine:database:create`
    2. run `ddev php bin/console doctrine:migrations:migrate`
    3. run `ddev php bin/console doctrine:fixtures:load`
-5. Setup Asset Build
-   1. run `ddev yarn install`
-   2. DEV watch: `ddev yarn run watch`
-   3. DEV server: `ddev yarn run dev-server`
-   
+
+5. watch for changes to your assets/styles
+```
+ddev php bin/console tailwind:build --watch
+```
+If you work on Windows and your app is running in a Docker container, and you are having trouble with the --watch option
+```
+ddev php bin/console tailwind:build --watch --poll
+```
 
 
 # Messenger
