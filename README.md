@@ -34,6 +34,11 @@ ddev php bin/console cache:clear
 ```
 
 
+
+TO DO   absences , you can't add more than 1 in the particular period of time
+TO DO   absences , you can take an absence today 
+
+
 Problems 
 
 -- Flash messages , Data , create User
