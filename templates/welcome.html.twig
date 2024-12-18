@@ -1,0 +1,19 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}{{ 'profile.welcome' | trans  }}{% endblock %}
+
+{% block content %}
+    <div>
+        <twig:MainHeader text="{{ 'profile.welcome' | trans  }}"></twig:MainHeader>
+
+        <div class="mb-3">
+            You are logged in as {{ app.user.userIdentifier }}
+        </div>
+
+        <h1 class="text-3xl font-bold underline">
+            Hello world!
+        </h1>
+
+    </div>
+    <a href="{{  path('app_employee_index')}}"> Employees </a>
+{% endblock %}
