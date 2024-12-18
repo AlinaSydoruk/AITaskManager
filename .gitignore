@@ -27,3 +27,4 @@
 .idea
 
 /public/downloads/
+/node_modules
