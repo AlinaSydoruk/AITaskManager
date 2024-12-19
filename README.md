@@ -17,8 +17,16 @@
    1. run `ddev yarn install`
    2. DEV watch: `ddev yarn run watch`
    3. DEV server: `ddev yarn run dev-server`
-   
 
+## watch for changes to your assets/styles
+
+```
+ddev php bin/console tailwind:build --watch
+```
+## If you work on Windows and your app is running in a Docker container, and you are having trouble with the --watch option
+```
+ddev php bin/console tailwind:build --watch --poll
+```
 
 # Messenger
 
@@ -32,6 +40,7 @@ ddev php bin/console messenger:consume async
 ```bash
 ddev php bin/console cache:clear
 ```
+
 
 
 Problems 
