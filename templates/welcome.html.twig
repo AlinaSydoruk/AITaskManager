@@ -1,26 +1,24 @@
 {% extends 'profile.html.twig' %}
 
-{% block title %}{{ 'profile.welcome' | trans  }}{% endblock %}
-
-
- {% block body %}{% endblock %}
-
+{% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
 
 {% block content %}
-    <div>
-        <twig:MainHeader text="{{ 'profile.welcome' | trans  }}"></twig:MainHeader>
+    <div class="flex flex-col space-y-5 ">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'profile.welcome' | trans }}"></twig:MainHeader>
 
-        <div class="mb-3">
-            {{ app.user.userIdentifier }}
-        </div>
-
-    </div>
-    <a href="{{ path('app_employee_index') }}">
-        <div class="my-4 sm:my-6 border-y-2   border-neutral">
-            <div class="my-2 ml-16 md:ml-24 lg:ml-32  border-l-1   border-neutral"  >
-            {{ 'profile.employees' | trans }}
+            <div class="my-3 ">
+                {{ 'welcome.you_are_logged_in_as' | trans }} {{ app.user.userIdentifier }}
             </div>
+
         </div>
-    </a>
+        <a href="{{ path('app_employee_index') }}">
+            <div class=" border-y-2 hover:bg-gray-200  border-neutral">
+                <div class="py-3 pl-4 sm:pl-8 md:pl-16 lg:pl-24 xl:pl-32">
+                    {{ 'profile.employees' | trans }}
+                </div>
+            </div>
+        </a>
+    </div>
 
 {% endblock content %}

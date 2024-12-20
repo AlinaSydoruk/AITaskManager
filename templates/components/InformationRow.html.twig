@@ -1,0 +1,16 @@
+<div class=" border-b-2 hover:bg-gray-100  border-neutral">
+    <div class="py-3 pl-4 sm:pl-8 md:pl-16 lg:pl-24 xl:pl-32">
+      <div class="grid grid-flow-row auto-rows-max text-sm" >
+          <div> {{ title }} </div>
+
+          {% block value %}
+              <span>
+               {{ 'symbol.dash' | trans }}
+            </span>
+          {% endblock value %}
+
+
+
+      </div>
+    </div>
+</div>
