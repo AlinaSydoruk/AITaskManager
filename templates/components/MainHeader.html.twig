@@ -1,5 +1,13 @@
-<div class="my-4 md:my-6 lg:my-8">
-    <h1>
-        {{ text }}
-    </h1>
+<div class="my-4 md:my-6 lg:my-8 ">
+    <div class=" flex" >
+        <div class="flex-1">
+            <h1 class="font-bold">
+                {{ text }}
+            </h1>
+        </div>
+        <div class="flex-2">
+            {% block rightSide %}
+            {% endblock %}
+        </div>
+    </div>
 </div>

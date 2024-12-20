@@ -6,10 +6,14 @@ namespace templates\Twig\Components;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
-class InformationRow
+class Button
 {
 
-    public string $title;
+    public string $label;
 
     public string $class = '';
+
+    public ?string $url = null;
+
+
 }
