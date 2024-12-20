@@ -4,6 +4,17 @@
 
 
 {% block content %}
+
+<div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="true"
+        />
+    </div>
+
+
+
     <div class="my-4">
         <div class="mt-2">
             <twig:MainHeader text="{{ employee.id}}  ,  {{ employee.fullName }}  ">
@@ -93,10 +104,12 @@
 
     </div>
 
-
+<div class="my-4">
     <twig:Button url="{{ path('app_employee_index') }}"
                  label="{{ 'action.back' | trans }}">
     </twig:Button>
+
+</div>
 
 
 
