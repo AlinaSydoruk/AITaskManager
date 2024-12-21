@@ -31,4 +31,4 @@ absence.you_do_not_have_any_absence: "Sie haben keine Abwesenheit "
 employee.edit: "Bearbeiten"
 employee.add_new_absence: "Neue Abwesenheit hinzufügen"
 action.back: "Zurück"
-
+action.delete': "Löschen"

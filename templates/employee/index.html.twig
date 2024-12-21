@@ -1,27 +1,63 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}Employees{% endblock %}
+{% block title %}{{ 'profile.employee' | trans  }}{% endblock %}
 
-{% block body %}
-   <div>
-       <h1>
-           Employees
-       </h1>
 
+{% block content %}
+
+<div class="my-4">
+    <twig:BreadCrumbHome/>
+    <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                         label="{{ 'employee.employee' | trans }}"
+                         isActive="true"
+    />
+
+
+    <div class="my-4">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'employee.employee' | trans }} ">
+                <twig:block name="rightSide">
+                    <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
+                        <twig:Button url="{{ path('app_employee_create') }}"
+                                     label="{{ 'action.create_new_employee' | trans }}"
+                        >
+                        </twig:Button>
+
+                        <twig:Button url="{{ path('app_download_employees') }}"
+                                     label="{{ 'action.download_file' | trans }}"
+
+                        >
+                        </twig:Button>
+
+                    </div>
+
+                    <br>
+                </twig:block>
+            </twig:MainHeader>
+        </div>
+    </div>
        {% for employee in pagerfanta %}
-           <div class="m-2 bg-gray">
-               <a href="{{ path("app_employee_show" , {'id' : employee.id}) }}">
-                   <div class="mb-3">
-                       {{ employee.firstname }}  {{ employee.lastName }}, {{ employee.email }}
+
+           <div class=" border-b-2 hover:bg-gray-100  border-neutral">
+               <div class=" px-4 py-4 md:px-8 lg:px-12 xl:px-16">
+                   <div class=" flex items-center  text-sm" >
+                       <div class="flex-1 " >
+                           <a href="{{ path("app_employee_show" , {'id' : employee.id}) }}">
+                                   {{ employee.fullName }} , {{ employee.email }}
+                           </a>
+                       </div>
+                       <div class="flex-2">
+                           <twig:Button label="{{ 'action.delete' | trans }}" url="{{ path('app_employee_delete' ,{"id" : employee.id} ) }}"></twig:Button>
+                       </div>
                    </div>
-               </a>
-               <a href="{{ path('app_employee_delete' ,{"id" : employee.id} ) }}"> Delete </a>
+               </div>
            </div>
+
+
        {% endfor %}
        {{ pagerfanta(pagerfanta) }}
 
-       <a href="{{ path('app_employee_create') }}"> Create new Employee</a>
-       <a href="{{ path('app_download_employees') }}">Download File</a>
+
 
        <div>
            {{ form_start (uploadForm, {'action': path('app_upload_absences' )} )  }}
