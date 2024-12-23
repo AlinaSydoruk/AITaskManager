@@ -21,7 +21,16 @@ class EmployeeFormType extends AbstractType
     {
         $builder
             ->add('firstName', null, [
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
                 'label' => 'First Name',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the first name',
@@ -30,6 +39,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('lastName', null, [
                 'label' => 'Last Name',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the last name',
@@ -38,6 +55,15 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('firstWorkingDay', DateTimeType::class, [
                 'label' => 'First Working Day',
+                'widget' => 'single_text',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the first working day',
@@ -50,6 +76,15 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('lastWorkingDay', DateTimeType::class, [
                 'label' => 'Last Working Day',
+                'widget' => 'single_text',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'required'   => false,
                 'constraints' => [
                     new GreaterThanOrEqual([
@@ -61,6 +96,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('workStatus', EnumType::class, [
                 'class' => WorkStatus::class,
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'label' => 'work status',
                 'constraints' => [
                     new NotBlank([
@@ -70,6 +113,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter email',
@@ -78,14 +129,38 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('businessNumber', null, [
                 'label' => 'Business Number',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'required'   => false,
             ])
             ->add('privateNumber', null, [
                 'label' => 'Private Number',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'required'   => false,
             ])
             ->add('streetAndNumber', null, [
                 'label' => 'Street and Number',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a street and number',
@@ -94,6 +169,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('city', null, [
                 'label' => 'City',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a city',
@@ -102,6 +185,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('postalCode', null, [
                 'label' => 'Postal Code',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter a postal code',
@@ -110,9 +201,15 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('monthlySalary', NumberType::class, [
                 'label' => 'Monthly Salary (CHF)',
-                'attr' => [
-                    'placeholder' => 'Enter amount in CHF',
+                'label_attr' => [
+                    'class' =>' text-sm '
                 ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
+
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter  monthly salary',
@@ -124,6 +221,14 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('jobTitle', null, [
                 'label' => 'Job Title',
+                'label_attr' => [
+                    'class' =>' text-sm '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the job title',
