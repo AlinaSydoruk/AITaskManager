@@ -25,8 +25,9 @@
         </div>
 
         <div class="my-4">
-            {{ form_start(form) }}
             <div class="max-w-md mx-auto">
+            {{ form_start(form) }}
+
 
                 {{ form_row(form.firstName) }}
 
@@ -57,10 +58,11 @@
                 <div class="my-4">
                     <twig:Button label="{{ 'action.create' | trans }}" url="{{ false }}" ></twig:Button>
                 </div>
-            </div>
+
 
 
             {{ form_end(form) }}
+            </div>
         </div>
 
         <twig:Button url="{{ path('app_employee_index') }}"
