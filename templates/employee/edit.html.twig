@@ -1,60 +1,71 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}  Edit  {% endblock %}
+{% block title %} {{ 'action.edit' | trans }}  {% endblock %}
 
-{% block body %}
-   <div>
+{% block content %}
 
-       <h1>
-           Employee {{ id }}
-       </h1>
-       {{ form_start(form) }}
-       <div class="mb-3">
-           <div class="m-2 p-2 bg-gray">
-                 {{ form_row(form.firstName) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
+    <div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem
+                label="{{ 'action.edit' | trans }}"
+                isActive="true"
+        />
+
+        <div class="my-4">
+            <div class="mt-2">
+                <twig:MainHeader text="{{ 'employee.edit' | trans }} ">
+                </twig:MainHeader>
+            </div>
+        </div>
+
+        <div class="my-4">
+            <div class="max-w-md mx-auto">
+
+
+                {{ form_start(form) }}
+
+                {{ form_row(form.firstName) }}
+
                 {{ form_row(form.lastName) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.firstWorkingDay) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.lastWorkingDay) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.workStatus) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.email) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.businessNumber) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.privateNumber) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.streetAndNumber) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.city) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.postalCode) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.monthlySalary) }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               {{ form_row(form.jobTitle) }}
-           </div>
-       </div>
-   </div>
 
-    <button type="submit">Save Changes</button>
+                {{ form_row(form.jobTitle) }}
 
-    {{ form_end(form) }}
+                <div class="my-4">
+                    <twig:Button label="{{ 'action.save_changes' | trans }}" url="{{ false }}"></twig:Button>
+                </div>
 
-        <a href="{{ path('app_employee_show' , {"id" : id }) }}"> Back </a>
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+        <twig:Button url="{{ path('app_employee_show' , {"id" : id }) }}"
+                     label="{{ 'action.back' | trans }}">
+        </twig:Button>
+    </div>
+
 {% endblock %}
