@@ -9,8 +9,16 @@
         <twig:BreadCrumbHome/>
         <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
                              label="{{ 'employee.employee' | trans }}"
-                             isActive="true"
+                             isActive="{{ false }}"
         />
+
+        <twig:BreadCrumbItem link="{{ false}}"
+                             label="{{ 'employee.id' | trans({'id': employee.id }) }}"
+                             isActive="{{ true }}"
+        />
+
+
+
     </div>
     <div class="my-4">
         <div class="mt-2">
