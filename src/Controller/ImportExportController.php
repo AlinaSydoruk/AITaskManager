@@ -11,6 +11,7 @@ use App\Service\ExportService;
 use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DomCrawler\Form;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,24 +36,26 @@ class ImportExportController extends AbstractController
     }
 
     #[Route('/upload/absences', name: 'app_upload_absences')]
-    public function uploadAbsences(Request $request ): Response
+    public function index(Request $request): Response
     {
-
         $uploadForm = $this->createForm(UploadFormType::class);
         $uploadForm->handleRequest($request);
-        if ($uploadForm->isValid()) {
+        if ($uploadForm->isSubmitted() && $uploadForm->isValid()) {
             /**@var UploadedFile $uploadedFile */
             $uploadedFile = $uploadForm['uploadFile']->getData();
             try {
                 $this->uploaderHelper->UploadExcelFile($uploadedFile);
             }catch (\LogicException $exception){
-                return new Response( $exception->getMessage(), Response::HTTP_BAD_REQUEST);
+                $uploadForm->addError(new FormError($exception->getMessage()));
+                return $this->render('upload/index.html.twig',[
+                    'uploadForm' => $uploadForm,
+                ]);
             }
-
             $this->addFlash('success' , 'absences uploaded successfully');
-            return $this->redirectToRoute("app_employee_index");
+            return $this->redirectToRoute('app_employee_index');
         }
-        return new Response( $uploadForm->getErrors(), Response::HTTP_BAD_REQUEST);
-
+        return $this->render('upload/index.html.twig',[
+            'uploadForm' => $uploadForm,
+        ]);
     }
 }

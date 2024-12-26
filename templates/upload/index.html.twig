@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Upload Absences{% endblock %}
+
+{% block body %}
+   <div>
+       <h1>
+           Upload Absences
+       </h1>
+
+       <div>
+           {{ form_start (uploadForm, {'action': path('app_upload_absences' )} )  }}
+           {{ form_errors(uploadForm) }}
+           {{ form_row(uploadForm.uploadFile)}}
+           <button type="submit">Upload Absences</button>
+           {{ form_end(uploadForm) }}
+       </div>
+   </div>
+{% endblock %}

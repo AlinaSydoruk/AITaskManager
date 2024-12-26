@@ -21,10 +21,10 @@ class EmployeeFormType extends AbstractType
     {
         $builder
             ->add('firstName', null, [
-                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
                 'label' => 'First Name',
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -40,7 +40,7 @@ class EmployeeFormType extends AbstractType
             ->add('lastName', null, [
                 'label' => 'Last Name',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -57,7 +57,7 @@ class EmployeeFormType extends AbstractType
                 'label' => 'First Working Day',
                 'widget' => 'single_text',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -78,7 +78,7 @@ class EmployeeFormType extends AbstractType
                 'label' => 'Last Working Day',
                 'widget' => 'single_text',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -97,7 +97,7 @@ class EmployeeFormType extends AbstractType
             ->add('workStatus', EnumType::class, [
                 'class' => WorkStatus::class,
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -114,7 +114,7 @@ class EmployeeFormType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -130,7 +130,7 @@ class EmployeeFormType extends AbstractType
             ->add('businessNumber', null, [
                 'label' => 'Business Number',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -142,7 +142,7 @@ class EmployeeFormType extends AbstractType
             ->add('privateNumber', null, [
                 'label' => 'Private Number',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -154,7 +154,7 @@ class EmployeeFormType extends AbstractType
             ->add('streetAndNumber', null, [
                 'label' => 'Street and Number',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -170,7 +170,7 @@ class EmployeeFormType extends AbstractType
             ->add('city', null, [
                 'label' => 'City',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -186,7 +186,7 @@ class EmployeeFormType extends AbstractType
             ->add('postalCode', null, [
                 'label' => 'Postal Code',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -202,7 +202,7 @@ class EmployeeFormType extends AbstractType
             ->add('monthlySalary', NumberType::class, [
                 'label' => 'Monthly Salary (CHF)',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
@@ -222,7 +222,7 @@ class EmployeeFormType extends AbstractType
             ->add('jobTitle', null, [
                 'label' => 'Job Title',
                 'label_attr' => [
-                    'class' =>' text-sm '
+                    'class' =>' text-sm text-gray-600 '
                 ],
                 'attr' => [
                     'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',

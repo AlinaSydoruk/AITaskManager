@@ -23,6 +23,15 @@ class AbsenceFormType extends AbstractType
         $builder
             ->add('startDate', DateTimeType::class, [
                 'label' => 'From date',
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
+                'label_attr' => [
+                    'class' =>' text-sm text-gray-600 '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the first absence day',
@@ -35,6 +44,15 @@ class AbsenceFormType extends AbstractType
             ])
             ->add('endDate', DateTimeType::class, [
                 'label' => 'To date',
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
+                'label_attr' => [
+                    'class' =>' text-sm text-gray-600 '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Please enter the last absence day',
@@ -47,6 +65,15 @@ class AbsenceFormType extends AbstractType
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
+                'label_attr' => [
+                    'class' =>' text-sm text-gray-600 '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'label' => 'Absence type',
                 'constraints' => [
                     new NotBlank([
@@ -55,6 +82,15 @@ class AbsenceFormType extends AbstractType
                 ],
             ])
             ->add('comment', TextareaType::class, [
+                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
+                'label_attr' => [
+                    'class' =>' text-sm text-gray-600 '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-2 border-gray-600 rounded-md focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'label' => 'Comment',
                 'required'   => false,
             ])

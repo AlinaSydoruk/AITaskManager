@@ -1,11 +1,11 @@
 <div class="flex">
-    <div class="border-solid border-2 border-gary-100 hover:bg-gray-300 rounded-md px-6 py-2 ">
-        {% if url %}
-            <a href="{{ url }}"> {{ label }}</a>
-        {% else %}
-            <button type="submit">
-                {{ label }}
-            </button>
-        {% endif %}
-    </div>
+    {% if url %}
+        <a href="{{ url }}"
+           class="text-center border-solid border-2 border-gray-200 hover:bg-gray-300 rounded-md px-6 py-2 {{ class|default(' ') }} "> {{ label }}</a>
+    {% else %}
+        <button type="submit"
+                class="text-center border-solid border-2 border-gray-200 hover:bg-gray-300 rounded-md px-6 py-2 ">
+            {{ label }}
+        </button>
+    {% endif %}
 </div>

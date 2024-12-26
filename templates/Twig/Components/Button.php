@@ -11,9 +11,11 @@ class Button
 
     public string $label;
 
-    public string $class = '';
+    public ?string $class = null;
 
     public ?string $url = null;
+
+
 
 
 }
