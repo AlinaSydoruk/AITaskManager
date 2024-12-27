@@ -1,19 +1,42 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}Upload Absences{% endblock %}
+{% block title %}{{ 'absence.upload_absences' | trans }}{% endblock %}
 
-{% block body %}
-   <div>
-       <h1>
-           Upload Absences
-       </h1>
+{% block content %}
 
-       <div>
-           {{ form_start (uploadForm, {'action': path('app_upload_absences' )} )  }}
-           {{ form_errors(uploadForm) }}
-           {{ form_row(uploadForm.uploadFile)}}
-           <button type="submit">Upload Absences</button>
-           {{ form_end(uploadForm) }}
-       </div>
-   </div>
+    <div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="{{ false }}"
+        />
+
+        <twig:BreadCrumbItem link="{{ false }}"
+                             label="{{ 'absence.upload_absences' | trans }}"
+                             isActive="{{ true }}"
+        />
+
+        <div class="max-w-md mx-auto border-2 border-gray-500 rounded-md">
+            <div class="p-4">
+                {{ form_start (uploadForm, {'action': path('app_upload_absences' )} ) }}
+                <div class="text-red-500">
+                    {{ form_errors(uploadForm) }}
+                </div>
+                {{ form_row(uploadForm.uploadFile) }}
+                <div class="my-4">
+                    <twig:Button url="{{ false }}"
+                                 label="{{ 'absence.upload_absences' | trans }}"
+                    >
+                    </twig:Button>
+                </div>
+                {{ form_end(uploadForm) }}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
+
+
+
+
+

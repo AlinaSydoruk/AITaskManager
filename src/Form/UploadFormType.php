@@ -16,6 +16,14 @@ class UploadFormType extends AbstractType
             ->add('uploadFile', FileType::class, [
                 'mapped' => false,
                 'label' => 'Upload file XLSX',
+                'label_attr' => [
+                    'class' =>' text-sm text-gray-600 '
+                ],
+                'attr' => [
+                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-2 border-gray-600 rounded-md focus:outline-none focus:ring-0  ',
+                    'placeholder' => ' ',
+
+                ],
                 'constraints' => [
                     new File([
                         'maxSize' => '16M',
