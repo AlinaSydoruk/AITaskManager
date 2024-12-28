@@ -38,9 +38,9 @@
         <div class="my-4">
             <div class="mt-2">
                 {% if isEdit %}
-                    <twig:MainHeader text="{{ 'absence.edit' | trans }} "></twig:MainHeader>
+                    <twig:MainHeader text="{{ 'action.edit' | trans }} "></twig:MainHeader>
                 {% else %}
-                    <twig:MainHeader text="{{ 'employee.erstellen' | trans }} "></twig:MainHeader>
+                    <twig:MainHeader text="{{ 'absence.new' | trans }} "></twig:MainHeader>
                 {% endif %}
             </div>
         </div>
@@ -59,9 +59,9 @@
             </div>
             <div class="my-4">
                 {% if isEdit %}
-                    <twig:Button url="{{ false }}" label="action.save_changes"></twig:Button>
+                    <twig:Button url="{{ false }}" label="{{ 'action.save_changes' |trans }}"></twig:Button>
                 {% else %}
-                    <twig:Button url="{{ false }}" label="action.create"></twig:Button>
+                    <twig:Button url="{{ false }}" label="{{ 'action.create' |trans }}"></twig:Button>
                 {% endif %}
 
                 {{ form_end(form) }}
@@ -71,9 +71,9 @@
     <div class="my-4">
         {% if isEdit %}
             <twig:Button url="{{ path('app_absence_show' , {'employeeId' : employeeId , "id" : id }) }}"
-                         label="action.back"></twig:Button>
+                         label="{{ 'action.back' |trans }}"></twig:Button>
         {% else %}
-            <twig:Button url="{{ path('app_employee_show' , {'id' : employeeId }) }}" label="action.back"></twig:Button>
+            <twig:Button url="{{ path('app_employee_show' , {'id' : employeeId }) }}" label="{{ 'action.back' |trans }}"></twig:Button>
         {% endif %}
     </div>
 {% endblock %}

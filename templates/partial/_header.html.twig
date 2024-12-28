@@ -10,7 +10,7 @@
                     <span class="absolute -inset-1.5"></span>
                     <span class="sr-only">{{ 'profile.open_user_menu' | trans }}</span>
 
-                    <a data-tooltip-target="tooltip-default" type="button" class="">
+                    <a data-tooltip-target="tooltip-default" type="button" class="mx-2">
                         <img class="size-8 rounded-full" src="{{ asset("images/alien.png") }}" alt="alien">
                     </a>
 
@@ -20,7 +20,11 @@
                     </div>
 
                 </a>
-                <a href="{{ path('app_logout') }}" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"> {{ 'profile.logout' | trans }}</a>
+                <a href="{{ path('app_logout') }}" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">
+                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
+                    </svg>
+                </a>
 
                 <button data-collapse-toggle="mobile-menu-2" type="button" class="inline-flex items-center p-2 ml-1 text-sm text-gray-500 rounded-lg lg:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="mobile-menu-2" aria-expanded="false">
                     <span class="sr-only">{{ 'profile.open_main_menu' | trans }}</span>

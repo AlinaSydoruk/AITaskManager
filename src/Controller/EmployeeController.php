@@ -11,12 +11,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 #[Route('/employee', name: 'app_employee_')]
 class EmployeeController extends AbstractController
 {
     public function __construct(
         private readonly PaginateEmployeesService $paginateEmployeesService,
-        private readonly EmployeeRepository       $employeeRepository
+        private readonly EmployeeRepository       $employeeRepository,
+        private readonly TranslatorInterface      $translator,
     )
     {}
 
@@ -41,7 +44,7 @@ class EmployeeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $employee = $form->getData();
             $this->employeeRepository->save($employee);
-            $this->addFlash('success', 'Employee has been created');
+            $this->addFlash('success',  $this->translator->trans('message.employee_has_been_created'));
             return $this->redirectToRoute('app_employee_index');
         }
 
@@ -62,7 +65,7 @@ class EmployeeController extends AbstractController
     public function delete(Employee $employee): Response
     {
         $this->employeeRepository->remove($employee);
-        $this->addFlash('success', 'Employee has been deleted');
+        $this->addFlash('success', $this->translator->trans('message.employee_has_been_deleted'));
         return $this->redirectToRoute('app_employee_index');
     }
 
@@ -75,7 +78,7 @@ class EmployeeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
             $this->employeeRepository->save($updatedEmployee);
-            $this->addFlash('success', 'Employee has been updated');
+            $this->addFlash('success', $this->translator->trans('message.employee_has_been_updated'));
             return $this->redirectToRoute('app_employee_show', [
                 'id' => $id
             ]);
