@@ -2,6 +2,10 @@ twig:
     file_name_pattern: '*.twig'
     form_themes:
         - 'sandbox_form.html.twig'
+
+    globals:
+        contact_email: '%app.contact_email%'
+        contact_phone: '%app.contact_phone%'
 when@test:
     twig:
         strict_variables: true
