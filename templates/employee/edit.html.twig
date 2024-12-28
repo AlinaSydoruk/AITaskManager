@@ -26,8 +26,10 @@
         <div class="my-4">
             <div class="max-w-md mx-auto">
 
-
                 {{ form_start(form) }}
+                <div class="text-red-500">
+                    {{ form_errors(form) }}
+                </div>
 
                 {{ form_row(form.firstName) }}
 

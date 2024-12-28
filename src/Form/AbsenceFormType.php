@@ -23,74 +23,38 @@ class AbsenceFormType extends AbstractType
         $builder
             ->add('startDate', DateTimeType::class, [
                 'label' => 'From date',
-                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
-                'label_attr' => [
-                    'class' =>' text-sm text-gray-600 '
-                ],
-                'attr' => [
-                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
-                    'placeholder' => ' ',
-
-                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the first absence day',
+                        'message' => 'error.please_enter_the_first_absence_day',
                     ]),
                     new GreaterThanOrEqual([
                         'value' => 'today',
-                        'message' => 'The start date cannot be earlier than today',
+                        'message' => 'error.the_start_date_cannot_be_earlier_than_today',
                     ]),
                 ],
             ])
             ->add('endDate', DateTimeType::class, [
                 'label' => 'To date',
-                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
-                'label_attr' => [
-                    'class' =>' text-sm text-gray-600 '
-                ],
-                'attr' => [
-                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
-                    'placeholder' => ' ',
-
-                ],
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the last absence day',
+                        'message' => 'error.please_enter_the_last_absence_day',
                     ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[startDate].data',
-                        'message' => 'The end date cannot be earlier than start date',
+                        'message' => 'error.the_end_date_cannot_be_earlier_than_start_date',
                     ]),
                 ],
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,
-                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
-                'label_attr' => [
-                    'class' =>' text-sm text-gray-600 '
-                ],
-                'attr' => [
-                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-600 focus:outline-none focus:ring-0  ',
-                    'placeholder' => ' ',
-
-                ],
                 'label' => 'Absence type',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please choose the absence type',
+                        'message' => 'error.please_choose_the_absence_type',
                     ]),
                 ],
             ])
             ->add('comment', TextareaType::class, [
-                'row_attr' => ['class' => 'relative z-0 w-full mb-5 group'],
-                'label_attr' => [
-                    'class' =>' text-sm text-gray-600 '
-                ],
-                'attr' => [
-                    'class' => ' py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-2 border-gray-600 rounded-md focus:outline-none focus:ring-0  ',
-                    'placeholder' => ' ',
-
-                ],
                 'label' => 'Comment',
                 'required'   => false,
             ])
