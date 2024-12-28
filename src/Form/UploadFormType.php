@@ -15,7 +15,7 @@ class UploadFormType extends AbstractType
         $builder
             ->add('uploadFile', FileType::class, [
                 'mapped' => false,
-                'label' => 'Upload file XLSX',
+                'label' => 'upload.upload_file_xlsx',
                 'constraints' => [
                     new File([
                         'maxSize' => '16M',
@@ -23,8 +23,8 @@ class UploadFormType extends AbstractType
                             'application/vnd.ms-excel', // xls
                             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' // xlsx
                         ],
-                        'mimeTypesMessage' => 'Please upload a valid XLSX',
-                        'maxSizeMessage' => 'The file is too large ({{ size }} {{ suffix }}). Allowed maximum size is {{ limit }} {{ suffix }}',
+                        'mimeTypesMessage' => 'error.please_upload_a_valid_xlsx',
+                        'maxSizeMessage' => 'error.file_too_large',
                     ])
                 ],
             ])

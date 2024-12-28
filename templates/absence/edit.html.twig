@@ -1,47 +1,79 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}  Absence  {% endblock %}
+{% block title %}{{ 'employee.absence' | trans }}{% endblock %}
 
-{% block body %}
-    <div>
+{% block content %}
 
-        <h1>
-            {% if isEdit %}
-                Update absence
-            {% else %}
-                Create new absence
-            {% endif %}
-        </h1>
+    <div class="my-4">
+        <twig:BreadCrumbHome/>
 
-        {{ form_start(form) }}
-        <div class="mb-3">
-            <div class="m-2 p-2 bg-gray">
+
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem link="{{ path('app_employee_show' , {'id' : employeeId }) }}"
+                             label="{{ 'employee.id' | trans({'id': employeeId}) }}"
+                             isActive="{{ false }}"
+        />
+        {% if isEdit %}
+
+            <twig:BreadCrumbItem link="{{ path('app_absence_show' , {'employeeId' : employeeId , "id" : id }) }}"
+                                 label="{{ 'employee.absence' | trans }}"
+                                 isActive="{{ false }}"
+            />
+
+            <twig:BreadCrumbItem link="{{ false }}"
+                                 label="{{ 'absence.edit' | trans }}"
+                                 isActive="true"
+            />
+        {% else %}
+
+            <twig:BreadCrumbItem link="{{ false }}"
+                                 label="{{ 'absence.new' | trans }}"
+                                 isActive="true"
+            />
+
+        {% endif %}
+        <div class="my-4">
+            <div class="mt-2">
+                {% if isEdit %}
+                    <twig:MainHeader text="{{ 'action.edit' | trans }} "></twig:MainHeader>
+                {% else %}
+                    <twig:MainHeader text="{{ 'absence.new' | trans }} "></twig:MainHeader>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="max-w-md mx-auto">
+            <div class="my-4">
+                {{ form_start(form) }}
+
                 {{ form_row(form.startDate) }}
-            </div>
-            <div class="m-2 p-2 bg-gray">
-                {{ form_row(form.endDate) }}
-            </div>
 
-            <div class="m-2 p-2 bg-gray">
+                {{ form_row(form.endDate) }}
+
                 {{ form_row(form.absenceType) }}
-            </div>
-            <div class="m-2 p-2 bg-gray">
+
                 {{ form_row(form.comment) }}
             </div>
+            <div class="my-4">
+                {% if isEdit %}
+                    <twig:Button url="{{ false }}" label="{{ 'action.save_changes' |trans }}"></twig:Button>
+                {% else %}
+                    <twig:Button url="{{ false }}" label="{{ 'action.create' |trans }}"></twig:Button>
+                {% endif %}
 
+                {{ form_end(form) }}
+            </div>
         </div>
-        {% if isEdit %}
-            <button type="submit">Save Changes</button>
-        {% else %}
-             <button type="submit">Create</button>
-        {% endif %}
-
-        {{ form_end(form) }}
     </div>
-    {% if isEdit %}
-        <a href="{{  path('app_absence_show' , {'employeeId' : employeeId , "id" : id })}}"> Back </a>
-    {% else %}
-        <a href="{{  path('app_employee_show' , {'id' : employeeId })}}"> Back </a>
-    {% endif %}
-
+    <div class="my-4">
+        {% if isEdit %}
+            <twig:Button url="{{ path('app_absence_show' , {'employeeId' : employeeId , "id" : id }) }}"
+                         label="{{ 'action.back' |trans }}"></twig:Button>
+        {% else %}
+            <twig:Button url="{{ path('app_employee_show' , {'id' : employeeId }) }}" label="{{ 'action.back' |trans }}"></twig:Button>
+        {% endif %}
+    </div>
 {% endblock %}

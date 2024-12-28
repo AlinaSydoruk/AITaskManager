@@ -25,11 +25,11 @@ class AbsenceFormType extends AbstractType
                 'label' => 'From date',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the first absence day',
+                        'message' => 'error.please_enter_the_first_absence_day',
                     ]),
                     new GreaterThanOrEqual([
                         'value' => 'today',
-                        'message' => 'The start date cannot be earlier than today',
+                        'message' => 'error.the_start_date_cannot_be_earlier_than_today',
                     ]),
                 ],
             ])
@@ -37,11 +37,11 @@ class AbsenceFormType extends AbstractType
                 'label' => 'To date',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the last absence day',
+                        'message' => 'error.please_enter_the_last_absence_day',
                     ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[startDate].data',
-                        'message' => 'The end date cannot be earlier than start date',
+                        'message' => 'error.the_end_date_cannot_be_earlier_than_start_date',
                     ]),
                 ],
             ])
@@ -50,7 +50,7 @@ class AbsenceFormType extends AbstractType
                 'label' => 'Absence type',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please choose the absence type',
+                        'message' => 'error.please_choose_the_absence_type',
                     ]),
                 ],
             ])

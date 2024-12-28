@@ -10,12 +10,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
 #[Route('/absence', name: 'app_absence_')]
 class AbsenceController extends AbstractController
 {
     public function __construct(
         private readonly AbsenceRepository  $absenceRepository,
         private readonly EmployeeRepository $employeeRepository,
+        private readonly TranslatorInterface $translator,
+
     )
     {}
 
@@ -37,13 +41,13 @@ class AbsenceController extends AbstractController
             $updatedAbsence = $form->getData();
             $this->absenceRepository->save($updatedAbsence);
             if ($isEdit){
-                $this->addFlash('success', 'Absence has been updated');
+                $this->addFlash('success',$this->translator->trans( 'message.absence_has_been_updated'));
                 return $this->redirectToRoute('app_absence_show', [
                     'employeeId' => $employeeId,
                     'id' => $id
                 ]);
             }
-            $this->addFlash('success', 'Absence has been created');
+            $this->addFlash('success', $this->translator->trans('message.absence_has_been_created'));
             return $this->redirectToRoute('app_employee_show', [
                 'id' => $employeeId
             ]);
@@ -62,7 +66,7 @@ class AbsenceController extends AbstractController
     {
         $absence = $this->absenceRepository->find($id);
         $this->absenceRepository->remove($absence);
-        $this->addFlash('success', 'Absence has been deleted');
+        $this->addFlash('success', $this->translator->trans('message.absence_has_been_created'));
         return $this->redirectToRoute('app_employee_show', [
             'id' => $employeeId
         ]);

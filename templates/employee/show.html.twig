@@ -1,77 +1,116 @@
-{% extends 'base.html.twig' %}
+{% extends 'profile.html.twig' %}
 
-{% block title %}{{ employee.firstname }} {% endblock %}
+{% block title %}{{ 'profile.employee' | trans }}{% endblock %}
 
-{% block body %}
-   <div>
-       <h1>
-           Employees {{ employee.id}}
-       </h1>
-       <div class="mb-3">
-           <div class="m-2 p-2 bg-gray">
-               First name : {{ employee.firstname }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Last name : {{ employee.lastName }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               First Working Day :  {{ employee.firstWorkingDay |date("m/d/Y") }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Last Working Day : {{ employee.lastWorkingDay |date("m/d/Y") }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-                Work Status : {{ employee.workStatus.value }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Email : {{ employee.email }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Business Number : {{ employee.businessNumber }}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Private Number : {{ employee.privateNumber}}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Street And Number : {{ employee.streetAndNumber}}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               City : {{ employee.city}}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Postal Code : {{ employee.postalCode}}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Monthly Salary : {{ employee.monthlySalary}}
-           </div>
-           <div class="m-2 p-2 bg-gray">
-               Job Title : {{ employee.jobTitle}}
-           </div>
 
-           <div class="m-2 p-2 bg-gray">
-               Absence :
-               {% if employee.absences %}
+{% block content %}
 
-                   {% for absence in employee.absences %}
-                       <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}"> {{ absence.startDate |date("m/d/Y")}}
-                           - {{ absence.endDate |date("m/d/Y")}} </a> <br>
-                   {% endfor %}
-               {% else %}
-                   You don't have any absence
-               {% endif %}
-           </div>
-       </div>
-   </div>
+    <div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="{{ false }}"
+        />
 
-    <a href="{{ path('app_employee_index') }}"> Back </a>
-    <br>
-    <a href="{{ path('app_employee_edit' , {"id" : employee.id }) }}"> Edit </a>
-    <br>
-    <a href="{{ path('app_absence_create' , {"employeeId" : employee.id }) }}"> Add new absence</a>
+        <twig:BreadCrumbItem link="{{ false}}"
+                             label="{{ 'employee.id' | trans({'id': employee.id }) }}"
+                             isActive="{{ true }}"
+        />
 
 
 
+    </div>
+    <div class="my-4">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ employee.id }}  ,  {{ employee.fullName }}  ">
+                <twig:block name="rightSide">
+                    <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
+                        <twig:Button url="{{ path('app_employee_edit' , {"id" : employee.id }) }}"
+                                     label="{{ 'action.edit' | trans }}"
+                        >
+                        </twig:Button>
+
+                        <twig:Button url="{{ path('app_absence_create' , {"employeeId" : employee.id }) }}"
+                                     label="{{ 'employee.add_new_absence' | trans }}"
+
+                        >
+                        </twig:Button>
+                    </div>
+
+                </twig:block>
+            </twig:MainHeader>
+        </div>
+        <twig:InformationRow title="{{ 'employee.first_name' | trans }}">
+            <twig:block name="value">{{ employee.firstname }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.last_name' | trans }}">
+            <twig:block name="value">{{ employee.lastName }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.first_working_day' | trans }}">
+            <twig:block name="value">{{ employee.firstWorkingDay |date("m/d/Y") }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.last_working_day' | trans }}">
+            <twig:block name="value">{{ employee.lastWorkingDay |date("m/d/Y") }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.work_status' | trans }}">
+            <twig:block name="value">{{ employee.workStatus.value }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.email' | trans }}">
+            <twig:block name="value">{{ employee.email }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.business_number' | trans }}">
+            <twig:block name="value">{{ employee.businessNumber }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.private_number' | trans }}">
+            <twig:block name="value">{{ employee.privateNumber }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.street_and_number' | trans }}">
+            <twig:block name="value">{{ employee.streetAndNumber }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.city' | trans }}">
+            <twig:block name="value">{{ employee.city }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.postal_code' | trans }}">
+            <twig:block name="value">{{ employee.postalCode }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.monthly_salary' | trans }}">
+            <twig:block name="value">{{ employee.monthlySalary }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.postal_code' | trans }}">
+            <twig:block name="value">{{ employee.postalCode }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.job_title' | trans }}">
+            <twig:block name="value">{{ employee.jobTitle }}</twig:block>
+        </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.absence' | trans }}">
+            <twig:block name="value">
+                {% if employee.absences %}
+                    {% for absence in employee.absences %}
+                        <div class="grid grid-flow-col auto-cols-max text-sm space-y-2">
+                            <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}">
+                                {{ absence.startDate |date("m/d/Y") }}
+                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("m/d/Y") }}
+                            </a></div>
+
+                    {% endfor %}
+                {% else %}
+                    {{ 'absence.you_do_not_have_any_absence' | trans }}
+                {% endif %}
+            </twig:block>
+        </twig:InformationRow>
+    </div>
+
+    <div class="my-4">
+        <twig:Button url="{{ path('app_employee_index') }}"
+                     label="{{ 'action.back' | trans }}">
+        </twig:Button>
+    </div>
+
+{% endblock content %}
 
 
 
-{% endblock %}
+
+
+
+

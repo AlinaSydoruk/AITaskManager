@@ -2,11 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Absence;
-use App\Form\AbsenceFormType;
 use App\Form\UploadFormType;
-use App\Repository\AbsenceRepository;
-use App\Repository\EmployeeRepository;
 use App\Service\ExportService;
 use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,14 +11,15 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportExportController extends AbstractController
 {
     public function __construct(
         private readonly ExportService $exportService,
         private readonly UploaderHelper $uploaderHelper,
+        private readonly TranslatorInterface $translator,
     )
     {
     }
@@ -51,7 +48,7 @@ class ImportExportController extends AbstractController
                     'uploadForm' => $uploadForm,
                 ]);
             }
-            $this->addFlash('success' , 'absences uploaded successfully');
+            $this->addFlash('success' ,  $this->translator->trans('message.absences_uploaded_successfully'));
             return $this->redirectToRoute('app_employee_index');
         }
         return $this->render('upload/index.html.twig',[

@@ -1,0 +1,14 @@
+<div class="inline-flex">
+    {% if isActive %}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.0816 11.9996L9.13184 7.04987L9.83895 6.34277L15.4958 11.9996L9.83895 17.6565L9.13184 16.9493L14.0816 11.9996Z" fill="black"/>
+            </svg>
+
+            <span class="fw-bold text-sm">{{ label }}</span>
+    {% else %}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14.0816 11.9996L9.13184 7.04987L9.83895 6.34277L15.4958 11.9996L9.83895 17.6565L9.13184 16.9493L14.0816 11.9996Z" fill="#666666"/>
+            </svg>
+            <a href="{{ link }}"><span class="text-sm text-gray-600 ">{{ label }}</span></a>
+    {% endif %}
+</div>
