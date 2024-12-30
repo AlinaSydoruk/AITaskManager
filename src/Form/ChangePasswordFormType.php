@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ChangePasswordFormType extends AbstractType
 {
@@ -38,10 +39,10 @@ class ChangePasswordFormType extends AbstractType
                         new PasswordStrength(),
                         new NotCompromisedPassword(),
                     ],
-                    'label' => 'New password',
+                    'label' => 'security.new_password',
                 ],
                 'second_options' => [
-                    'label' => 'Repeat Password',
+                    'label' => 'security.repeat_password',
                 ],
                 'invalid_message' => 'security.the_password_fields_must_match',
                 // Instead of being set onto the object directly,

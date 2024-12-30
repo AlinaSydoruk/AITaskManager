@@ -22,7 +22,7 @@ class AbsenceFormType extends AbstractType
     {
         $builder
             ->add('startDate', DateTimeType::class, [
-                'label' => 'From date',
+                'label' => 'absence.start_date',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_enter_the_first_absence_day',
@@ -34,7 +34,7 @@ class AbsenceFormType extends AbstractType
                 ],
             ])
             ->add('endDate', DateTimeType::class, [
-                'label' => 'To date',
+                'label' => 'absence.end_date',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_enter_the_last_absence_day',
@@ -47,7 +47,7 @@ class AbsenceFormType extends AbstractType
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,
-                'label' => 'Absence type',
+                'label' => 'absence.absence_type',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_choose_the_absence_type',
@@ -55,7 +55,7 @@ class AbsenceFormType extends AbstractType
                 ],
             ])
             ->add('comment', TextareaType::class, [
-                'label' => 'Comment',
+                'label' => 'absence.comment',
                 'required'   => false,
             ])
         ;

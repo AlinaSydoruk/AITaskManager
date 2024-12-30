@@ -88,8 +88,8 @@
                     {% for absence in employee.absences %}
                         <div class="grid grid-flow-col auto-cols-max text-sm space-y-2">
                             <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}">
-                                {{ absence.startDate |date("m/d/Y") }}
-                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("m/d/Y") }}
+                                {{ absence.startDate |date("d/m/Y") }}
+                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d/m/Y") }}
                             </a></div>
 
                     {% endfor %}
