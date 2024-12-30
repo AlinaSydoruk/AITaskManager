@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Absence;
+use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,6 +17,22 @@ class AbsenceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Absence::class);
     }
+
+
+    public function findOverlappingAbsences(Employee $employee, \DateTimeInterface $startDate, \DateTimeInterface $endDate): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.employee = :employee')
+            ->andWhere('a.startDate <= :endDate')
+            ->andWhere('a.endDate >= :startDate')
+            ->setParameter('employee', $employee)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+
 
 //    /**
 //     * @return Absence[] Returns an array of Absence objects
