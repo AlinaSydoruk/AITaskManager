@@ -19,9 +19,9 @@
         <div class="max-w-md mx-auto border-2 border-gray-500 rounded-md">
             <div class="p-4">
                 {{ form_start (uploadForm, {'action': path('app_upload_absences' )} ) }}
-                <div class="text-red-500">
-                    {{ form_errors(uploadForm) }}
-                </div>
+
+                {{ form_errors(uploadForm) }}
+
                 {{ form_row(uploadForm.uploadFile) }}
                 <div class="my-4">
                     <twig:Button url="{{ false }}"

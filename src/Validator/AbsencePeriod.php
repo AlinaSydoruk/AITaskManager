@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraint;
  * @Annotation
  * @Target({"PROPERTY", "METHOD", "ANNOTATION"})
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute]
 class AbsencePeriod extends Constraint
 {
     /*
@@ -18,7 +18,7 @@ class AbsencePeriod extends Constraint
 
     public string $message = 'The absence period from {{ startDate }} to {{ endDate }} overlaps with an existing one.';
 
-    public function getTargets(): array|string
+    public function getTargets(): string
     {
         return self::CLASS_CONSTRAINT;
     }
