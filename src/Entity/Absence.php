@@ -20,7 +20,7 @@ class Absence
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     private ?int $id = null;
-    #[Assert\GreaterThanOrEqual ( 'today' ) ]
+    #[Assert\GreaterThanOrEqual ( '+1 hour' ) ]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $startDate = null;

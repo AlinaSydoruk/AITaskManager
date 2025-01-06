@@ -66,7 +66,7 @@ class AbsenceController extends AbstractController
     {
         $absence = $this->absenceRepository->find($id);
         $this->absenceRepository->remove($absence);
-        $this->addFlash('success', $this->translator->trans('message.absence_has_been_created'));
+        $this->addFlash('success', $this->translator->trans('message.absence_has_been_deleted'));
         return $this->redirectToRoute('app_employee_show', [
             'id' => $employeeId
         ]);
