@@ -15,6 +15,8 @@ class Button
 
     public ?string $url = null;
 
+    public ?string $attributes = null;
+
 
 
 

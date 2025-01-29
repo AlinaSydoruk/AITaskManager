@@ -42,36 +42,29 @@
                                          class="w-full"
                             ></twig:Button>
                         </div>
-
-
                     </div>
-
-
-
-
                 </twig:block>
             </twig:MainHeader>
         </div>
     </div>
+    <div class="my-4 ">
        {% for employee in pagerfanta %}
 
            <div class=" border-b-2 hover:bg-gray-100  border-neutral">
-               <div class=" px-4 py-4 md:px-8 lg:px-12 xl:px-16">
-                   <div class=" flex items-center  text-sm" >
-                       <div class="flex-1 " >
-                           <a href="{{ path("app_employee_show" , {'id' : employee.id}) }}">
-                                   {{ employee.fullName }} , {{ employee.email }}
-                           </a>
-                       </div>
-                       <div class="flex-2">
-                           <twig:Button label="{{ 'action.delete' | trans }}" url="{{ path('app_employee_delete' ,{"id" : employee.id} ) }}"></twig:Button>
+               <a href="{{ path("app_employee_show" , {'id' : employee.id}) }}">
+                   <div class=" px-4 py-4 md:px-8 lg:px-12 xl:px-16">
+                       <div class=" flex items-center  text-sm">
+                           <div class="flex-1 ">
+                               {{ employee.fullName }} , {{ employee.email }}
+                           </div>
                        </div>
                    </div>
-               </div>
+               </a>
            </div>
 
 
        {% endfor %}
+    </div>
        {{ pagerfanta(pagerfanta) }}
 
 

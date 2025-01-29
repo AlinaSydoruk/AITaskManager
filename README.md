@@ -14,9 +14,7 @@
    2. run `ddev php bin/console doctrine:migrations:migrate`
    3. run `ddev php bin/console doctrine:fixtures:load`
 5. Setup Asset Build
-   1. run `ddev yarn install`
-   2. DEV watch: `ddev yarn run watch`
-   3. DEV server: `ddev yarn run dev-server`
+   1. run `ddev php bin/console tailwind:build --watch`
 
 ## watch for changes to your assets/styles
 
