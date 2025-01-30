@@ -4,7 +4,8 @@ namespace App\Entity;
 
 enum WorkStatus: string
 {
-    case  notYetStartedWorking = 'Not yet started working';
-    case  working = 'Working';
-    case  terminated = 'Terminated';
+    case  notYetStartedWorking = 'Arbeit noch nicht';
+    case  working = 'Arbeitet';
+    case  contractTerminated = 'Gekündigt';
+    case  noLongerWithTheCompany = 'Gegangen';
 }

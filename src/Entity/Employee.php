@@ -137,10 +137,13 @@ class Employee
     public function getWorkStatus(): ?WorkStatus
     {
         $currentDate = new \DateTime('today');
-        if ($this->getLastWorkingDay() && $this->getLastWorkingDay() < $currentDate){
-            return WorkStatus::terminated;
-        } elseif ($this->getFirstWorkingDay() > $currentDate) {
+
+        if ($this->getLastWorkingDay() && $this->getLastWorkingDay() < $currentDate) {
+            return WorkStatus:: noLongerWithTheCompany;
+        }elseif ($this->getFirstWorkingDay() > $currentDate) {
             return WorkStatus::notYetStartedWorking;
+        }elseif ($this->getLastWorkingDay()){
+            return WorkStatus:: contractTerminated;
         } else {
             return WorkStatus::working;
         }
