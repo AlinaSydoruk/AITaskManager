@@ -5,9 +5,12 @@ namespace App\Form;
 use App\Entity\Employee;
 use App\Entity\WorkStatus;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -36,20 +39,16 @@ class EmployeeFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('firstWorkingDay', DateTimeType::class, [
+            ->add('firstWorkingDay', DateType::class, [
                 'label' => 'employee.first_working_day',
                 'widget' => 'single_text',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_fill_in_this_field',
                     ]),
-                    new GreaterThanOrEqual([
-                        'value' => 'today',
-                        'message' => 'error.the_first_working_day_cannot_be_earlier_than_today',
-                    ]),
                 ],
             ])
-            ->add('lastWorkingDay', DateTimeType::class, [
+            ->add('lastWorkingDay', DateType::class, [
                 'label' => 'employee.last_working_day',
                 'widget' => 'single_text',
                 'required'   => false,
@@ -61,15 +60,7 @@ class EmployeeFormType extends AbstractType
                 ],
 
             ])
-            ->add('workStatus', EnumType::class, [
-                'class' => WorkStatus::class,
-                'label' => 'employee.work_status',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_choose_work_status',
-                    ]),
-                ],
-            ])
+
             ->add('email', EmailType::class, [
                 'label' => 'employee.email',
                 'constraints' => [
@@ -110,8 +101,9 @@ class EmployeeFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('monthlySalary', NumberType::class, [
+            ->add('monthlySalary', MoneyType::class, [
                 'label' => 'employee.monthly_salary',
+                'currency' => 'CHF',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_fill_in_this_field ',

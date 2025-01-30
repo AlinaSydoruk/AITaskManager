@@ -34,7 +34,6 @@ class EmployeeFixtures extends Fixture
             $employee->setFirstName($data[0]);
             $employee->setLastName($data[1]);
             $employee->setFirstWorkingDay(new \DateTime('now'));
-            $employee->setWorkStatus(WorkStatus::notYetStartedWorking);
             $employee->setEmail($data[2]);
             $employee->setBusinessNumber('123456789');
             $employee->setPrivateNumber('987654321');

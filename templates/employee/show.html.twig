@@ -76,10 +76,10 @@
             <twig:block name="value">{{ employee.lastName }}</twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.first_working_day' | trans }}">
-            <twig:block name="value">{{ employee.firstWorkingDay |date("m/d/Y") }}</twig:block>
+            <twig:block name="value">{{ employee.firstWorkingDay |date("d.m.Y") }}</twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.last_working_day' | trans }}">
-            <twig:block name="value">{{ employee.lastWorkingDay |date("m/d/Y") }}</twig:block>
+            <twig:block name="value">{{ employee.lastWorkingDay ? employee.lastWorkingDay |date("d.m.Y") : 'message.not_specified' | trans }}</twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.work_status' | trans }}">
             <twig:block name="value">{{ employee.workStatus.value }}</twig:block>
@@ -103,7 +103,7 @@
             <twig:block name="value">{{ employee.postalCode }}</twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.monthly_salary' | trans }}">
-            <twig:block name="value">{{ employee.monthlySalary }}</twig:block>
+            <twig:block name="value">{{ employee.monthlySalary|format_currency('CHF') }}</twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.postal_code' | trans }}">
             <twig:block name="value">{{ employee.postalCode }}</twig:block>
