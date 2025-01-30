@@ -10,16 +10,9 @@
                     <span class="absolute -inset-1.5"></span>
                     <span class="sr-only">{{ 'profile.open_user_menu' | trans }}</span>
 
-                    <a data-tooltip-target="tooltip-default" type="button" class="mx-2">
-                        <img class="size-8 rounded-full" src="{{ asset("images/alien.png") }}" alt="alien">
-                    </a>
-
-                    <div id="tooltip-default" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                        <span class="text-2xs">{{ app.user.email }}</span>
-                        <div class="tooltip-arrow" data-popper-arrow></div>
-                    </div>
-
                 </a>
+                <span class="text-2xs text-white px-4">{{ app.user.email }}</span>
+
                 <a href="{{ path('app_logout') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800">
                     <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 16">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 8h11m0 0L8 4m4 4-4 4m4-11h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3"/>
