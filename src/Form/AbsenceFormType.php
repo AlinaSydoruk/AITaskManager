@@ -7,6 +7,7 @@ use App\Entity\AbsenceType;
 use App\Entity\WorkStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -21,19 +22,15 @@ class AbsenceFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startDate', DateTimeType::class, [
+            ->add('startDate', DateType::class, [
                 'label' => 'absence.start_date',
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_enter_the_first_absence_day',
                     ]),
-                    new GreaterThanOrEqual([
-                        'value' => 'today',
-                        'message' => 'error.the_start_date_cannot_be_earlier_than_today',
-                    ]),
                 ],
             ])
-            ->add('endDate', DateTimeType::class, [
+            ->add('endDate', DateType::class, [
                 'label' => 'absence.end_date',
                 'constraints' => [
                     new NotBlank([
