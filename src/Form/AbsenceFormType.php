@@ -7,6 +7,7 @@ use App\Entity\AbsenceType;
 use App\Entity\WorkStatus;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -21,41 +22,37 @@ class AbsenceFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startDate', DateTimeType::class, [
-                'label' => 'From date',
+            ->add('startDate', DateType::class, [
+                'label' => 'absence.start_date',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the first absence day',
-                    ]),
-                    new GreaterThanOrEqual([
-                        'value' => 'today',
-                        'message' => 'The start date cannot be earlier than today',
+                        'message' => 'error.please_enter_the_first_absence_day',
                     ]),
                 ],
             ])
-            ->add('endDate', DateTimeType::class, [
-                'label' => 'To date',
+            ->add('endDate', DateType::class, [
+                'label' => 'absence.end_date',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter the last absence day',
+                        'message' => 'error.please_enter_the_last_absence_day',
                     ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[startDate].data',
-                        'message' => 'The end date cannot be earlier than start date',
+                        'message' => 'error.the_end_date_cannot_be_earlier_than_start_date',
                     ]),
                 ],
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,
-                'label' => 'Absence type',
+                'label' => 'absence.absence_type',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please choose the absence type',
+                        'message' => 'error.please_choose_the_absence_type',
                     ]),
                 ],
             ])
             ->add('comment', TextareaType::class, [
-                'label' => 'Comment',
+                'label' => 'absence.comment',
                 'required'   => false,
             ])
         ;

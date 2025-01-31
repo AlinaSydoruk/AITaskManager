@@ -1,0 +1,30 @@
+{% block form_row %}
+    <div class="{{ form.vars.errors|length > 0 ? 'text-red-500' }}">
+        {% for error in form.vars.errors %}
+            <p class="text-red-500 text-sm mt-2">{{ error.message }}</p>
+        {% endfor %}
+        {{ form_label(form, form.vars.label, { 'label_attr': { 'class': 'text-sm text-gray-600' } }) }}
+        {{ form_widget(form, {
+            row_attr:{
+                class: 'relative z-0 w-full mb-5 group'
+            },
+            attr: {
+                class: 'py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2  focus:outline-none focus:ring-0 ' ~ (form.vars.errors|length > 0 ? '  border-red-500' : 'border-gray-600'),
+                placeholder: ' '
+            }
+        }) }}
+
+    </div>
+{% endblock %}
+
+{% block form_errors -%}
+    {% if errors|length > 0 -%}
+        {% if form is not rootform %}<span>{% else %}<div class="text-red-500 p-4 bg-red-100 border-2 border-red-500 rounded-md">{% endif %}
+        <ul class="list-unstyled">
+        {%- for error in errors -%}
+            <li>{{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+        {% if form is not rootform %}</span>{% else %}</div>{% endif %}
+    {%- endif %}
+{%- endblock form_errors %}

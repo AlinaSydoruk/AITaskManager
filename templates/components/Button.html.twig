@@ -1,0 +1,17 @@
+<div class="flex">
+    {% if url|default(null) %}
+        <a href="{{ url }}"
+    {% else %}
+        <button type="submit"
+    {% endif %}
+
+    {% block attributes %} {% endblock %}
+    class="text-center border-solid border-2 border-gray-200 hover:bg-gray-300 rounded-md px-6 py-2 {{ class|default(' ') }} ">
+    {{ label }}
+
+    {% if url|default(null) %}
+            </a>
+    {% else %}
+        </button>
+    {% endif %}
+</div>

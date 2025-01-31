@@ -9,12 +9,14 @@ use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExportService
 {
     public function __construct(
         private readonly EmployeeRepository $employeeRepository,
         private readonly UploaderHelper     $uploaderHelper,
+        private readonly TranslatorInterface      $translator,
     )
     {
     }
@@ -60,7 +62,7 @@ class ExportService
                 ->setCellValue('B' . $rowEmployee, $employee->getFirstName())
                 ->setCellValue('C' . $rowEmployee, $employee->getLastName())
                 ->setCellValue('D' . $rowEmployee, $employee->getFirstWorkingDay()->format('Y-m-d'))
-                ->setCellValue('E' . $rowEmployee, $employee->getLastWorkingDay() ? $employee->getLastWorkingDay()->format('Y-m-d') : '')
+                ->setCellValue('E' . $rowEmployee, $employee->getLastWorkingDay() ? $employee->getLastWorkingDay()->format('Y-m-d') : $this->translator->trans('message.not_specified'))
                 ->setCellValue('F' . $rowEmployee, $employee->getWorkStatus()->value)
                 ->setCellValue('G' . $rowEmployee, $employee->getEmail())
                 ->setCellValue('H' . $rowEmployee, $employee->getBusinessNumber())
@@ -78,7 +80,7 @@ class ExportService
                 $absenceSheet->setCellValue('A' . $rowAbsence, $absence->getId())
                     ->setCellValue('B' . $rowAbsence, $employee->getId())
                     ->setCellValue('C' . $rowAbsence, $absence->getStartDate()->format('Y-m-d'))
-                    ->setCellValue('D' . $rowAbsence, $absence->getEndDate() ? $absence->getEndDate()->format('Y-m-d') : '')
+                    ->setCellValue('D' . $rowAbsence, $absence->getEndDate()->format('Y-m-d'))
                     ->setCellValue('E' . $rowAbsence, $absence->getAbsenceType()->value)
                     ->setCellValue('F' . $rowAbsence, $absence->getComment());
 

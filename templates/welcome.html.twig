@@ -1,0 +1,25 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 ">
+        <twig:BreadCrumbHome/>
+        <div class="my-4">
+            <twig:MainHeader text="{{ 'profile.welcome' | trans }}"></twig:MainHeader>
+
+            <div class="my-4 ">
+                {{ 'welcome.you_are_logged_in_as' | trans }} {{ app.user.userIdentifier }}
+            </div>
+
+        </div>
+        <a href="{{ path('app_employee_index') }}">
+            <div class=" border-y-2 hover:bg-gray-200  border-neutral">
+                <div class="py-3 pl-4 sm:pl-8 md:pl-16 lg:pl-24 xl:pl-32">
+                    {{ 'profile.employee' | trans }}
+                </div>
+            </div>
+        </a>
+    </div>
+
+{% endblock content %}

@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use App\Repository\AbsenceRepository;
+use App\Validator\AbsencePeriod;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
+#[AbsencePeriod]
 class Absence
 {
     public function __construct(?Employee $employee)
@@ -18,7 +20,7 @@ class Absence
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
     private ?int $id = null;
-    #[Assert\GreaterThanOrEqual ( 'today' ) ]
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
     private ?\DateTimeInterface $startDate = null;

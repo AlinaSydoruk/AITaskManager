@@ -7,11 +7,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: EmployeeRepository::class)]
+#[SoftDeleteable(fieldName: 'deletedAt')]
 class Employee
 {
+    use TimestampableEntity,  SoftDeleteableEntity;
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column]
@@ -27,16 +32,12 @@ class Employee
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\GreaterThanOrEqual ( 'today' ) ]
     private ?\DateTimeInterface $firstWorkingDay = null;
 
     #[Assert\GreaterThanOrEqual ( propertyPath : 'firstWorkingDay' ) ]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastWorkingDay = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
-    private ?WorkStatus $workStatus = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
@@ -135,12 +136,17 @@ class Employee
 
     public function getWorkStatus(): ?WorkStatus
     {
-        return $this->workStatus;
-    }
+        $currentDate = new \DateTime('today');
 
-    public function setWorkStatus(?WorkStatus $workStatus): void
-    {
-        $this->workStatus = $workStatus;
+        if ($this->getLastWorkingDay() && $this->getLastWorkingDay() < $currentDate) {
+            return WorkStatus:: noLongerWithTheCompany;
+        }elseif ($this->getFirstWorkingDay() > $currentDate) {
+            return WorkStatus::notYetStartedWorking;
+        }elseif ($this->getLastWorkingDay()){
+            return WorkStatus:: contractTerminated;
+        } else {
+            return WorkStatus::working;
+        }
     }
 
     public function getEmail(): ?string
@@ -251,6 +257,11 @@ class Employee
         }
 
         return $this;
+    }
+
+    public function getFullName():string
+    {
+        return $this->getFirstName() . " " . $this->getLastName();
     }
 
 }

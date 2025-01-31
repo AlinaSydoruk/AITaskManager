@@ -19,6 +19,6 @@ class FrontendController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function home(): Response
     {
-        return $this->render("profile.html.twig");
+        return $this->render("welcome.html.twig");
     }
 }

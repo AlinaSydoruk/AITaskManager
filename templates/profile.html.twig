@@ -1,15 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profile!{% endblock %}
+{% block title %}{{ 'profile.sandbox' | trans }}{% endblock %}
 
-{% block body %}
-   <div>
-       <h1>
-           Welcome
-       </h1>
-       <div class="mb-3">
-           You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}">Logout</a>
-       </div>
-   </div>
-    <a href="{{  path('app_employee_index')}}"> Employees </a>
-{% endblock %}
+ {% block body %}
+     {% include 'partial/_header.html.twig' %}
+     <div class="flex-grow px-2 sm:px-4 md:px-8 lg:px-12 xl:px-16">
+         {% for message in app.flashes('success') %}
+                <div class="bg-green-100 border border-green-400 text-md text-green-600 p-4 my-2 rounded-lg">{{ message }}</div>
+         {% endfor %}
+
+         {% block content %}{% endblock %}
+     </div>
+     {% include 'partial/_footer.html.twig' %}
+ {% endblock %}

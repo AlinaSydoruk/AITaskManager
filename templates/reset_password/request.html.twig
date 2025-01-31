@@ -1,22 +1,38 @@
-{% extends 'base.html.twig' %}
+{% extends 'base_public.html.twig' %}
 
-{% block title %}Reset your password{% endblock %}
+{% block title %}{{ 'security.reset_your_password' | trans }}{% endblock %}
 
-{% block body %}
+{% block content %}
+<h1 class="my-4 text-2xl">{{ 'security.reset_your_password' | trans }}</h1>
+
     {% for flash_error in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+        <div class="text-red-500" role="alert">{{ flash_error }}</div>
     {% endfor %}
-    <h1>Reset your password</h1>
 
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
-        <div>
+
+    {{ form_start(requestForm, {'attr': {'class': 'form-container'}}) }}
+    <div class="relative z-0 w-full mb-5 group">
+        {{ form_row(requestForm.email, {
+            'attr': {
+                'class': 'block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:border-gray-600 focus:outline-none focus:ring-0',
+                'placeholder': ' '
+            },
+            'label_attr': {
+                'class': 'absolute text-sm text-gray-500 dark:text-gray-400  scale-75 -top-2 -z-10 '
+            }
+        }) }}
+    </div>
+    <div class="my-4">
+
             <small>
                 Enter your email address, and we will send you a
                 link to reset your password.
             </small>
-        </div>
+    </div>
 
-        <button class="btn btn-primary">Send password reset email</button>
+    <div class="space-y-4">
+    <twig:Button label="{{ 'security.send_password_reset_email' | trans }}" url="{{ false }}"></twig:Button>
+    <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_login') }}"></twig:Button>
+    </div>
     {{ form_end(requestForm) }}
 {% endblock %}
