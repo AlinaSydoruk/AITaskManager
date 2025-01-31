@@ -25,6 +25,8 @@
 ###< symfony/asset-mapper ###
 
 .idea
+.DS_Store
+.vscode
 
 /public/downloads/
 /node_modules
