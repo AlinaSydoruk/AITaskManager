@@ -116,9 +116,9 @@
                 {% if employee.absences.get(0) %}
                     {% for absence in employee.absences %}
                         <div class="grid grid-flow-col auto-cols-max text-sm space-y-2">
-                            <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}">
-                                {{ absence.startDate |date("d/m/Y") }}
-                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d/m/Y") }}
+                            <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}" class="underline">
+                                {{ absence.startDate |date("d.m.Y") }}
+                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d.m.Y") }}
                             </a></div>
 
                     {% endfor %}
