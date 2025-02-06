@@ -104,6 +104,7 @@ class EmployeeFormType extends AbstractType
             ->add('monthlySalary', MoneyType::class, [
                 'label' => 'employee.monthly_salary',
                 'currency' => 'CHF',
+                'grouping' => true,
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_fill_in_this_field ',
