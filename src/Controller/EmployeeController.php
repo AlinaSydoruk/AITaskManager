@@ -43,7 +43,7 @@ class EmployeeController extends AbstractController
             }catch (\LogicException $exception){
                 $uploadForm->addError(new FormError($exception->getMessage()));
             }
-            $this->addFlash('success' , 'absences uploaded successfully');
+            $this->addFlash('success' , 'message.absences_uploaded_successfully');
         }
 
         return $this->render('employee/index.html.twig',[
@@ -104,6 +104,7 @@ class EmployeeController extends AbstractController
         return $this->render('employee/edit.html.twig', [
             'form' => $form,
             'id' => $employee->getId(),
+            'employeeFullName' => $employee->getFullName()
         ]);
     }
 

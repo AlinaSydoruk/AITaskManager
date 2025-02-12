@@ -13,7 +13,7 @@
                              isActive="{{ false }}"
         />
         <twig:BreadCrumbItem link="{{ path('app_employee_show' , {'id' : employeeId }) }}"
-                             label="{{ 'employee.id' | trans({'id': employeeId}) }}"
+                             label="{{ employeeFullName }}"
                              isActive="{{ false }}"
         />
         {% if isEdit %}

@@ -57,6 +57,7 @@ class AbsenceController extends AbstractController
             'form' => $form,
             'id' => $id,
             'employeeId' => $employeeId,
+            'employeeFullName' => ($this->employeeRepository->find($employeeId))->getFullName(),
             'isEdit' => $isEdit,
         ]);
     }
@@ -76,7 +77,9 @@ class AbsenceController extends AbstractController
     public function show(int $id, int $employeeId): Response
     {
         $absence = $this->absenceRepository->find($id);
+        $employee = $this->employeeRepository->find($employeeId);
         return $this->render("absence/show.html.twig", [
+            'employeeFullName' =>  $employee->getFullName(),
             'absence' => $absence,
             'employeeId' => $employeeId
         ]);

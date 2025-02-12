@@ -11,6 +11,10 @@
                              label="{{ 'employee.employee' | trans }}"
                              isActive="{{ false }}"
         />
+        <twig:BreadCrumbItem link="{{ path('app_employee_show' , {"id" : id }) }}"
+                             label="{{ employeeFullName }}"
+                             isActive="{{ false }}"
+        />
         <twig:BreadCrumbItem
                 label="{{ 'action.edit' | trans }}"
                 isActive="true"
