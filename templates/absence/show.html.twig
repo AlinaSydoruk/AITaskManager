@@ -45,11 +45,12 @@
 
                                     <div class="flex justify-between px-6 ">
                                         <twig:Button label="{{ 'action.delete' | trans }}"
-                                                     url="{{  path('app_absence_delete' , {"employeeId" : employeeId , "id" : absence.id }) }}">
+                                                     url="{{  path('app_absence_delete' , {"employeeId" : employeeId , "id" : absence.id }) }}"
+                                                     class="text-red-500 p-4 bg-red-100 border-2 border-red-500">
                                             <twig:block name="attributes"> data-modal-hide="popup-modal"</twig:block>
                                         </twig:Button>
 
-                                        <twig:Button label="{{ 'action.close' | trans }}" class="text-red-500 p-4 bg-red-100 border-2 border-red-500">
+                                        <twig:Button label="{{ 'action.close' | trans }}" >
                                             <twig:block name="attributes"> data-modal-hide="popup-modal"</twig:block>
                                         </twig:Button>
                                     </div>
