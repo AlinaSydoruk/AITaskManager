@@ -6,7 +6,6 @@ use App\Form\UploadFormType;
 use App\Service\ExportService;
 use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,7 +26,7 @@ class ImportExportController extends AbstractController
     #[Route('/download/employees', name: 'app_download_employees')]
     public function downloadEmployees(): Response
     {
-        $fileName = $this->exportService->exportEmployeeData('employee.xlsx');
+        $fileName = $this->exportService->exportEmployeeData('employee '. date("d.m.Y h-i" ) .'.xlsx');
         $filePath = $this->uploaderHelper->getPublicDownloadsPath() . $fileName;
         return $this->file($filePath, $fileName);
     }

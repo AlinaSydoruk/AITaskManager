@@ -41,7 +41,6 @@ readonly class ImportService
             if (!$row->isEmpty(definitionOfEmptyFlags: CellIterator::TREAT_EMPTY_STRING_AS_EMPTY_CELL)) {
                 foreach ($cellIterator as $cell) {
                     $cells[] = trim($cell->getValue());
-                     dump(  $cell->getValue() . "errrr");
                 }
                 if (trim(!$cells[0])) {
                     throw new \LogicException("missed email in row " . $row->getRowIndex());
@@ -83,7 +82,7 @@ readonly class ImportService
 
                 //EndDate
                 $endDate = null;
-                $date = trim($cells[4]);
+                $date = $cells[4];
                 if (!$date) {
                     throw new \LogicException("missed end date in row " . $row->getRowIndex());
                 }

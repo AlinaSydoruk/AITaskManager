@@ -24,18 +24,10 @@ class AbsenceFormType extends AbstractType
         $builder
             ->add('startDate', DateType::class, [
                 'label' => 'absence.start_date',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_enter_the_first_absence_day',
-                    ]),
-                ],
             ])
             ->add('endDate', DateType::class, [
                 'label' => 'absence.end_date',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_enter_the_last_absence_day',
-                    ]),
                     new GreaterThanOrEqual([
                         'propertyPath' => 'parent.all[startDate].data',
                         'message' => 'error.the_end_date_cannot_be_earlier_than_start_date',
