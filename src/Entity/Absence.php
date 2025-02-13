@@ -6,12 +6,17 @@ use App\Repository\AbsenceRepository;
 use App\Validator\AbsencePeriod;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\SoftDeleteable;
+use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
+#[SoftDeleteable(fieldName: 'deletedAt')]
 #[AbsencePeriod]
 class Absence
 {
+    use TimestampableEntity,  SoftDeleteableEntity;
     public function __construct(?Employee $employee)
     {
         $this->employee = $employee;
