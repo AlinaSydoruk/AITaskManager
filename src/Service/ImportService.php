@@ -35,7 +35,7 @@ readonly class ImportService
         $absences = [];
         foreach ($worksheet->getRowIterator(2) as $row) {
             $cellIterator = $row->getCellIterator();
-            $cellIterator->setIterateOnlyExistingCells(true);
+
             $cells = [];
 
             if (!$row->isEmpty(definitionOfEmptyFlags: CellIterator::TREAT_EMPTY_STRING_AS_EMPTY_CELL)) {
