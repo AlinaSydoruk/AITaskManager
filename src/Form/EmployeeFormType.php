@@ -25,49 +25,21 @@ class EmployeeFormType extends AbstractType
         $builder
             ->add('firstName', null, [
                 'label' => 'employee.first_name',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('lastName', null, [
                 'label' => 'employee.first_name',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('firstWorkingDay', DateType::class, [
                 'label' => 'employee.first_working_day',
                 'widget' => 'single_text',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('lastWorkingDay', DateType::class, [
                 'label' => 'employee.last_working_day',
                 'widget' => 'single_text',
                 'required'   => false,
-                'constraints' => [
-                    new GreaterThanOrEqual([
-                        'propertyPath' => 'parent.all[firstWorkingDay].data',
-                        'message' => 'error.last_working_day_cannot_be_earlier_than_first_working_date',
-                    ]),
-                ],
-
             ])
-
             ->add('email', EmailType::class, [
                 'label' => 'employee.email',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('businessNumber', null, [
                 'label' => 'employee.business_number',
@@ -79,48 +51,20 @@ class EmployeeFormType extends AbstractType
             ])
             ->add('streetAndNumber', null, [
                 'label' => 'employee.street_and_number',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('city', null, [
                 'label' => 'employee.city',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('postalCode', null, [
                 'label' => 'employee.postal_code',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
             ->add('monthlySalary', MoneyType::class, [
                 'label' => 'employee.monthly_salary',
                 'currency' => 'CHF',
                 'grouping' => true,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field ',
-                    ]),
-                    new Positive([
-                        'message' => 'error.monthly_salary_must_be_greater_than_0',
-                            ])
-                ],
             ])
             ->add('jobTitle', null, [
                 'label' => 'employee.job_title',
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'error.please_fill_in_this_field',
-                    ]),
-                ],
             ])
         ;
     }

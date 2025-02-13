@@ -30,3 +30,7 @@ services:
         arguments:
             $publicDownloadsDir: '%kernel.project_dir%%env(PUBLIC_DOWNLOADS_DIR)%'
             $uploadsDir: '%kernel.project_dir%%env(UPLOADS_DIR)%'
+
+    App\Form\NoValidateExtension:
+        arguments:
+            $html5_validation: '%env(bool:APP_HTML5_VALIDATION)%'

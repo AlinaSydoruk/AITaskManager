@@ -27,12 +27,6 @@ class AbsenceFormType extends AbstractType
             ])
             ->add('endDate', DateType::class, [
                 'label' => 'absence.end_date',
-                'constraints' => [
-                    new GreaterThanOrEqual([
-                        'propertyPath' => 'parent.all[startDate].data',
-                        'message' => 'error.the_end_date_cannot_be_earlier_than_start_date',
-                    ]),
-                ],
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,

@@ -42,6 +42,14 @@ readonly class ImportService
                 foreach ($cellIterator as $cell) {
                     $cells[] = trim($cell->getValue());
                 }
+
+                // id
+                $id = $cells[0];
+
+               /* if ($id){
+                    $absences
+                }*/
+
                 if (trim(!$cells[0])) {
                     throw new \LogicException("missed email in row " . $row->getRowIndex());
                 }
