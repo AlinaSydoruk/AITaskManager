@@ -36,8 +36,8 @@ readonly class UploaderHelper
     public function UploadExcelFile(UploadedFile $uploadedFile): void
     {
         $newFileName = $this->createUniqueFilename($uploadedFile);
-        $uploadedFile->move($this->getUploadsPath(), $newFileName);
-        $this->importService->importAbsences($this->getUploadsPath() . $newFileName);
+        $uploadedFile->move($this->getUploadsPath(), "/" . $newFileName);
+        $this->importService->importAbsences($this->getUploadsPath() . "/" . $newFileName);
 
     }
 
