@@ -28,7 +28,19 @@ class ExportService
 
         $employeeSheet = $spreadsheet->getSheet(0)->setTitle('Employees');
 
-        foreach ($employeeSheet->getColumnIterator('A', 'N') as $column){
+        $columnWidths = [
+            'A' => 10,
+            'B' => 20,
+            'C' => 20,
+            'D' => 25,
+            'E' => 20,
+            'F' => 20,
+            'G' => 20
+        ];
+        foreach ($columnWidths as $colum => $width) {
+            $employeeSheet->getColumnDimension($colum)->setWidth($width);
+        }
+        foreach ($employeeSheet->getColumnIterator('G', 'N') as $column){
             $employeeSheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
         }
 
@@ -36,17 +48,17 @@ class ExportService
         $employeeSheet->setCellValue('A1', 'ID')
             ->setCellValue('B1', 'First Name')
             ->setCellValue('C1', 'Last Name')
-            ->setCellValue('D1', 'First Working Day')
-            ->setCellValue('E1', 'Last Working Day')
-            ->setCellValue('F1', 'Work Status')
-            ->setCellValue('G1', 'Email')
-            ->setCellValue('H1', 'Business Number')
-            ->setCellValue('I1', 'Private Number')
-            ->setCellValue('J1', 'Street and Number')
-            ->setCellValue('K1', 'City')
-            ->setCellValue('L1', 'Postal Code')
-            ->setCellValue('M1', 'Monthly Salary')
-            ->setCellValue('N1', 'Job Title')
+            ->setCellValue('D1', 'Street and Number')
+            ->setCellValue('E1', 'City')
+            ->setCellValue('F1', 'Job Title')
+            ->setCellValue('G1', 'First Working Day')
+            ->setCellValue('H1', 'Last Working Day')
+            ->setCellValue('I1', 'Work Status')
+            ->setCellValue('J1', 'Email')
+            ->setCellValue('K1', 'Business Number')
+            ->setCellValue('L1', 'Private Number')
+            ->setCellValue('M1', 'Postal Code')
+            ->setCellValue('N1', 'Monthly Salary')
             ->setCellValue('O1', 'Absences');
 
 
@@ -57,17 +69,18 @@ class ExportService
             $employeeSheet->setCellValue('A' . $rowEmployee, $employee->getId())
                 ->setCellValue('B' . $rowEmployee, $employee->getFirstName())
                 ->setCellValue('C' . $rowEmployee, $employee->getLastName())
-                ->setCellValue('D' . $rowEmployee, $employee->getFirstWorkingDay()->format('d.m.Y'))
-                ->setCellValue('E' . $rowEmployee, $employee->getLastWorkingDay() ? $employee->getLastWorkingDay()->format('d.m.Y') : $this->translator->trans('message.not_specified'))
-                ->setCellValue('F' . $rowEmployee, $employee->getWorkStatus()->value)
-                ->setCellValue('G' . $rowEmployee, $employee->getEmail())
-                ->setCellValue('H' . $rowEmployee, $employee->getBusinessNumber())
-                ->setCellValue('I' . $rowEmployee, $employee->getPrivateNumber())
-                ->setCellValue('J' . $rowEmployee, $employee->getStreetAndNumber())
-                ->setCellValue('K' . $rowEmployee, $employee->getCity())
-                ->setCellValue('L' . $rowEmployee, $employee->getPostalCode())
-                ->setCellValue('M' . $rowEmployee, 'CHF ' .  number_format($employee->getMonthlySalary(), 2, '.', "'"))
-                ->setCellValue('N' . $rowEmployee, $employee->getJobTitle());
+                ->setCellValue('D' . $rowEmployee, $employee->getStreetAndNumber())
+                ->setCellValue('E' . $rowEmployee, $employee->getCity())
+                ->setCellValue('F' . $rowEmployee, $employee->getJobTitle())
+                ->setCellValue('G' . $rowEmployee, $employee->getFirstWorkingDay()->format('d.m.Y'))
+                ->setCellValue('H' . $rowEmployee, $employee->getLastWorkingDay() ? $employee->getLastWorkingDay()->format('d.m.Y') : $this->translator->trans('message.not_specified'))
+                ->setCellValue('I' . $rowEmployee, $employee->getWorkStatus()->value)
+                ->setCellValue('J' . $rowEmployee, $employee->getEmail())
+                ->setCellValue('K' . $rowEmployee, $employee->getBusinessNumber())
+                ->setCellValue('L' . $rowEmployee, $employee->getPrivateNumber())
+                ->setCellValue('M' . $rowEmployee, $employee->getPostalCode())
+                ->setCellValue('N' . $rowEmployee, 'CHF ' .  number_format($employee->getMonthlySalary(), 2, '.', "'"));
+
 
             $cellIterator = $employeeSheet->getRowIterator($rowEmployee)->current()->getCellIterator('O');
             foreach ($employee->getAbsences() as $absence) {
@@ -83,7 +96,9 @@ class ExportService
         }
         $employeeSheet->getStyle($employeeSheet->calculateWorksheetDimension())
             ->getAlignment()
-            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
+            ->setHorizontal(Alignment::HORIZONTAL_LEFT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP)
+            ->setWrapText(true);
 
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($this->uploaderHelper->getPublicDownloadsPath() . $fileName);
