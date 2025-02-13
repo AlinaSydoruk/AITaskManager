@@ -43,40 +43,49 @@ readonly class ImportService
                     $cells[] = trim($cell->getValue());
                 }
 
+                $absence = null;
+
                 // id
                 $id = $cells[0];
 
-               /* if ($id){
-                    $absences
-                }*/
-
-                if (trim(!$cells[0])) {
-                    throw new \LogicException("missed email in row " . $row->getRowIndex());
+                if ($id){
+                    $absence = $this->absenceRepository->find($id);
+                    dd($absence);
+                    $absence? : throw new \LogicException("incorrect id in row " . $row->getRowIndex());
+                } else {
+                    throw new \LogicException("missed id in row " . $row->getRowIndex());
                 }
+
                 //email
-                $employee = $this->employeeRepository->findEmployeeByEmail($cells[0]);
-
-                if (!$employee) {
-                    throw new LogicException("Unable to find employee with email : $cells[0]");
+                if (!$absence) {
+                    if (trim(!$cells[1])) {
+                        throw new \LogicException("missed email in row " . $row->getRowIndex());
+                    }
+                    $employee = $this->employeeRepository->findEmployeeByEmail($cells[1]);
+                    if (!$employee) {
+                        throw new LogicException("Unable to find employee with email : $cells[1]");
+                    }
+                    $absence = new Absence($employee);
                 }
 
-                $type = trim($cells[1]);
+                $type = trim($cells[2]);
                 if (trim(!$type)) {
                     throw new \LogicException("missed AbsenceType in row " . $row->getRowIndex());
                 }
                 $absenceType = AbsenceType::tryFrom($type);
 
                 if (!$absenceType) {
-                    throw new \LogicException(" incorrect Absence Type : $cells[1] , only " . implode(', ', array_map(fn($case) => $case->value, AbsenceType::cases())) . "are allowed ");
+                    throw new \LogicException(" incorrect Absence Type : $cells[2] , only " . implode(', ', array_map(fn($case) => $case->value, AbsenceType::cases())) . "are allowed ");
                 }
+                $absence->setAbsenceType($absenceType);
 
-                $comment = $cells[2];
-                $absence = new Absence($employee);
+                //Comment
+                $comment = $cells[3];
+                $absence->setComment($comment);
 
                 //StartDate
                 $startDate = null;
-
-                $date = trim($cells[3]);
+                $date = trim($cells[4]);
                 if (!$date) {
                     throw new \LogicException("missed start date in row " . $row->getRowIndex());
                 }
@@ -90,7 +99,7 @@ readonly class ImportService
 
                 //EndDate
                 $endDate = null;
-                $date = $cells[4];
+                $date = $cells[5];
                 if (!$date) {
                     throw new \LogicException("missed end date in row " . $row->getRowIndex());
                 }
@@ -100,11 +109,6 @@ readonly class ImportService
                 } else if ($endDate = DateTime::createFromFormat('d.m.Y', $date)) {
                     $absence->setEndDate($endDate);
                 } else throw new \LogicException("Incorrect date type: $date, try dd.mm.yyyy.  ");
-
-
-                $absence->setAbsenceType($absenceType);
-                $absence->setComment($comment);
-
 
                 $errors = $this->validator->validate($absence);
                 if (count($errors) > 0) {

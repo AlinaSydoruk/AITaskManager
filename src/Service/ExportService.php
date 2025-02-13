@@ -100,8 +100,12 @@ class ExportService
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP)
             ->setWrapText(true);
 
+        $directory = $this->uploaderHelper->getPublicDownloadsPath();
+        if (!is_dir($directory)) {
+            mkdir($directory, 0777, true);
+        }
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
-        $writer->save($this->uploaderHelper->getPublicDownloadsPath() . $fileName);
+        $writer->save($directory ."/". $fileName);
 
         return $fileName;
     }

@@ -26,8 +26,8 @@ class ImportExportController extends AbstractController
     #[Route('/download/employees', name: 'app_download_employees')]
     public function downloadEmployees(): Response
     {
-        $fileName = $this->exportService->exportEmployeeData('employee '. date("d.m.Y h-i" ) .'.xlsx');
-        $filePath = $this->uploaderHelper->getPublicDownloadsPath() . $fileName;
+        $fileName = $this->exportService->exportEmployeeData('employee'. date("d.m.Y h-i" ) .'.xlsx');
+        $filePath = $this->uploaderHelper->getPublicDownloadsPath() . "/" .$fileName;
         return $this->file($filePath, $fileName);
     }
 
