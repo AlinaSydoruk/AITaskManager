@@ -8,6 +8,7 @@ use App\UploaderHelper;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -27,22 +28,9 @@ class ExportService
 
         $employeeSheet = $spreadsheet->getSheet(0)->setTitle('Employees');
 
-        $employeeSheet->getColumnDimension('A')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('B')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('C')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('D')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('E')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('F')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('G')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('H')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('I')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('J')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('K')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('L')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('M')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('N')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('O')->setAutoSize(true);
-        $employeeSheet->getColumnDimension('P')->setAutoSize(true);
+        foreach ($employeeSheet->getColumnIterator('A', 'N') as $column){
+            $employeeSheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+        }
 
         // headers for Employee
         $employeeSheet->setCellValue('A1', 'ID')
@@ -93,6 +81,9 @@ class ExportService
             $rowEmployee++;
 
         }
+        $employeeSheet->getStyle($employeeSheet->calculateWorksheetDimension())
+            ->getAlignment()
+            ->setHorizontal(Alignment::HORIZONTAL_LEFT);
 
         $writer = IOFactory::createWriter($spreadsheet, "Xlsx");
         $writer->save($this->uploaderHelper->getPublicDownloadsPath() . $fileName);
