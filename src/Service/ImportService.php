@@ -42,30 +42,31 @@ readonly class ImportService
                 foreach ($cellIterator as $cell) {
                     $cells[] = trim($cell->getValue());
                 }
-
                 $absence = null;
 
                 // id
                 $id = $cells[0];
-
-                if ($id){
+                if ($id) {
                     $absence = $this->absenceRepository->find($id);
-                    dd($absence);
-                    $absence? : throw new \LogicException("incorrect id in row " . $row->getRowIndex());
+                    $absence ?: throw new \LogicException("incorrect id in row " . $row->getRowIndex());
                 } else {
                     throw new \LogicException("missed id in row " . $row->getRowIndex());
                 }
 
                 //email
+
+                if (trim(!$cells[1])) {
+                    throw new \LogicException("missed email in row " . $row->getRowIndex());
+                }
+                $employee = $this->employeeRepository->findEmployeeByEmail($cells[1]);
+                if (!$employee) {
+                    throw new LogicException("Unable to find employee with email : $cells[1]");
+                }
+
                 if (!$absence) {
-                    if (trim(!$cells[1])) {
-                        throw new \LogicException("missed email in row " . $row->getRowIndex());
-                    }
-                    $employee = $this->employeeRepository->findEmployeeByEmail($cells[1]);
-                    if (!$employee) {
-                        throw new LogicException("Unable to find employee with email : $cells[1]");
-                    }
                     $absence = new Absence($employee);
+                } else {
+                    $absence->setEmployee($employee);
                 }
 
                 $type = trim($cells[2]);
