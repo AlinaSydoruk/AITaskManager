@@ -1,19 +1,26 @@
-name: sandbox
+# Basil Config
+name: praktika
 type: php
 docroot: public
 php_version: "8.2"
-webserver_type: nginx-fpm
-router_http_port: "82"
+webserver_type: apache-fpm
+router_http_port: "80"
+router_https_port: "443"
 xdebug_enabled: false
 additional_hostnames: []
 additional_fqdns: []
 database:
     type: mysql
     version: "8.0"
+nfs_mount_enabled: false
+mutagen_enabled: false
 use_dns_when_possible: true
 composer_version: "2"
-web_environment: []
-corepack_enable: false
+web_environment:
+    - DATABASE_URL=mysql://root:root@db:3306/db
+    - MAILER_DSN=smtp://localhost:1025
+    - TEST_DB_SUFFIX=_test
+nodejs_version: "20"
 
 # Key features of DDEV's config.yaml:
 
