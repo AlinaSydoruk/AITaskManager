@@ -34,3 +34,8 @@ services:
     App\Form\NoValidateExtension:
         arguments:
             $html5_validation: '%env(bool:APP_HTML5_VALIDATION)%'
+
+    App\Service\VocationService:
+        arguments:
+            $vacationDaysPerYear: '%env(int:VACATION_DAYS_PER_YEAR)%'
+            $workHoursPerDay: '%env(int:WORK_HOURS_PER_DAY)%'
