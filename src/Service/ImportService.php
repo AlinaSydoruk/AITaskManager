@@ -42,40 +42,40 @@ readonly class ImportService
                 foreach ($cellIterator as $cell) {
                     $cells[] = trim($cell->getValue());
                 }
-
                 $absence = null;
 
                 // id
                 $id = $cells[0];
-
-                if ($id){
+                if ($id) {
                     $absence = $this->absenceRepository->find($id);
-                    dd($absence);
-                    $absence? : throw new \LogicException("incorrect id in row " . $row->getRowIndex());
+                    $absence ?: throw new \LogicException($this->translator->trans("error.incorrect_id_in_row") . $row->getRowIndex());
                 } else {
-                    throw new \LogicException("missed id in row " . $row->getRowIndex());
+                    throw new \LogicException($this->translator->trans("error.missed_id_in_row") . $row->getRowIndex());
                 }
 
                 //email
+                if (trim(!$cells[1])) {
+                    throw new \LogicException($this->translator->trans("error.missed_email_in_row") . $row->getRowIndex());
+                }
+                $employee = $this->employeeRepository->findEmployeeByEmail($cells[1]);
+                if (!$employee) {
+                    throw new LogicException($this->translator->trans("error.unable_to_find_employee_with_email",['email' => $cells[1]]));
+                }
+
                 if (!$absence) {
-                    if (trim(!$cells[1])) {
-                        throw new \LogicException("missed email in row " . $row->getRowIndex());
-                    }
-                    $employee = $this->employeeRepository->findEmployeeByEmail($cells[1]);
-                    if (!$employee) {
-                        throw new LogicException("Unable to find employee with email : $cells[1]");
-                    }
                     $absence = new Absence($employee);
+                } else {
+                    $absence->setEmployee($employee);
                 }
 
                 $type = trim($cells[2]);
                 if (trim(!$type)) {
-                    throw new \LogicException("missed AbsenceType in row " . $row->getRowIndex());
+                    throw new \LogicException($this->translator->trans("error.missed_absence_type_in_row") . $row->getRowIndex());
                 }
                 $absenceType = AbsenceType::tryFrom($type);
 
                 if (!$absenceType) {
-                    throw new \LogicException(" incorrect Absence Type : $cells[2] , only " . implode(', ', array_map(fn($case) => $case->value, AbsenceType::cases())) . "are allowed ");
+                    throw new \LogicException($this->translator->trans("error.incorrect_absence_type", ['absenceType' => $cells[2] , 'allowedTypes' =>implode(', ', array_map(fn($case) => $case->value, AbsenceType::cases()))]));
                 }
                 $absence->setAbsenceType($absenceType);
 
@@ -87,28 +87,28 @@ readonly class ImportService
                 $startDate = null;
                 $date = trim($cells[4]);
                 if (!$date) {
-                    throw new \LogicException("missed start date in row " . $row->getRowIndex());
+                    throw new \LogicException($this->translator->trans("error.missed_start_date_in_row") . $row->getRowIndex());
                 }
                 if (is_numeric($date)) {
                     $startDate = Date::excelToDateTimeObject(intval($date));
                     $absence->setStartDate($startDate);
                 } else if ($startDate = DateTime::createFromFormat('d.m.Y', $date)) {
                     $absence->setStartDate($startDate);
-                } else throw new \LogicException("Incorrect date type: $date, try dd.mm.yyyy.  ");
+                } else throw new \LogicException($this->translator->trans('error.incorrect_date_type', ['date' => $date]));
 
 
                 //EndDate
                 $endDate = null;
                 $date = $cells[5];
                 if (!$date) {
-                    throw new \LogicException("missed end date in row " . $row->getRowIndex());
+                    throw new \LogicException($this->translator->trans("error.missed_end_date_in_row") . $row->getRowIndex());
                 }
                 if (is_numeric($date)) {
                     $endDate = Date::excelToDateTimeObject(intval($date));
                     $absence->setEndDate($endDate);
                 } else if ($endDate = DateTime::createFromFormat('d.m.Y', $date)) {
                     $absence->setEndDate($endDate);
-                } else throw new \LogicException("Incorrect date type: $date, try dd.mm.yyyy.  ");
+                } else throw new \LogicException($this->translator->trans('error.incorrect_date_type', ['date' => $date]));
 
                 $errors = $this->validator->validate($absence);
                 if (count($errors) > 0) {
@@ -116,7 +116,7 @@ readonly class ImportService
                     foreach ($errors as $violation) {
                         $errorsString = $violation->getPropertyPath() . ': ' . $violation->getMessage() . "\n";
                     }
-                    throw new \LogicException(' Absences are not valid for this employee ' . $absence->getEmployee()->getEmail() . ' ' . $errorsString);
+                    throw new \LogicException($this->translator->trans('error.absences_not_valid_for_employee') . $absence->getEmployee()->getEmail() . ' ' . $errorsString);
                 }
                 $absences[] = $absence;
             }

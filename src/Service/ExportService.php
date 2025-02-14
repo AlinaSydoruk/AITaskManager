@@ -26,7 +26,7 @@ class ExportService
 
         $spreadsheet = new Spreadsheet();
 
-        $employeeSheet = $spreadsheet->getSheet(0)->setTitle('Employees');
+        $employeeSheet = $spreadsheet->getSheet(0)->setTitle($this->translator->trans('employee.employee'));
 
         $columnWidths = [
             'A' => 10,
@@ -46,20 +46,20 @@ class ExportService
 
         // headers for Employee
         $employeeSheet->setCellValue('A1', 'ID')
-            ->setCellValue('B1', 'First Name')
-            ->setCellValue('C1', 'Last Name')
-            ->setCellValue('D1', 'Street and Number')
-            ->setCellValue('E1', 'City')
-            ->setCellValue('F1', 'Job Title')
-            ->setCellValue('G1', 'First Working Day')
-            ->setCellValue('H1', 'Last Working Day')
-            ->setCellValue('I1', 'Work Status')
-            ->setCellValue('J1', 'Email')
-            ->setCellValue('K1', 'Business Number')
-            ->setCellValue('L1', 'Private Number')
-            ->setCellValue('M1', 'Postal Code')
-            ->setCellValue('N1', 'Monthly Salary')
-            ->setCellValue('O1', 'Absences');
+            ->setCellValue('B1', $this->translator->trans('employee.first_name'))
+            ->setCellValue('C1', $this->translator->trans('employee.last_name'))
+            ->setCellValue('D1', $this->translator->trans('employee.street_and_number'))
+            ->setCellValue('E1', $this->translator->trans('employee.city'))
+            ->setCellValue('F1', $this->translator->trans('employee.job_title'))
+            ->setCellValue('G1', $this->translator->trans('employee.first_working_day'))
+            ->setCellValue('H1', $this->translator->trans('employee.last_working_day'))
+            ->setCellValue('I1', $this->translator->trans('employee.work_status'))
+            ->setCellValue('J1', $this->translator->trans('employee.email'))
+            ->setCellValue('K1', $this->translator->trans('employee.business_number'))
+            ->setCellValue('L1', $this->translator->trans('employee.private_number'))
+            ->setCellValue('M1', $this->translator->trans('employee.postal_code'))
+            ->setCellValue('N1', $this->translator->trans('employee.monthly_salary'))
+            ->setCellValue('O1', $this->translator->trans('employee.absence'));
 
 
         $employees = $this->employeeRepository->findAll();
