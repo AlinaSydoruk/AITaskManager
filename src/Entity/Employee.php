@@ -78,9 +78,8 @@ class Employee
      */
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employee', orphanRemoval: true)]
     private Collection $absences;
-    #[ORM\Column]
-    #[Assert\NotBlank]
-    private ?int $availableVocationHours = null;
+    #[ORM\Column(nullable: true)]
+    private ?float $availableVocationDays = null;
 
     public function __construct()
     {
@@ -267,14 +266,14 @@ class Employee
         return $this->getFirstName() . " " . $this->getLastName();
     }
 
-    public function getAvailableVocationHours(): ?int
+    public function getAvailableVocationDays(): ?float
     {
-        return $this->availableVocationHours;
+        return $this->availableVocationDays;
     }
 
-    public function setAvailableVocationHours(?int $availableVocationHours): void
+    public function setAvailableVocationDays(?float $availableVocationDays): void
     {
-        $this->availableVocationHours = $availableVocationHours;
+        $this->availableVocationDays = $availableVocationDays;
     }
 
 

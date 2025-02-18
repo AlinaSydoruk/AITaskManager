@@ -1,15 +1,16 @@
 <?php
 
 
-namespace templates\Twig\Components;
+namespace App\Twig\Components;
 
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
-class InformationRow
+class MainHeader
 {
 
-    public string $title;
+    public string $text;
+    public ?string $subheading = null;
 
     public string $class = '';
 }

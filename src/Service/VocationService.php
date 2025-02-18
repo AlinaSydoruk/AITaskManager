@@ -18,16 +18,24 @@ readonly class VocationService
     {
     }
 
-    public function getVacationHoursPerYear(): int
+    public function getVacationDaysPerYear(): int
     {
-
-        return $this->vacationDaysPerYear * $this->workHoursPerDay;
+        return $this->vacationDaysPerYear;
     }
 
     public function calculateEmployeeAvailableVacationDays(Employee $employee): float
     {
-        return $employee->getAvailableVocationHours() / $this->workHoursPerDay;
-    }
+        $vacationPerMonth = 25.0 / 12.0; // 2.0833 days/month
+
+        if (!$employee->getAvailableVocationDays()){
+            $currentDate = new \DateTime('today');
+            if ($employee->getFirstWorkingDay() > $currentDate){
+                $availableVocationDays =
+
+            }
+        }
+
+
 
     public function increaseEmployeeAvailableVacationDays (Employee $employee, int $hours): void
     {
