@@ -21,6 +21,7 @@ readonly class ImportService
         private AbsenceRepository   $absenceRepository,
         private ValidatorInterface  $validator,
         private TranslatorInterface $translator,
+        private VocationService     $vocationService,
     )
     {
     }

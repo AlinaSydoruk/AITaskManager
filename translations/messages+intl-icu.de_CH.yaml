@@ -98,4 +98,4 @@ error.missed_absence_type_in_row: "Fehlender Abwesenheitstyp in der Zeile "
 error.unable_to_find_employee_with_email: "Mitarbeiter mit der E-Mail {email} konnte nicht gefunden werden."
 error.incorrect_absence_type: "Ungültiger Abwesenheitstyp: {absenceType}; Nur {allowedTypes} sind erlaubt."
 error.incorrect_date_type: "Ungültiges Datumsformat: {date}, bitte verwenden Sie das Format TT.MM.JJJJ."
-
+error.invalid_end_of_year_format_expected_d-m: "Ungültiges END_OF_YEAR-Format, erwartet 'd-m'"

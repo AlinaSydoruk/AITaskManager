@@ -38,4 +38,4 @@ services:
     App\Service\VocationService:
         arguments:
             $vacationDaysPerYear: '%env(int:VACATION_DAYS_PER_YEAR)%'
-            $workHoursPerDay: '%env(int:WORK_HOURS_PER_DAY)%'
+            $endOfYear: '%env(END_OF_YEAR)%'

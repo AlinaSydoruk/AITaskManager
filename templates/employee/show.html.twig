@@ -114,6 +114,10 @@
         <twig:InformationRow title="{{ 'employee.job_title' | trans }}">
             <twig:block name="value">{{ employee.jobTitle }}</twig:block>
         </twig:InformationRow>
+        <twig:InformationRow title="{{ 'employee.available_vocations' | trans }}">
+            <twig:block name="value">{{ availableVocationDays }}</twig:block>
+        </twig:InformationRow>
+
         <twig:InformationRow title="{{ 'employee.absence' | trans }}">
             <twig:block name="value">
                 {% if employee.absences.get(0) %}

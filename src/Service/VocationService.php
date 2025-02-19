@@ -12,7 +12,7 @@ class VocationService
         private EmployeeRepository  $employeeRepository,
         private TranslatorInterface $translator,
         private int                 $vacationDaysPerYear,
-        private int                 $workHoursPerDay,
+        private string              $endOfYear,
 
     )
     {
@@ -26,35 +26,27 @@ class VocationService
 
     public function calculateEmployeeAvailableVacationDays(Employee $employee): float
     {
-
         $currentDate = new \DateTime('today');
-        $endOfYear = new \DateTime('December 31');
 
-
-        if (!$employee->getAvailableVocationDays()) {
-            if ($employee->getFirstWorkingDay() >= $currentDate) { // Not yet started working
-
-                //The number of vocation days until the end of the year
-                $totalVacationDaysUntilEndOfYear = $this->getEmployeeVocationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYear);
-                $employee->setAvailableVocationDays($totalVacationDaysUntilEndOfYear);
-                return $totalVacationDaysUntilEndOfYear;
-
-            }else{
-                $totalVacationDays = $this->getEmployeeVocationDaysInPeriod($employee->getFirstWorkingDay() , $currentDate);
-                $totalUsedVocationDays = null;
-                foreach ($employee->getAbsences() as $absence){
-                    $totalUsedVocationDays+=$absence->getDurationInDays();
-                }
-                $availableVocationDays = $totalVacationDays - $totalUsedVocationDays; // can be negative
-                $employee->setAvailableVocationDays($availableVocationDays);
-                return $availableVocationDays;
-            }
+        $endOfYear = \DateTime::createFromFormat('d-m',$this->endOfYear);
+        if (!$endOfYear) {
+            throw new \InvalidArgumentException($this->translator->trans('error.invalid_end_of_year_format_expected_d-m'));
         }
-        return $employee->getAvailableVocationDays();
+
+        if ($employee->getFirstWorkingDay() > $currentDate) {
+            return $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYear);
+        } else {
+            $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $currentDate);
+            $totalUsedVocationDays = null;
+            foreach ($employee->getAbsences() as $absence) {
+                $totalUsedVocationDays += $absence->getDurationInDays();
+            }
+            return $totalVacationDays - $totalUsedVocationDays; // can be negative
+        }
     }
 
 
-    private function getEmployeeVocationDaysInPeriod(\DateTimeInterface $startDate , \DateTimeInterface $endDate ) : float
+    private function getEmployeeVacationDaysInPeriod(\DateTimeInterface $startDate , \DateTimeInterface $endDate ) : float
     {
         $vacationPerMonth =  $this->vacationDaysPerYear / 12.0; // 2.0833 days/month
         $interval = $startDate->diff($endDate);
@@ -76,15 +68,8 @@ class VocationService
             return $integerPart + 0.5;
         }
     }
-
-
-    public function increaseEmployeeAvailableVacationDays (Employee $employee, int $days): void
-    {
-        $employee->getAvailableVocationDays() ?  : $this->calculateEmployeeAvailableVacationDays($employee);
-        $employee->setAvailableVocationDays($employee->getAvailableVocationDays() + $days);
-    }
-
-    public function canDecreaseEmployeeAvailableVacationDays(Employee $employee, int $days): bool
+/*
+    public function canTakeVacation(Employee $employee, int $days): bool
     {
         $employee->getAvailableVocationDays() ?  : $this->calculateEmployeeAvailableVacationDays($employee);
         $leftVacationDays = $employee->getAvailableVocationDays() - $days ;
@@ -94,6 +79,6 @@ class VocationService
         $employee->setAvailableVocationDays($leftVacationDays);
         return true;
 
-    }
+    }*/
 
 }

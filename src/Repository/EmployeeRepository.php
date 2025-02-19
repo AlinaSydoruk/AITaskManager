@@ -29,7 +29,6 @@ class EmployeeRepository extends ServiceEntityRepository
 
     }
 
-
     public function findEmployeeByEmail($value): ?Employee
     {
         return $this->createQueryBuilder('e')
