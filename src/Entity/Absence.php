@@ -46,6 +46,12 @@ class Absence
     #[ORM\JoinColumn(nullable: false)]
     private Employee $employee;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isStartDateHalfDay = false;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $isEndDateHalfDay = false;
+
 
     public function getId(): ?int
     {
@@ -109,4 +115,33 @@ class Absence
 
         return $this;
     }
+
+    public function isStartDateHalfDay(): bool
+    {
+        return $this->isStartDateHalfDay;
+    }
+
+    public function setIsStartDateHalfDay(bool $isStartDateHalfDay): void
+    {
+        $this->isStartDateHalfDay = $isStartDateHalfDay;
+    }
+
+    public function isEndDateHalfDay(): bool
+    {
+        return $this->isEndDateHalfDay;
+    }
+
+    public function setIsEndDateHalfDay(bool $isEndDateHalfDay): void
+    {
+        $this->isEndDateHalfDay = $isEndDateHalfDay;
+    }
+
+    public function getDurationInDays():float
+    {
+        $days = $this->startDate->diff($this->endDate)->days + 1;
+        $days = $this->isStartDateHalfDay ? ($days - 0.5) : $days;
+        return $this->isEndDateHalfDay ? ($days - 0.5) : $days;
+
+    }
+
 }
