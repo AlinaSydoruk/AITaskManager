@@ -12,12 +12,12 @@ class VocationService
         private EmployeeRepository  $employeeRepository,
         private TranslatorInterface $translator,
         private int                 $vacationDaysPerYear,
-        private int                 $workHoursPerDay
+        private int                 $workHoursPerDay,
 
     )
     {
     }
-    private float $vacationPerMonth = 25.0 / 12.0; // 2.0833 days/month
+
 
     public function getVacationDaysPerYear(): int
     {
@@ -26,6 +26,7 @@ class VocationService
 
     public function calculateEmployeeAvailableVacationDays(Employee $employee): float
     {
+
         $currentDate = new \DateTime('today');
         $endOfYear = new \DateTime('December 31');
 
@@ -55,28 +56,42 @@ class VocationService
 
     private function getEmployeeVocationDaysInPeriod(\DateTimeInterface $startDate , \DateTimeInterface $endDate ) : float
     {
+        $vacationPerMonth =  $this->vacationDaysPerYear / 12.0; // 2.0833 days/month
         $interval = $startDate->diff($endDate);
         $monthsWorked = $interval->y * 12 + $interval->m;
         $daysInFirstMonth = (int) $startDate->format('t');
         $daysWorkedFirstMonth = $daysInFirstMonth - (int) $startDate->format('d') + 1;
-        $firstMonthAccrual = ($daysWorkedFirstMonth / $daysInFirstMonth) * $this->vacationPerMonth;
-        $totalVacationDaysUntilEndOfYear  = ($monthsWorked * $this->vacationPerMonth) + $firstMonthAccrual;
-        // 1.343434  $totalVacationDaysUntilEndOfYear  - do not forget to round it  !!!!
-        return $totalVacationDaysUntilEndOfYear;
+        $firstMonthAccrual = ($daysWorkedFirstMonth / $daysInFirstMonth) * $vacationPerMonth;
+        $totalVacationDaysUntilEndOfYear  = ($monthsWorked * $vacationPerMonth) + $firstMonthAccrual;
+        return $this->roundToHalf($totalVacationDaysUntilEndOfYear);
     }
 
-    public function increaseEmployeeAvailableVacationDays (Employee $employee, int $hours): void
+    private function roundToHalf($number): float
     {
-        $employee->setAvailableVocationHours($employee->getAvailableVocationHours() + $hours);
+        $integerPart = floor($number);
+        $decimalPart = $number - $integerPart;
+        if ($decimalPart < 0.5) {
+            return $integerPart;
+        } else {
+            return $integerPart + 0.5;
+        }
     }
 
-    public function decreaseEmployeeAvailableVacationHours (Employee $employee, int $hours): bool
+
+    public function increaseEmployeeAvailableVacationDays (Employee $employee, int $days): void
     {
-        $leftVacationHours = $employee->getAvailableVocationHours() - $hours ;
-        if ($leftVacationHours < 0 ){
+        $employee->getAvailableVocationDays() ?  : $this->calculateEmployeeAvailableVacationDays($employee);
+        $employee->setAvailableVocationDays($employee->getAvailableVocationDays() + $days);
+    }
+
+    public function canDecreaseEmployeeAvailableVacationDays(Employee $employee, int $days): bool
+    {
+        $employee->getAvailableVocationDays() ?  : $this->calculateEmployeeAvailableVacationDays($employee);
+        $leftVacationDays = $employee->getAvailableVocationDays() - $days ;
+        if ($leftVacationDays < 0 ){
             return false;
         }
-        $employee->setAvailableVocationHours($leftVacationHours);
+        $employee->setAvailableVocationDays($leftVacationDays);
         return true;
 
     }
