@@ -35,7 +35,7 @@ services:
         arguments:
             $html5_validation: '%env(bool:APP_HTML5_VALIDATION)%'
 
-    App\Service\VocationService:
+    App\Service\VacationService:
         arguments:
             $vacationDaysPerYear: '%env(int:VACATION_DAYS_PER_YEAR)%'
             $endOfYear: '%env(END_OF_YEAR)%'

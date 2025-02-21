@@ -2,18 +2,16 @@
 
 namespace App\Service;
 
+use App\Entity\Absence;
 use App\Entity\Employee;
-use App\Repository\EmployeeRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class VocationService
+class VacationService
 {
     public function __construct(
-        private EmployeeRepository  $employeeRepository,
         private TranslatorInterface $translator,
         private int                 $vacationDaysPerYear,
         private string              $endOfYear,
-
     )
     {
     }
@@ -32,11 +30,10 @@ class VocationService
         if (!$endOfYear) {
             throw new \InvalidArgumentException($this->translator->trans('error.invalid_end_of_year_format_expected_d-m'));
         }
-
+        $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYear);
         if ($employee->getFirstWorkingDay() > $currentDate) {
-            return $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYear);
+            return $totalVacationDays;
         } else {
-            $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $currentDate);
             $totalUsedVocationDays = null;
             foreach ($employee->getAbsences() as $absence) {
                 $totalUsedVocationDays += $absence->getDurationInDays();
@@ -68,17 +65,13 @@ class VocationService
             return $integerPart + 0.5;
         }
     }
-/*
-    public function canTakeVacation(Employee $employee, int $days): bool
+
+    public function canTakeVacation(Absence $absence): bool
     {
-        $employee->getAvailableVocationDays() ?  : $this->calculateEmployeeAvailableVacationDays($employee);
-        $leftVacationDays = $employee->getAvailableVocationDays() - $days ;
-        if ($leftVacationDays < 0 ){
+        $availableVocationDays = $this->calculateEmployeeAvailableVacationDays($absence->getEmployee());
+        if ($availableVocationDays - $absence->getDurationInDays() < 0 ){
             return false;
         }
-        $employee->setAvailableVocationDays($leftVacationDays);
         return true;
-
-    }*/
-
+    }
 }

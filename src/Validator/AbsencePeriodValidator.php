@@ -43,12 +43,10 @@ class AbsencePeriodValidator extends ConstraintValidator
         $overlappingAbsences = $this->absenceRepository->findOverlappingAbsences($employee, $startDate, $endDate);
 
         if (!empty($overlappingAbsences)) {
-            if(count($overlappingAbsences) !== 1 && $overlappingAbsences[0]->getId() !== $absenceId) {
-                $this->context->buildViolation($constraint->message)
-                    ->setParameter('{{ startDate }}', $startDate->format('d-m-Y'))
-                    ->setParameter('{{ endDate }}', $endDate->format('d-m-Y'))
-                    ->addViolation();
-            }
+            $this->context->buildViolation($constraint->message)
+                ->setParameter('{{ startDate }}', $startDate->format('d-m-Y'))
+                ->setParameter('{{ endDate }}', $endDate->format('d-m-Y'))
+                ->addViolation();
         }
     }
 }

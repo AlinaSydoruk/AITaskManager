@@ -7,7 +7,7 @@ use App\Form\EmployeeFormType;
 use App\Form\UploadFormType;
 use App\Repository\EmployeeRepository;
 use App\Service\PaginateEmployeesService;
-use App\Service\VocationService;
+use App\Service\VacationService;
 use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -25,7 +25,7 @@ class EmployeeController extends AbstractController
         private readonly EmployeeRepository       $employeeRepository,
         private readonly UploaderHelper           $uploaderHelper,
         private readonly TranslatorInterface      $translator,
-        private readonly VocationService          $vocationService,
+        private readonly VacationService          $vocationService,
     )
     {}
 
@@ -77,7 +77,7 @@ class EmployeeController extends AbstractController
     {
         return $this->render("employee/show.html.twig", [
             'employee' => $employee,
-            'availableVocationDays' => $this->vocationService->calculateEmployeeAvailableVacationDays($employee)
+            'availableVacationDays' => $this->vocationService->calculateEmployeeAvailableVacationDays($employee)
         ]);
     }
 

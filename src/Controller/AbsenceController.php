@@ -6,6 +6,7 @@ use App\Entity\Absence;
 use App\Form\AbsenceFormType;
 use App\Repository\AbsenceRepository;
 use App\Repository\EmployeeRepository;
+use App\Service\VacationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,9 +17,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class AbsenceController extends AbstractController
 {
     public function __construct(
-        private readonly AbsenceRepository  $absenceRepository,
-        private readonly EmployeeRepository $employeeRepository,
-        private readonly TranslatorInterface $translator,
+        private readonly AbsenceRepository    $absenceRepository,
+        private readonly EmployeeRepository   $employeeRepository,
+        private readonly TranslatorInterface  $translator,
+        private readonly VacationService      $vacationService
 
     )
     {}
@@ -39,6 +41,20 @@ class AbsenceController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedAbsence = $form->getData();
+            if($updatedAbsence->getEmployee()->getFirstWorkingDay() < new \DateTime('today')){
+                $this->addFlash('error' ,  $this->translator->trans('error.you_can_not_take_vacation_before_first_working_day'));
+                return $this->redirectToRoute("app_employee_show", [
+                    'id' => $employeeId
+                ]);
+            }
+            if (!$this->vacationService->canTakeVacation($updatedAbsence)) {
+                $this->addFlash('error', $this->translator->trans('error.you_have_not_enough_vacation_days_for_this_absence', [
+                    "availableVacationDays" => $this->vacationService->calculateEmployeeAvailableVacationDays($updatedAbsence->getEmployee()),
+                    "durationInDays" => $updatedAbsence->getDurationInDays()]));
+                return $this->redirectToRoute("app_employee_show", [
+                    'id' => $employeeId
+                ]);
+            }
             $this->absenceRepository->save($updatedAbsence);
             if ($isEdit){
                 $this->addFlash('success',$this->translator->trans( 'message.absence_has_been_updated'));

@@ -114,10 +114,15 @@
         <twig:InformationRow title="{{ 'employee.job_title' | trans }}">
             <twig:block name="value">{{ employee.jobTitle }}</twig:block>
         </twig:InformationRow>
-        <twig:InformationRow title="{{ 'employee.available_vocations' | trans }}">
-            <twig:block name="value">{{ availableVocationDays }}</twig:block>
+        <twig:InformationRow title="{{ 'employee.available_vacations' | trans }}">
+            <twig:block name="value">
+                {% if availableVacationDays == 0 %}
+                    {{ 'employee.you_do_not_have_any_more_vacation_days' | trans }}
+                {% else %}
+                    {{ availableVacationDays }}
+                {% endif %}
+            </twig:block>
         </twig:InformationRow>
-
         <twig:InformationRow title="{{ 'employee.absence' | trans }}">
             <twig:block name="value">
                 {% if employee.absences.get(0) %}
