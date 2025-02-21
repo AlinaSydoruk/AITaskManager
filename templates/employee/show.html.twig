@@ -131,8 +131,8 @@
                             <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}" class="underline">
                                 {{ absence.startDate |date("d.m.Y") }}
                                 {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d.m.Y") }}
-                            </a></div>
-
+                            </a>
+                        </div>
                     {% endfor %}
                 {% else %}
                     {{ 'absence.you_do_not_have_any_absence' | trans }}

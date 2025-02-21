@@ -25,15 +25,16 @@ class VacationService
     public function calculateEmployeeAvailableVacationDays(Employee $employee): float
     {
         $currentDate = new \DateTime('today');
+        $endOfThisYear = \DateTime::createFromFormat('d-m',$this->endOfYear);
 
-        $endOfYear = \DateTime::createFromFormat('d-m',$this->endOfYear);
-        if (!$endOfYear) {
+        if (!$endOfThisYear) {
             throw new \InvalidArgumentException($this->translator->trans('error.invalid_end_of_year_format_expected_d-m'));
         }
-        $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYear);
         if ($employee->getFirstWorkingDay() > $currentDate) {
-            return $totalVacationDays;
+            $endOfYearOfFirstWorkingDay = \DateTime::createFromFormat( 'd-m-Y',$this->endOfYear . '-' . $employee->getFirstWorkingDay()->format('Y'));
+            return $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYearOfFirstWorkingDay);
         } else {
+            $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfThisYear);
             $totalUsedVocationDays = null;
             foreach ($employee->getAbsences() as $absence) {
                 $totalUsedVocationDays += $absence->getDurationInDays();
