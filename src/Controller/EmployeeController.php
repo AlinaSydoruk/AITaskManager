@@ -93,18 +93,21 @@ class EmployeeController extends AbstractController
     public function edit(int $id , Request $request): Response
     {
         $employee = $this->employeeRepository->find($id);
+
+        if (!$employee) {
+            throw $this->createNotFoundException($this->translator->trans('error.employee_not_found'));
+        }
+        $originalEmployee = clone $employee;
         $form = $this->createForm(EmployeeFormType::class, $employee);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
-            if ($updatedEmployee->getFirstWorkingDay() <  new \DateTime('today') && ($updatedEmployee->getAbsences())->isEmpty()){
+            if ($updatedEmployee->getFirstWorkingDay() !== $originalEmployee->getFirstWorkingDay() && count($employee->getAbsences()) > 0) {
                 $this->addFlash('error',  $this->translator->trans('error.you_can_not_change_your_first_working_day_if_there_are_any_absences'));
                 return $this->redirectToRoute("app_employee_show", [
                     'id' => $id
                 ]);
             }
-
-
             $this->employeeRepository->save($updatedEmployee);
             $this->addFlash('success', $this->translator->trans('message.employee_has_been_updated'));
             return $this->redirectToRoute('app_employee_show', [
