@@ -77,7 +77,7 @@ class EmployeeController extends AbstractController
     {
         return $this->render("employee/show.html.twig", [
             'employee' => $employee,
-            'availableVacationDays' => $this->vocationService->calculateEmployeeAvailableVacationDays($employee)
+            'availableVacationDays' => $this->vocationService->calculateEmployeeAvailableVacationDays($employee),
         ]);
     }
 

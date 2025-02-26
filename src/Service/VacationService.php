@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Absence;
 use App\Entity\Employee;
 use App\Repository\HolidayRepository;
+use DateTimeInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class VacationService
@@ -24,6 +25,9 @@ class VacationService
         return $this->vacationDaysPerYear;
     }
 
+    /**
+     * @throws \DateMalformedPeriodStringException
+     */
     public function calculateEmployeeAvailableVacationDays(Employee $employee): float
     {
         $currentDate = new \DateTime('today');
@@ -39,7 +43,7 @@ class VacationService
             $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfThisYear);
             $totalUsedVocationDays = null;
             foreach ($employee->getAbsences() as $absence) {
-                $totalUsedVocationDays += $absence->getDurationInDays();
+                $totalUsedVocationDays += $this->getDurationInDaysWithoutHolidaysAndWeekends($absence->getStartDate(), $absence->getEndDate(),$absence->isStartDateHalfDay(),$absence->isEndDateHalfDay());
             }
             return $totalVacationDays - $totalUsedVocationDays; // can be negative
         }
@@ -69,10 +73,13 @@ class VacationService
         }
     }
 
+    /**
+     * @throws \DateMalformedPeriodStringException
+     */
     public function canTakeVacation(Absence $absence): bool
     {
         $availableVocationDays = $this->calculateEmployeeAvailableVacationDays($absence->getEmployee());
-        if ($availableVocationDays - $absence->getDurationInDays() < 0 ){
+        if ($availableVocationDays - $this->getDurationInDaysWithoutHolidaysAndWeekends($absence->getStartDate(), $absence->getEndDate(),$absence->isStartDateHalfDay(),$absence->isEndDateHalfDay()) < 0 ){
             return false;
         }
         return true;
@@ -81,12 +88,17 @@ class VacationService
     /**
      * @throws \DateMalformedPeriodStringException
      */
-    public function getDurationInDaysWithoutHolidaysAndWeekends(Absence $absence): float
+    public function getDurationInDaysWithoutHolidaysAndWeekends(
+        DateTimeInterface $startDate,
+        DateTimeInterface $endDate,
+        bool $isStartDateHalfDay,
+        bool $isEndDateHalfDay
+    ): float
     {
         $period = new \DatePeriod(
-            $absence->getStartDate(),
+            $startDate,
             new \DateInterval('P1D'),
-            $absence->getEndDate(),
+            $endDate,
             \DatePeriod::INCLUDE_END_DATE
         );
 
@@ -104,10 +116,10 @@ class VacationService
             }
             $vacationDays++;
         }
-        if ($absence->isStartDateHalfDay()) {
+        if ($isStartDateHalfDay) {
             $vacationDays -= 0.5;
         }
-        if ($absence->isEndDateHalfDay()) {
+        if ($isEndDateHalfDay) {
             $vacationDays -= 0.5;
         }
 

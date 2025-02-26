@@ -1,15 +1,14 @@
 {% block form_row %}
-    <div class="{{ form.vars.errors|length > 0 ? 'text-red-500' }}">
+    {% set additional_row_attr =  form.vars.row_attr.class|default('') %}
+    {% set additional_attr =  form.vars.attr.class|default('') %}
+    <div class="{{ form.vars.errors|length > 0 ? 'text-red-500' }} {{ additional_row_attr }}"  >
         {% for error in form.vars.errors %}
             <p class="text-red-500 text-sm mt-2">{{ error.message }}</p>
         {% endfor %}
         {{ form_label(form, form.vars.label, { 'label_attr': { 'class': 'text-sm text-gray-600' } }) }}
         {{ form_widget(form, {
-            row_attr:{
-                class: 'relative z-0 w-full mb-5 group'
-            },
             attr: {
-                class: 'py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2  focus:outline-none focus:ring-0 ' ~ (form.vars.errors|length > 0 ? '  border-red-500' : 'border-gray-600'),
+                class: 'py-2.5 px-3 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2  focus:outline-none focus:ring-0 ' ~ additional_attr  ~ (form.vars.errors|length > 0 ? '  border-red-500' : ' border-gray-600' ) ,
                 placeholder: ' '
             }
         }) }}

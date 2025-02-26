@@ -4,17 +4,13 @@ namespace App\Form;
 
 use App\Entity\Absence;
 use App\Entity\AbsenceType;
-use App\Entity\WorkStatus;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 class AbsenceFormType extends AbstractType
@@ -25,8 +21,31 @@ class AbsenceFormType extends AbstractType
             ->add('startDate', DateType::class, [
                 'label' => 'absence.start_date',
             ])
+            ->add('isStartDateHalfDay', ChoiceType::class, [
+                'label' => ' ',
+                'choices'=>[
+                    'absence.morning' =>false,
+                    'absence.midday' =>true
+                ],
+                'multiple' => false,
+                'choice_translation_domain' => 'validators',
+                'attr' => ['class' => 'border-2 '],
+                'row_attr' =>['class' => 'flex items-end']
+
+            ])
             ->add('endDate', DateType::class, [
                 'label' => 'absence.end_date',
+            ])
+            ->add('isEndDateHalfDay', ChoiceType::class, [
+                'label' => ' ',
+                'choices'=>[
+                    'absence.midday' =>true,
+                    'absence.evening' =>false
+                ],
+                'multiple' => false,
+                'choice_translation_domain' => 'validators',
+                'attr' => ['class' => 'border-2 '],
+                'row_attr' =>['class' => 'flex items-end']
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,

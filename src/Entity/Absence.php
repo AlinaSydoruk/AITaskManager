@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AbsenceRepository;
 use App\Validator\AbsencePeriod;
+use App\Validator\EmptyAbsencePeriod;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\SoftDeleteable;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints  as  Assert;
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
 #[SoftDeleteable(fieldName: 'deletedAt')]
 #[AbsencePeriod]
+#[EmptyAbsencePeriod]
 class Absence
 {
     use TimestampableEntity,  SoftDeleteableEntity;
@@ -136,12 +138,5 @@ class Absence
         $this->isEndDateHalfDay = $isEndDateHalfDay;
     }
 
-    public function getDurationInDays():float
-    {
-        $days = $this->startDate->diff($this->endDate)->days + 1;
-        $days = $this->isStartDateHalfDay ? ($days - 0.5) : $days;
-        return $this->isEndDateHalfDay ? ($days - 0.5) : $days;
-
-    }
 
 }
