@@ -65,11 +65,11 @@
 
 
     <twig:InformationRow title="{{ 'absence.start_date' | trans }}">
-        <twig:block name="value">{{ absence.startDate |date("d.m.Y") }}</twig:block>
+        <twig:block name="value">{{ absence.startDate |date("d.m.Y") }}  {{ absence.isStartDateHalfDay ? 'absence.midday' | trans : '' }} </twig:block>
     </twig:InformationRow>
 
     <twig:InformationRow title="{{ 'absence.end_date' | trans }}">
-        <twig:block name="value">{{ absence.endDate |date("d.m.Y") }}</twig:block>
+        <twig:block name="value">{{ absence.endDate |date("d.m.Y") }}  {{ absence.isEndDateHalfDay ? 'absence.midday' | trans : '' }} </twig:block>
     </twig:InformationRow>
 
     <twig:InformationRow title="{{ 'absence.absence_type' | trans }}">
