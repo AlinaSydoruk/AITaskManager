@@ -72,8 +72,22 @@
         <twig:block name="value">{{ absence.endDate |date("d.m.Y") }}  {{ absence.isEndDateHalfDay ? 'absence.midday' | trans : '' }} </twig:block>
     </twig:InformationRow>
 
+    <twig:InformationRow title="{{ 'absence.duration' | trans }}">
+        <twig:block name="value">
+            {% set days = vacation_days(absence.startDate, absence.endDate, absence.isStartDateHalfDay, absence.isEndDateHalfDay) %}
+            {% if days == 1 %}
+                {{ 'absence.duration_1_day' | trans }}
+            {% elseif days == 0.5 %}
+                {{ 'absence.duration_half_a_day' | trans }}
+            {% else %}
+                {{ days ~ ' ' ~ 'absence.duration_days' | trans }}
+            {% endif %}
+        </twig:block>
+    </twig:InformationRow>
+
+
     <twig:InformationRow title="{{ 'absence.absence_type' | trans }}">
-        <twig:block name="value">{{  absence.absenceType.value }}</twig:block>
+        <twig:block name="value">{{  absence.absenceType.value }} </twig:block>
     </twig:InformationRow>
 
     <twig:InformationRow title="{{ 'absence.comment' | trans }}">
