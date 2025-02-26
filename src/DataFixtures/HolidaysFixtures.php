@@ -2,13 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Employee;
+
 use App\Entity\Holiday;
-use App\Entity\User;
-use App\Entity\WorkStatus;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use PhpOffice\PhpSpreadsheet\Calculation\MathTrig\Random;
 
 class HolidaysFixtures extends Fixture
 {
@@ -30,7 +27,6 @@ class HolidaysFixtures extends Fixture
             $holiday = new Holiday();
             $holiday->setDate(new \DateTime($data[0]));
             $holiday->setTitle($data[1]);
-            $holiday->setCanton(null);
 
             $manager->persist($holiday);
         }

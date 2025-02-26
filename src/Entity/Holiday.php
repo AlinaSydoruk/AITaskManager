@@ -23,8 +23,6 @@ class Holiday
     #[Assert\NotBlank]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $canton = null;
 
     public function getId(): ?int
     {
@@ -51,18 +49,6 @@ class Holiday
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getCanton(): ?string
-    {
-        return $this->canton;
-    }
-
-    public function setCanton(?string $canton): static
-    {
-        $this->canton = $canton;
 
         return $this;
     }
