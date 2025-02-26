@@ -4,6 +4,7 @@ namespace App\Service;
 
 use App\Entity\Absence;
 use App\Entity\Employee;
+use App\Repository\HolidayRepository;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class VacationService
@@ -12,6 +13,7 @@ class VacationService
         private TranslatorInterface $translator,
         private int                 $vacationDaysPerYear,
         private string              $endOfYear,
+        private HolidayRepository   $holidayRepository
     )
     {
     }
@@ -75,4 +77,41 @@ class VacationService
         }
         return true;
     }
+
+    /**
+     * @throws \DateMalformedPeriodStringException
+     */
+    public function getDurationInDaysWithoutHolidaysAndWeekends(Absence $absence): float
+    {
+        $period = new \DatePeriod(
+            $absence->getStartDate(),
+            new \DateInterval('P1D'),
+            $absence->getEndDate(),
+            \DatePeriod::INCLUDE_END_DATE
+        );
+
+        $vacationDays = 0.0;
+        foreach ($period as $day) {
+            $weekday = $day->format('N');
+            if ($weekday >= 6) {
+                continue;
+            }
+            $holidays  = $this->holidayRepository->findAll();
+            $holidayDates = array_map(fn($holiday) => $holiday->getDate()->format('Y-m-d'), $holidays);
+
+            if (in_array($day->format('Y-m-d'), $holidayDates,true)) {
+                continue;
+            }
+            $vacationDays++;
+        }
+        if ($absence->isStartDateHalfDay()) {
+            $vacationDays -= 0.5;
+        }
+        if ($absence->isEndDateHalfDay()) {
+            $vacationDays -= 0.5;
+        }
+
+        return max(0, $vacationDays);
+    }
+
 }
