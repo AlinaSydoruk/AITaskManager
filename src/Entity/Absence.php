@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AbsenceRepository;
 use App\Validator\AbsencePeriod;
 use App\Validator\EmptyAbsencePeriod;
+use App\Validator\SubstituteAvailableInPeriod;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\SoftDeleteable;
@@ -16,6 +17,7 @@ use Symfony\Component\Validator\Constraints  as  Assert;
 #[SoftDeleteable(fieldName: 'deletedAt')]
 #[AbsencePeriod]
 #[EmptyAbsencePeriod]
+#[SubstituteAvailableInPeriod]
 class Absence
 {
     use TimestampableEntity,  SoftDeleteableEntity;
@@ -50,14 +52,14 @@ class Absence
 
     #[ORM\ManyToOne(inversedBy: 'absences')]
     #[ORM\JoinColumn(nullable: true)]
-    private Employee $substitute;
+    #[Assert\NotIdenticalTo(propertyPath: 'employee', message: 'error.please_choose_another_substitute')]
+    private ?Employee $substitute = null;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isStartDateHalfDay = false;
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isEndDateHalfDay = false;
-
 
     public function getId(): ?int
     {
@@ -142,12 +144,12 @@ class Absence
         $this->isEndDateHalfDay = $isEndDateHalfDay;
     }
 
-    public function getSubstitute(): Employee
+    public function getSubstitute(): ?Employee
     {
         return $this->substitute;
     }
 
-    public function setSubstitute(Employee $substitute): void
+    public function setSubstitute(?Employee $substitute): void
     {
         $this->substitute = $substitute;
     }

@@ -68,9 +68,10 @@ class AbsenceFormType extends AbstractType
                     return $employee->getFullName();
                 },
                 'label' => 'absence.substitute',
-                'placeholder' => 'absence.choose_substitute',
+                'placeholder' => 'absence.no_substitute',
                 'required' => false,
                 'attr' => ['class' => 'border-2'],
+                'row_attr' =>['class' => 'my-2']
             ]);
         ;
     }

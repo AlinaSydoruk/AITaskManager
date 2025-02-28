@@ -90,6 +90,16 @@
         <twig:block name="value">{{  absence.absenceType.value }} </twig:block>
     </twig:InformationRow>
 
+    <twig:InformationRow title="{{ 'absence.substitute' | trans }}">
+        <twig:block name="value">
+            {% if absence.substitute %}
+                {{ absence.substitute.fullName }}
+            {% else %}
+                {{ 'absence.no_substitute' | trans }}
+            {% endif %}
+        </twig:block>
+    </twig:InformationRow>
+
     <twig:InformationRow title="{{ 'absence.comment' | trans }}">
         <twig:block name="value">{{ absence.comment}}</twig:block>
     </twig:InformationRow>

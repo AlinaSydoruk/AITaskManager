@@ -50,7 +50,8 @@ class AbsenceController extends AbstractController
             if (!$this->vacationService->canTakeVacation($updatedAbsence)) {
                 $this->addFlash('error', $this->translator->trans('error.you_have_not_enough_vacation_days_for_this_absence', [
                     "availableVacationDays" => $this->vacationService->calculateEmployeeAvailableVacationDays($updatedAbsence->getEmployee()),
-                    "durationInDays" => $updatedAbsence->getDurationInDays()]));
+                    "durationInDays" => $this->vacationService->getDurationInDaysWithoutHolidaysAndWeekends($updatedAbsence->getStartDate(), $updatedAbsence->getEndDate(),$updatedAbsence->isStartDateHalfDay(),$updatedAbsence->isEndDateHalfDay()),
+                ]));
                 return $this->redirectToRoute("app_employee_show", [
                     'id' => $employeeId
                 ]);
