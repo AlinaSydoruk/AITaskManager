@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
+use App\Form\EditAvailableVacationFormType;
 use App\Form\EmployeeFormType;
 use App\Form\UploadFormType;
 use App\Repository\EmployeeRepository;
@@ -121,5 +122,25 @@ class EmployeeController extends AbstractController
             'employeeFullName' => $employee->getFullName()
         ]);
     }
+
+    #[Route('/edit-available-vacation-days/{id}', name: 'edit_available_vacation_days')]
+    public function editAvailableVacationDays(int $id, Request $request): Response
+    {
+        $employee = $this->employeeRepository->find($id);
+        if (!$employee) {
+            throw $this->createNotFoundException($this->translator->trans('error.employee_not_found'));
+        }
+        $form = $this->createForm(EditAvailableVacationFormType::class, $this->vocationService->calculateEmployeeAvailableVacationDays($employee));
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+
+        }
+        return $this->render("employee/show.html.twig", [
+        'form' => $form,
+    ]);
+    }
+
+
 
 }

@@ -116,11 +116,53 @@
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.available_vacations' | trans }}">
             <twig:block name="value">
+
+                <div class="flex ">
+                    <div class="mr-2">
+
                 {% if availableVacationDays == 0 %}
                     {{ 'employee.you_do_not_have_any_more_vacation_days' | trans }}
                 {% else %}
                     {{ availableVacationDays }}
                 {% endif %}
+
+                </div>
+                    <div>
+                <twig:Button label="{{ 'action.edit' | trans }}">
+                    <twig:block name="attributes"> data-modal-target="popup-modal" data-modal-toggle="popup-modal" </twig:block>
+                </twig:Button>
+                    </div>
+
+                <div id="popup-modal" tabindex="-1" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                    <div class="relative p-4 w-full max-w-md max-h-full">
+                        <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                            <div class="p-4 md:p-5 text-center">
+                                <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{{ 'employee.edit_number_of_vacation_days' | trans }}</h3>
+
+                                <div class="flex justify-between px-6 ">
+                                    <twig:Button label="{{ 'action.save_changes' | trans }}"
+                                                 url="{{  path('app_employee_edit_available_vacation_days' , { "id" : employee.id }) }}"
+                                                 >
+                                        <twig:block name="attributes"> data-modal-hide="popup-modal"</twig:block>
+                                    </twig:Button>
+
+                                    <twig:Button label="{{ 'action.close' | trans }}" >
+                                        <twig:block name="attributes"> data-modal-hide="popup-modal"</twig:block>
+                                    </twig:Button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+
+
+
+
+
+
             </twig:block>
         </twig:InformationRow>
         <twig:InformationRow title="{{ 'employee.absence' | trans }}">
