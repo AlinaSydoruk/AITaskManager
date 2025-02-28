@@ -15,9 +15,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ExportService
 {
     public function __construct(
-        private readonly EmployeeRepository $employeeRepository,
-        private readonly UploaderHelper     $uploaderHelper,
-        private readonly TranslatorInterface      $translator,
+        private readonly EmployeeRepository   $employeeRepository,
+        private readonly UploaderHelper       $uploaderHelper,
+        private readonly TranslatorInterface  $translator,
+        private readonly VacationService      $vacationService
     )
     {
     }
@@ -40,7 +41,7 @@ class ExportService
         foreach ($columnWidths as $colum => $width) {
             $employeeSheet->getColumnDimension($colum)->setWidth($width);
         }
-        foreach ($employeeSheet->getColumnIterator('G', 'N') as $column){
+        foreach ($employeeSheet->getColumnIterator('G', 'P') as $column){
             $employeeSheet->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
         }
 
@@ -59,7 +60,10 @@ class ExportService
             ->setCellValue('L1', $this->translator->trans('employee.private_number'))
             ->setCellValue('M1', $this->translator->trans('employee.postal_code'))
             ->setCellValue('N1', $this->translator->trans('employee.monthly_salary'))
-            ->setCellValue('O1', $this->translator->trans('employee.absence'));
+            ->setCellValue('O1', $this->translator->trans('employee.vacation_days_per_year'))
+            ->setCellValue('P1', $this->translator->trans('employee.remaining_vacation_days_by_the_end_of_year'))
+            ->setCellValue('Q1', $this->translator->trans('employee.absence'));
+
 
 
         $employees = $this->employeeRepository->findAll();
@@ -79,10 +83,12 @@ class ExportService
                 ->setCellValue('K' . $rowEmployee, $employee->getBusinessNumber())
                 ->setCellValue('L' . $rowEmployee, $employee->getPrivateNumber())
                 ->setCellValue('M' . $rowEmployee, $employee->getPostalCode())
-                ->setCellValue('N' . $rowEmployee, 'CHF ' .  number_format($employee->getMonthlySalary(), 2, '.', "'"));
+                ->setCellValue('N' . $rowEmployee, 'CHF ' .  number_format($employee->getMonthlySalary(), 2, '.', "'"))
+                ->setCellValue('O' . $rowEmployee, $this->vacationService->getVacationDaysPerYear())
+                ->setCellValue('P' . $rowEmployee, $this->vacationService->calculateEmployeeAvailableVacationDays($employee));
 
 
-            $cellIterator = $employeeSheet->getRowIterator($rowEmployee)->current()->getCellIterator('O');
+            $cellIterator = $employeeSheet->getRowIterator($rowEmployee)->current()->getCellIterator('Q');
             foreach ($employee->getAbsences() as $absence) {
                 $absencePeriod = $absence->getStartDate()->format('d.m.Y') . " - " . $absence->getEndDate()->format('d.m.Y');
                 $cellIterator->current()->setValue($absencePeriod);
