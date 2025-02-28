@@ -48,6 +48,10 @@ class Absence
     #[ORM\JoinColumn(nullable: false)]
     private Employee $employee;
 
+    #[ORM\ManyToOne(inversedBy: 'absences')]
+    #[ORM\JoinColumn(nullable: true)]
+    private Employee $substitute;
+
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isStartDateHalfDay = false;
 
@@ -136,6 +140,16 @@ class Absence
     public function setIsEndDateHalfDay(bool $isEndDateHalfDay): void
     {
         $this->isEndDateHalfDay = $isEndDateHalfDay;
+    }
+
+    public function getSubstitute(): Employee
+    {
+        return $this->substitute;
+    }
+
+    public function setSubstitute(Employee $substitute): void
+    {
+        $this->substitute = $substitute;
     }
 
 

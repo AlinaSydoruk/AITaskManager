@@ -4,6 +4,8 @@ namespace App\Form;
 
 use App\Entity\Absence;
 use App\Entity\AbsenceType;
+use App\Entity\Employee;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -60,6 +62,16 @@ class AbsenceFormType extends AbstractType
                 'label' => 'absence.comment',
                 'required'   => false,
             ])
+            ->add('substitute', EntityType::class, [
+                'class' => Employee::class,
+                'choice_label' => function (Employee $employee) {
+                    return $employee->getFullName();
+                },
+                'label' => 'absence.substitute',
+                'placeholder' => 'absence.choose_substitute',
+                'required' => false,
+                'attr' => ['class' => 'border-2'],
+            ]);
         ;
     }
 
