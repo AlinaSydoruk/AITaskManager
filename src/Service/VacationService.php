@@ -108,6 +108,14 @@ class VacationService
             if ($weekday >= 6) {
                 continue;
             }
+            if($day->diff($period->getStartDate())->days == 0 && $isStartDateHalfDay){
+                $vacationDays -= 0.5;
+            }
+            if($day->diff($period->getEndDate())->days == 0 && $isEndDateHalfDay){
+                $vacationDays -= 0.5;
+            }
+
+
             $holidays  = $this->holidayRepository->findAll();
             $holidayDates = array_map(fn($holiday) => $holiday->getDate()->format('Y-m-d'), $holidays);
 
@@ -115,12 +123,6 @@ class VacationService
                 continue;
             }
             $vacationDays++;
-        }
-        if ($isStartDateHalfDay) {
-            $vacationDays -= 0.5;
-        }
-        if ($isEndDateHalfDay) {
-            $vacationDays -= 0.5;
         }
 
         return max(0, $vacationDays);
