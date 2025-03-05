@@ -51,9 +51,10 @@
 
                 {{ form_errors(form) }}
 
+                {{ form_label(form.startDate) }}
                 <div class="flex justify-between">
 
-                        {{ form_row(form.startDate) }}
+                        {{ form_widget(form.startDate) }}
 
                         {{ form_row(form.isStartDateHalfDay) }}
 
@@ -79,6 +80,7 @@
                     <twig:Button url="{{ false }}" label="{{ 'action.create' |trans }}"></twig:Button>
                 {% endif %}
 
+                {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>
         </div>

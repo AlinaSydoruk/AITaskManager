@@ -42,7 +42,7 @@ class AbsenceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedAbsence = $form->getData();
             if($updatedAbsence->getEmployee()->getFirstWorkingDay() > new \DateTime('today')){
-                $this->addFlash('error' ,  $this->translator->trans('error.you_can_not_take_vacation_before_first_working_day'));
+                $this->addFlash('error',  $this->translator->trans('error.you_can_not_take_vacation_before_first_working_day'));
                 return $this->redirectToRoute("app_employee_show", [
                     'id' => $employeeId
                 ]);

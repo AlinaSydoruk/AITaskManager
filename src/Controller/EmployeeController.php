@@ -12,6 +12,7 @@ use App\Service\VacationService;
 use App\UploaderHelper;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ class EmployeeController extends AbstractController
         private readonly EmployeeRepository       $employeeRepository,
         private readonly UploaderHelper           $uploaderHelper,
         private readonly TranslatorInterface      $translator,
-        private readonly VacationService          $vocationService,
+        private readonly VacationService          $vacationService,
     )
     {}
 
@@ -78,7 +79,7 @@ class EmployeeController extends AbstractController
     {
         return $this->render("employee/show.html.twig", [
             'employee' => $employee,
-            'availableVacationDays' => $this->vocationService->calculateEmployeeAvailableVacationDays($employee),
+            'availableVacationDays' => $this->vacationService->calculateEmployeeAvailableVacationDays($employee),
         ]);
     }
 
@@ -99,10 +100,20 @@ class EmployeeController extends AbstractController
             throw $this->createNotFoundException($this->translator->trans('error.employee_not_found'));
         }
         $originalEmployee = clone $employee;
+
+        $availableVacationDays = $this->vacationService->calculateEmployeeAvailableVacationDays($employee);
         $form = $this->createForm(EmployeeFormType::class, $employee);
+        $form->get('availableVacationDays')->setData($availableVacationDays);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
+            $requiredVacationDays = $form->get('isHalfDay')->getData() ? $form->get('availableVacationDays')->getData() + 0.5 : $form->get('availableVacationDays')->getData();
+
+
+            $deviation = $availableVacationDays - $requiredVacationDays ;
+            $employee->setAvailableVacationDeviation($employee->getAvailableVacationDeviation() + $deviation);
+
+
             if ($updatedEmployee->getFirstWorkingDay() !== $originalEmployee->getFirstWorkingDay() && count($employee->getAbsences()) > 0) {
                 $this->addFlash('error',  $this->translator->trans('error.you_can_not_change_your_first_working_day_if_there_are_any_absences'));
                 return $this->redirectToRoute("app_employee_show", [
@@ -121,24 +132,6 @@ class EmployeeController extends AbstractController
             'id' => $employee->getId(),
             'employeeFullName' => $employee->getFullName()
         ]);
-    }
-
-    #[Route('/edit-available-vacation-days/{id}', name: 'edit_available_vacation_days')]
-    public function editAvailableVacationDays(int $id, Request $request): Response
-    {
-        $employee = $this->employeeRepository->find($id);
-        if (!$employee) {
-            throw $this->createNotFoundException($this->translator->trans('error.employee_not_found'));
-        }
-        $form = $this->createForm(EditAvailableVacationFormType::class, $this->vocationService->calculateEmployeeAvailableVacationDays($employee));
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-
-
-        }
-        return $this->render("employee/show.html.twig", [
-        'form' => $form,
-    ]);
     }
 
 

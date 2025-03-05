@@ -6,6 +6,8 @@ twig:
     globals:
         contact_email: '%app.contact_email%'
         contact_phone: '%app.contact_phone%'
+        vacation_days_per_year: '%app.vacation_days_per_year%'
+
 when@test:
     twig:
         strict_variables: true

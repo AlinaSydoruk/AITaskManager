@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Absence;
+use App\Entity\AbsenceType;
 use App\Entity\Employee;
 use App\Repository\HolidayRepository;
 use DateTimeInterface;
@@ -38,14 +39,16 @@ class VacationService
         }
         if ($employee->getFirstWorkingDay() > $currentDate) {
             $endOfYearOfFirstWorkingDay = \DateTime::createFromFormat( 'd-m-Y',$this->endOfYear . '-' . $employee->getFirstWorkingDay()->format('Y'));
-            return $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYearOfFirstWorkingDay);
+            return $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfYearOfFirstWorkingDay) - $employee->getAvailableVacationDeviation();
         } else {
             $totalVacationDays = $this->getEmployeeVacationDaysInPeriod($employee->getFirstWorkingDay(), $endOfThisYear);
             $totalUsedVocationDays = null;
             foreach ($employee->getAbsences() as $absence) {
-                $totalUsedVocationDays += $this->getDurationInDaysWithoutHolidaysAndWeekends($absence->getStartDate(), $absence->getEndDate(),$absence->isStartDateHalfDay(),$absence->isEndDateHalfDay());
+                if($absence->getAbsenceType() === AbsenceType::vacation ){
+                    $totalUsedVocationDays += $this->getDurationInDaysWithoutHolidaysAndWeekends($absence->getStartDate(), $absence->getEndDate(),$absence->isStartDateHalfDay(),$absence->isEndDateHalfDay());
+                }
             }
-            return $totalVacationDays - $totalUsedVocationDays; // can be negative
+            return $totalVacationDays - $totalUsedVocationDays - $employee->getAvailableVacationDeviation(); // can be negative
         }
     }
 

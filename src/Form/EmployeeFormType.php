@@ -2,21 +2,18 @@
 
 namespace App\Form;
 
+use App\Entity\AbsenceType;
 use App\Entity\Employee;
-use App\Entity\WorkStatus;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\EnumType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
-use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Positive;
 
 class EmployeeFormType extends AbstractType
 {
@@ -66,7 +63,23 @@ class EmployeeFormType extends AbstractType
             ->add('jobTitle', null, [
                 'label' => 'employee.job_title',
             ])
-        ;
+            ->add('availableVacationDays', IntegerType::class, [
+                'mapped' => false,
+                'label' => 'employee.available_vacations',
+                'attr' => ['class' => 'w-50 '],
+            ])
+            ->add('isHalfDay', ChoiceType::class, [
+                'label' => false,
+                'choices'=>[
+                    'absence.full_day' =>false,
+                    'absence.half_day' =>true
+                ],
+                'multiple' => false,
+                'choice_translation_domain' => 'validators',
+                'attr' => ['class' => 'border-2 '],
+                'row_attr' =>['class' => 'flex items-end'],
+                'mapped' => false,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

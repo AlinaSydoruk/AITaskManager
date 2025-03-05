@@ -12,4 +12,5 @@ class InformationRow
     public string $title;
 
     public string $class = '';
+    public bool $itemsCenter = false;
 }

@@ -6,6 +6,7 @@
 parameters:
     app.contact_email: '%env(APP_CONTACT_EMAIL)%'
     app.contact_phone: '%env(APP_CONTACT_PHONE)%'
+    app.vacation_days_per_year: '%env(int:VACATION_DAYS_PER_YEAR)%'
 
 services:
     # default configuration for services in *this* file

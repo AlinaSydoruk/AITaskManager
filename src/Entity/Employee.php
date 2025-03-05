@@ -80,6 +80,9 @@ class Employee
     #[ORM\OneToMany(targetEntity: Absence::class, mappedBy: 'employee', orphanRemoval: true)]
     private Collection $absences;
 
+    #[ORM\Column]
+    private ?float $availableVacationDeviation = 0.0;
+
     public function __construct()
     {
         $this->absences = new ArrayCollection();
@@ -263,5 +266,17 @@ class Employee
     public function getFullName():string
     {
         return $this->getFirstName() . " " . $this->getLastName();
+    }
+
+    public function getAvailableVacationDeviation(): ?float
+    {
+        return $this->availableVacationDeviation;
+    }
+
+    public function setAvailableVacationDeviation(float $availableVacationDeviation): static
+    {
+        $this->availableVacationDeviation = $availableVacationDeviation;
+
+        return $this;
     }
 }

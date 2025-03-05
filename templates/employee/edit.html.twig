@@ -58,6 +58,12 @@
 
                 {{ form_row(form.jobTitle) }}
 
+                <div class="flex justify-between">
+                    {{ form_row(form.availableVacationDays) }}
+
+                    {{ form_row(form.isHalfDay) }}
+                </div>
+
                 <div class="my-4">
                     <twig:Button label="{{ 'action.save_changes' | trans }}" url="{{ false }}"></twig:Button>
                 </div>
