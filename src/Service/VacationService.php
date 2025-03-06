@@ -131,4 +131,13 @@ class VacationService
         return max(0, $vacationDays);
     }
 
+
+    public function setAvailableVacationDays(Employee $employee, int $days ,bool $isHalfDay ) :void
+    {
+        $requiredVacationDays = $isHalfDay ? $days + 0.5 : $days;
+        $deviation = $this->calculateEmployeeAvailableVacationDays($employee) - $requiredVacationDays ;
+        $employee->setAvailableVacationDeviation($employee->getAvailableVacationDeviation() + $deviation);
+
+    }
+
 }

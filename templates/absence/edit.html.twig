@@ -51,19 +51,19 @@
 
                 {{ form_errors(form) }}
 
-                {{ form_label(form.startDate) }}
                 <div class="flex justify-between">
-
-                        {{ form_widget(form.startDate) }}
-
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.startDate) }}
+                    </div>
                         {{ form_row(form.isStartDateHalfDay) }}
 
                 </div>
 
                 <div class="flex justify-between">
-                {{ form_row(form.endDate) }}
-
-                {{ form_row(form.isEndDateHalfDay) }}
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.endDate) }}
+                    </div>
+                    {{ form_row(form.isEndDateHalfDay) }}
 
                 </div>
 

@@ -64,6 +64,7 @@ class EmployeeController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $employee = $form->getData();
+            $this->vacationService->setAvailableVacationDays($employee, $form->get('availableVacationDays')->getData(), $form->get('isHalfDay')->getData());
             $this->employeeRepository->save($employee);
             $this->addFlash('success',  $this->translator->trans('message.employee_has_been_created'));
             return $this->redirectToRoute('app_employee_index');
@@ -104,15 +105,11 @@ class EmployeeController extends AbstractController
         $availableVacationDays = $this->vacationService->calculateEmployeeAvailableVacationDays($employee);
         $form = $this->createForm(EmployeeFormType::class, $employee);
         $form->get('availableVacationDays')->setData($availableVacationDays);
+        fmod($availableVacationDays , 1) > 0 ? $form->get('isHalfDay')->setData(true) : $form->get('isHalfDay')->setData(false);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $updatedEmployee = $form->getData();
-            $requiredVacationDays = $form->get('isHalfDay')->getData() ? $form->get('availableVacationDays')->getData() + 0.5 : $form->get('availableVacationDays')->getData();
-
-
-            $deviation = $availableVacationDays - $requiredVacationDays ;
-            $employee->setAvailableVacationDeviation($employee->getAvailableVacationDeviation() + $deviation);
-
+            $this->vacationService->setAvailableVacationDays($employee, $form->get('availableVacationDays')->getData(), $form->get('isHalfDay')->getData());
 
             if ($updatedEmployee->getFirstWorkingDay() !== $originalEmployee->getFirstWorkingDay() && count($employee->getAbsences()) > 0) {
                 $this->addFlash('error',  $this->translator->trans('error.you_can_not_change_your_first_working_day_if_there_are_any_absences'));

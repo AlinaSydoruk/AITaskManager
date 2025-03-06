@@ -26,34 +26,39 @@ class AbsenceFormType extends AbstractType
                 'label' => 'absence.start_date',
             ])
             ->add('isStartDateHalfDay', ChoiceType::class, [
-                'label' => ' ',
+                'label' => false,
                 'choices'=>[
                     'absence.morning' =>false,
                     'absence.midday' =>true
                 ],
                 'multiple' => false,
                 'choice_translation_domain' => 'validators',
-                'attr' => ['class' => 'border-2 '],
+                'attr' => ['class' => 'border-2 py-2.5 px-3'],
                 'row_attr' =>['class' => 'flex items-end']
 
             ])
             ->add('endDate', DateType::class, [
                 'label' => 'absence.end_date',
+                'attr' => ['class' => 'py-2.5 px-4 w-full'],
+
+
             ])
             ->add('isEndDateHalfDay', ChoiceType::class, [
-                'label' => ' ',
+                'label' => false,
                 'choices'=>[
                     'absence.midday' =>true,
                     'absence.evening' =>false
                 ],
                 'multiple' => false,
                 'choice_translation_domain' => 'validators',
-                'attr' => ['class' => 'border-2 '],
-                'row_attr' =>['class' => 'flex items-end']
+                'attr' => ['class' => 'border-2 py-2.5 px-4'],
+                'row_attr' =>['class' => 'flex items-end ']
             ])
             ->add('absenceType', EnumType::class, [
                 'class' => AbsenceType::class,
                 'label' => 'absence.absence_type',
+                'attr' => ['class' => 'border-2 py-2.5 px-3 w-full'],
+                'row_attr' =>['class' => 'my-2 '],
                 'constraints' => [
                     new NotBlank([
                         'message' => 'error.please_choose_the_absence_type',
@@ -72,8 +77,8 @@ class AbsenceFormType extends AbstractType
                 'label' => 'absence.substitute',
                 'placeholder' => 'absence.no_substitute',
                 'required' => false,
-                'attr' => ['class' => 'border-2'],
-                'row_attr' =>['class' => 'my-2']
+                'attr' => ['class' => 'border-2 w-full py-2.5 px-3'],
+                'row_attr' =>['class' => 'my-2 ']
             ]);
         ;
     }

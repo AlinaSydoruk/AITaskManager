@@ -66,7 +66,6 @@ class EmployeeFormType extends AbstractType
             ->add('availableVacationDays', IntegerType::class, [
                 'mapped' => false,
                 'label' => 'employee.available_vacations',
-                'attr' => ['class' => 'w-50 '],
             ])
             ->add('isHalfDay', ChoiceType::class, [
                 'label' => false,
@@ -76,8 +75,8 @@ class EmployeeFormType extends AbstractType
                 ],
                 'multiple' => false,
                 'choice_translation_domain' => 'validators',
-                'attr' => ['class' => 'border-2 '],
-                'row_attr' =>['class' => 'flex items-end'],
+                'attr' => ['class' => 'border-2 py-2.5 px-3'],
+                'row_attr' =>['class' => 'flex items-end my-2'],
                 'mapped' => false,
             ]);
     }
