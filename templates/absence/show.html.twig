@@ -104,6 +104,10 @@
         <twig:block name="value">{{ absence.comment}}</twig:block>
     </twig:InformationRow>
 
+    <twig:InformationRow title="{{ 'absence.calamari_id' | trans }}">
+        <twig:block name="value">{{ absence.calamariId ? absence.calamariId : 'message.not_specified' | trans }}</twig:block>
+    </twig:InformationRow>
+
 </div>
     <twig:Button url="{{ path('app_employee_show' , {"id" : employeeId }) }}"
                  label="{{ 'action.back' | trans }}"

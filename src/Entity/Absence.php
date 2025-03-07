@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation\SoftDeleteable;
 use Gedmo\SoftDeleteable\Traits\SoftDeleteableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints  as  Assert;
 
 #[ORM\Entity(repositoryClass: AbsenceRepository::class)]
@@ -18,6 +19,7 @@ use Symfony\Component\Validator\Constraints  as  Assert;
 #[AbsencePeriod]
 #[EmptyAbsencePeriod]
 #[SubstituteAvailableInPeriod]
+#[UniqueEntity('calamariId')]
 class Absence
 {
     use TimestampableEntity,  SoftDeleteableEntity;
@@ -60,6 +62,10 @@ class Absence
 
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isEndDateHalfDay = false;
+
+    #[ORM\Column(nullable: true)]
+    #[Assert\Positive]
+    private ?int $calamariId = null;
 
     public function getId(): ?int
     {
@@ -154,5 +160,13 @@ class Absence
         $this->substitute = $substitute;
     }
 
+    public function getCalamariId(): ?int
+    {
+        return $this->calamariId;
+    }
 
+    public function setCalamariId(?int $calamariId): void
+    {
+        $this->calamariId = $calamariId;
+    }
 }

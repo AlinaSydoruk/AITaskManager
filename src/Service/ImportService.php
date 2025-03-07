@@ -45,11 +45,10 @@ readonly class ImportService
                 }
                 $absence = null;
 
-                // id
-                $id = $cells[0];
-                if ($id) {
-                    $absence = $this->absenceRepository->find($id);
-                    $absence ?: throw new \LogicException($this->translator->trans("error.incorrect_id_in_row") . $row->getRowIndex());
+                // calamariId
+                $calamariId = $cells[0];
+                if ($calamariId) {
+                    $absence = $this->absenceRepository->findAbsenceByCalamariId($calamariId);
                 } else {
                     throw new \LogicException($this->translator->trans("error.missed_id_in_row") . $row->getRowIndex());
                 }
@@ -63,10 +62,8 @@ readonly class ImportService
                     throw new LogicException($this->translator->trans("error.unable_to_find_employee_with_email",['email' => $cells[1]]));
                 }
 
-                if (!$absence) {
+                if (!$absence){
                     $absence = new Absence($employee);
-                } else {
-                    $absence->setEmployee($employee);
                 }
 
                 $type = trim($cells[2]);

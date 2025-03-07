@@ -34,6 +34,19 @@ class AbsenceRepository extends ServiceEntityRepository
 
 
 
+    public function findAbsenceByCalamariId($value): ?Absence
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.calamariId = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
+
+
+
+
 //    /**
 //     * @return Absence[] Returns an array of Absence objects
 //     */

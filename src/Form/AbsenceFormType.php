@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -79,7 +80,11 @@ class AbsenceFormType extends AbstractType
                 'required' => false,
                 'attr' => ['class' => 'border-2 w-full py-2.5 px-3'],
                 'row_attr' =>['class' => 'my-2 ']
-            ]);
+            ])
+            ->add('calamariId', NumberType::class, [
+                'label' => 'absence.calamari_id',
+                'required'   => false,
+            ])
         ;
     }
 
