@@ -64,6 +64,7 @@ readonly class ImportService
 
                 if (!$absence){
                     $absence = new Absence($employee);
+                    $absence->setCalamariId($calamariId);
                 }
 
                 $type = trim($cells[2]);

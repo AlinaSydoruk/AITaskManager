@@ -34,6 +34,8 @@ class AbsencePeriodValidator extends ConstraintValidator
         $startDate = $value->getStartDate();
         $endDate = $value->getEndDate();
         $absenceId = $value->getId();
+        $calamariId = $value->getCalamariId();
+
 
 
         if (!$employee || !$startDate || !$endDate) {
@@ -42,10 +44,14 @@ class AbsencePeriodValidator extends ConstraintValidator
 
         $overlappingAbsences = $this->absenceRepository->findOverlappingAbsences($employee, $startDate, $endDate);
 
-        $hasOverlaps = !empty($overlappingAbsences);
-        $isSameAbsence = count($overlappingAbsences) == 1 && $overlappingAbsences[0]->getId() == $absenceId;
 
-        if ($hasOverlaps && !$isSameAbsence) {
+        $hasOverlaps = !empty($overlappingAbsences);
+
+
+        $isSameAbsence = count($overlappingAbsences) == 1 && $overlappingAbsences[0]->getId() == $absenceId;
+        $hasValidCalamariId = count($overlappingAbsences) == 1 && $overlappingAbsences[0]->getCalamariId() == $calamariId;
+
+        if ($hasOverlaps && !$isSameAbsence && !$hasValidCalamariId) {
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ startDate }}', $startDate->format('d-m-Y'))
                 ->setParameter('{{ endDate }}', $endDate->format('d-m-Y'))
