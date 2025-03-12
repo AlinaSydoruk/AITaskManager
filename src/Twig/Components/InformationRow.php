@@ -13,4 +13,10 @@ class InformationRow
 
     public string $class = '';
     public bool $itemsCenter = false;
+
+    public bool $hoverEffect = true;
+
+    public string $firstColumnWidth = '';
+    public string $secondColumnWidth = '';
+
 }

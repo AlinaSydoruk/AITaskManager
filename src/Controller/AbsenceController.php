@@ -6,6 +6,7 @@ use App\Entity\Absence;
 use App\Form\AbsenceFormType;
 use App\Repository\AbsenceRepository;
 use App\Repository\EmployeeRepository;
+use App\Service\AbsenceService;
 use App\Service\VacationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,21 +14,32 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/absence', name: 'app_absence_')]
+#[Route('employee/', name: 'app_absence_')]
 class AbsenceController extends AbstractController
 {
     public function __construct(
         private readonly AbsenceRepository    $absenceRepository,
         private readonly EmployeeRepository   $employeeRepository,
         private readonly TranslatorInterface  $translator,
-        private readonly VacationService      $vacationService
+        private readonly VacationService      $vacationService,
+        private readonly AbsenceService       $absenceService
 
     )
     {}
+    #[Route('{employeeId}/absence', name: 'index')]
+    public function index(int $employeeId): Response
+    {
+        $employee = $this->employeeRepository->find($employeeId);
+        return $this->render("absence/index.html.twig", [
+            'absencesSortedByYear' => $this->absenceService->getAbsencesSortedByYear($employee),
+            'employee' => $employee,
+        ]);
+    }
 
 
-    #[Route('/create/{employeeId}', name: 'create')]
-    #[Route('/edit/{employeeId}/{id}', name: 'edit')]
+
+    #[Route('{employeeId}/absence/create', name: 'create')]
+    #[Route('{employeeId}/absence/edit/{id}', name: 'edit')]
     public function edit(?int $id, int $employeeId, Request $request): Response
     {
         $isEdit = true;
@@ -79,7 +91,7 @@ class AbsenceController extends AbstractController
         ]);
     }
 
-    #[Route('/delete/{employeeId}/{id}', name: 'delete')]
+    #[Route('{employeeId}/absence/delete/{id}', name: 'delete')]
     public function delete(int $id, int $employeeId): Response
     {
         $absence = $this->absenceRepository->find($id);
@@ -90,7 +102,7 @@ class AbsenceController extends AbstractController
         ]);
     }
 
-    #[Route('/{employeeId}/{id}', name: 'show')]
+    #[Route('{employeeId}/absence/{id}', name: 'show')]
     public function show(int $id, int $employeeId): Response
     {
         $absence = $this->absenceRepository->find($id);
