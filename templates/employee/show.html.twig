@@ -114,33 +114,23 @@
         <twig:InformationRow title="{{ 'employee.job_title' | trans }}">
             <twig:block name="value">{{ employee.jobTitle }}</twig:block>
         </twig:InformationRow>
-        <twig:InformationRow title="{{ 'employee.available_vacations' | trans }}">
+        <twig:InformationRow title="{{ 'employee.available_vacations' | trans }} ">
             <twig:block name="value">
                 <div class="flex ">
                     <div class="mr-2">
                         {% if availableVacationDays == 0 %}
                             {{ 'employee.you_do_not_have_any_more_vacation_days' | trans }}
                         {% else %}
-                            {{ availableVacationDays }}
+                            {{ availableVacationDays }} / {{ vacation_days_per_year }}
                         {% endif %}
                     </div>
                 </div>
             </twig:block>
         </twig:InformationRow>
-        <twig:InformationRow title="{{ 'employee.absence' | trans }}">
+
+        <twig:InformationRow title="{{ 'employee.absence' | trans }}" hoverEffect="{{ false }}">
             <twig:block name="value">
-                {% if employee.absences.get(0) %}
-                    {% for absence in employee.absences %}
-                        <div class="grid grid-flow-col auto-cols-max text-sm space-y-2">
-                            <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}" class="underline">
-                                {{ absence.startDate |date("d.m.Y") }}
-                                {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d.m.Y") }}
-                            </a>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    {{ 'absence.you_do_not_have_any_absence' | trans }}
-                {% endif %}
+                <twig:Button label="{{ 'absence.to_absences' | trans }}" url="{{ path('app_absence_index' , {'employeeId' : employee.id }) }}"></twig:Button>
             </twig:block>
         </twig:InformationRow>
     </div>

@@ -1,0 +1,72 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}{{ 'profile.employee' | trans }}{% endblock %}
+
+
+{% block content %}
+
+    <div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem link="{{ path('app_employee_index') }}"
+                             label="{{ 'employee.employee' | trans }}"
+                             isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem link="{{ path('app_employee_show' , {"id" : employee.id }) }}"
+                             label="{{ employee.fullName }}"
+                             isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem link="{{ false }}"
+                             label="{{ 'employee.abcences' | trans }}"
+                             isActive="{{ true }}"
+        />
+    </div>
+
+    <div class="mt-4 mb-8">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'employee.abcences' | trans }}"></twig:MainHeader>
+        </div>
+        {% if absencesSortedByYear %}
+
+            {% for key,  year in absencesSortedByYear %}
+                <twig:InformationRow title="{{ key }}" firstColumnWidth="w-1/4" secondColumnWidth="w-3/4">
+                    <twig:block name="value">
+                        <div class="flex flex-row">
+                            <div class="flex-grow">
+                                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                    {% for absence in year %}
+                                        <a href="{{ path('app_absence_show', {"id" : absence.id , "employeeId" : employee.id }) }}"
+                                           class="flex flex-none justify-center text-xs px-2 py-2 border-2  {{ absence.absenceType.name == 'vacation' ? "bg-primary text-white border-transparent hover:border-primary  " : "bg-gray-200 text-black border-transparent hover:border-gray-200" }}">
+                                            {{ absence.startDate |date("d.m.Y") }}
+                                            {{ 'symbol.dash' | trans }} {{ absence.endDate |date("d.m.Y") }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </twig:block>
+                </twig:InformationRow>
+            {% endfor %}
+        {% else %}
+            <div class="my-4">
+                {{ 'absence.you_do_not_have_any_absence' | trans }}
+            </div>
+        {% endif %}
+    </div>
+
+
+
+
+    <div class="my-4">
+        <twig:Button url="{{ path('app_employee_show' , {"id" : employee.id }) }}"
+                     label="{{ 'action.back' | trans }}">
+        </twig:Button>
+    </div>
+
+{% endblock content %}
+
+
+
+
+
+
+
