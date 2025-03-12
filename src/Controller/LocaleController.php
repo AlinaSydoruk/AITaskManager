@@ -34,7 +34,7 @@ class LocaleController extends AbstractController
         if($user){
             $user->setLocale($language->value);
             $this->entityManager->persist($user);
-            $this->entityManager->persist($user);
+            $this->entityManager->flush();
         }
 
         $referer = $request->headers->get('referer');

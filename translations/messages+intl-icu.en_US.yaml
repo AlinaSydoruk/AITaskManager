@@ -103,6 +103,8 @@ email.password_reset_instruction: "To reset your password, please click the foll
 email.greeting: "Hello {name},"
 email.cheers: "Best regards,"
 email.team_signature: "The team of {company}"
+common.locale_short.de_CH: "German"
+common.locale_short.en_US: "English"
 error.incorrect_id_in_row: "Incorrect ID in row"
 error.missed_id_in_row: "Missing ID in row"
 error.missed_email_in_row: "Missing email in row"

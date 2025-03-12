@@ -11,7 +11,7 @@
                         type="button">
                     {% for localeOption in app.enabled_locales %}
                         {% if localeOption == app.locale %}
-                            <span >{{ ('common.locale_short.' ~ localeOption) | trans }}</span>
+                            <span>{{ ('common.locale_short.' ~ localeOption) | trans }}</span>
                         {% endif %}
                     {% endfor %}
                 </button>

@@ -103,6 +103,8 @@ email.password_reset_instruction: "Um Ihr Passwort zurückzusetzen, klicken Sie 
 email.greeting: "Hallo {name},"
 email.cheers: "Viele Grüsse,"
 email.team_signature: "Das Team von {company}"
+common.locale_short.de_CH: "Deutsch"
+common.locale_short.en_US: "Englisch"
 error.incorrect_id_in_row: "Ungültige ID in der Zeile "
 error.missed_id_in_row: "Fehlende ID in der Zeile "
 error.missed_email_in_row: "Fehlende E-Mail in der Zeile "
