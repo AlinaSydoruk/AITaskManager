@@ -1,0 +1,48 @@
+{% extends 'profile.html.twig' %}
+
+{% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 ">
+        <twig:BreadCrumbHome/>
+
+
+    <div class="my-4">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'board.create_board' | trans }} ">
+            </twig:MainHeader>
+        </div>
+    </div>
+
+    <div class="my-4">
+        <div class="max-w-md mx-auto">
+            {{ form_start(form) }}
+
+            {{ form_errors(form) }}
+
+            {{ form_row(form.title) }}
+
+            {{ form_row(form.description) }}
+
+            {{ form_row(form.color) }}
+
+            <div class="my-4">
+                <twig:Button label="{{ 'action.create' | trans }}" url="{{ false }}" ></twig:Button>
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <twig:Button url="{{ path('app_home') }}"
+                 label="{{ 'action.back' | trans }}"
+    >
+    </twig:Button>
+    </div>
+
+
+
+
+
+
+{% endblock content %}

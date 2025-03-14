@@ -1,0 +1,11 @@
+<a href="{{ url }}">
+    <div style="width : 130px; height : 130px;  word-break:break-all; text-overflow: ellipsis; "
+         class="flex justify-center items-center m-4  border-2 rounded-lg shadow-sm hover:bg-gray-100   {{ class|default(' ') }} ">
+
+        {% if title %}
+            <h2 class="mb-2 text-center font-bold tracking-tight text-gray-900  ">{{ title }}</h2>
+        {% else %}
+            {% block title %}{% endblock %}
+        {% endif %}
+    </div>
+</a>

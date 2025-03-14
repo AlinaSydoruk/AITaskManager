@@ -6,8 +6,7 @@
 parameters:
     app.contact_email: '%env(APP_CONTACT_EMAIL)%'
     app.contact_phone: '%env(APP_CONTACT_PHONE)%'
-    app.vacation_days_per_year: '%env(int:VACATION_DAYS_PER_YEAR)%'
-    app.default_locale: 'de_CH'
+    app.default_locale: 'en_US'
 
 services:
     # default configuration for services in *this* file
@@ -28,19 +27,13 @@ services:
     # please note that last definitions always *replace* previous ones
 
 
-    App\UploaderHelper:
-        arguments:
-            $publicDownloadsDir: '%kernel.project_dir%%env(PUBLIC_DOWNLOADS_DIR)%'
-            $uploadsDir: '%kernel.project_dir%%env(UPLOADS_DIR)%'
+
 
     App\Form\NoValidateExtension:
         arguments:
             $html5_validation: '%env(bool:APP_HTML5_VALIDATION)%'
 
-    App\Service\VacationService:
-        arguments:
-            $vacationDaysPerYear: '%env(int:VACATION_DAYS_PER_YEAR)%'
-            $endOfYear: '%env(END_OF_YEAR)%'
+
 
     App\Service\LocaleSubscriber:
         tags:

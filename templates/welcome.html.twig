@@ -10,25 +10,53 @@
                 <twig:block name="rightSide">
                     <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
 
-                    <twig:Button url="{{ path('app_download_employees') }}"
-                             label="{{ 'action.download_file' | trans }}"
-                             class="w-full"
-                ></twig:Button>
-                <twig:Button url="{{ path('app_upload_absences') }}"
-                             label="{{ 'action.upload_file' | trans }}"
-                             class="w-full"
-                ></twig:Button>
+
                     </div>
                 </twig:block>
             </twig:MainHeader>
         </div>
-        <a href="{{ path('app_employee_index') }}">
-            <div class=" border-y-2 hover:bg-gray-200  border-neutral">
-                <div class="py-3 pl-4 sm:pl-8 md:pl-16 lg:pl-24 xl:pl-32">
-                    {{ 'profile.employee' | trans }}
-                </div>
+
+
+        <div class="my-4">
+            <div class="max-w-md mx-auto">
+
+                {% if boards %}
+                    <div class="flex flex-wrap gap-4 ">
+                        {% for board in boards %}
+                            <twig:BoardCard color="{{ board.color }}" title="{{ board.title }}"
+                                            url="{{ path("app_board_index", { "id" : board.id } ) }}"></twig:BoardCard>
+                        {% endfor %}
+                        <twig:BoardCard color="gray-300"
+                                        url="{{ path("app_board_create") }}">
+                            <twig:block name="title">
+                                <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 13V29M13 21H29M41 21C41 32.0457 32.0457 41 21 41C9.9543 41 1 32.0457 1 21C1 9.9543 9.9543 1 21 1C32.0457 1 41 9.9543 41 21Z" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+
+                            </twig:block>
+                        </twig:BoardCard>
+                    </div>
+                {% else %}
+                    <div class="m-4 p-4">
+                        <h1> {{ 'welcome.no_boards' | trans }} </h1>
+
+                        <twig:BoardCard color="gray-300"
+                                        url="{{ path("app_board_create") }}">
+                            <twig:block name="title">
+                                <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 13V29M13 21H29M41 21C41 32.0457 32.0457 41 21 41C9.9543 41 1 32.0457 1 21C1 9.9543 9.9543 1 21 1C32.0457 1 41 9.9543 41 21Z" stroke="#1E1E1E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </twig:block>
+                        </twig:BoardCard>
+
+                    </div>
+
+                {% endif %}
+
             </div>
-        </a>
+        </div>
+
+
     </div>
 
 {% endblock content %}

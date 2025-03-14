@@ -1,12 +1,11 @@
 twig:
     file_name_pattern: '*.twig'
     form_themes:
-        - 'sandbox_form.html.twig'
+        - 'form.html.twig'
 
     globals:
         contact_email: '%app.contact_email%'
         contact_phone: '%app.contact_phone%'
-        vacation_days_per_year: '%app.vacation_days_per_year%'
 
 when@test:
     twig:

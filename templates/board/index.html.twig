@@ -1,0 +1,35 @@
+{% extends 'kanban/base.html.twig' %}
+
+{% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 ">
+        <twig:BreadCrumbHome/>
+        <div class="my-4">
+            <twig:MainHeader text="{{ 'profile.welcome' | trans }}">
+                <twig:block name="rightSide">
+                    <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
+
+
+
+                    </div>
+                </twig:block>
+            </twig:MainHeader>
+        </div>
+
+
+
+
+
+
+
+
+
+
+        <h1 >  {{ board.title }}</h1>
+
+
+
+    </div>
+
+{% endblock content %}
