@@ -1,4 +1,4 @@
-{% extends 'profile.html.twig' %}
+{% extends 'kanban/base.html.twig' %}
 
 {% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
 
@@ -19,9 +19,8 @@
 
         <div class="my-4">
             <div class="max-w-md mx-auto">
-
                 {% if boards %}
-                    <div class="flex flex-wrap gap-4 ">
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 ">
                         {% for board in boards %}
                             <twig:BoardCard color="{{ board.color }}" title="{{ board.title }}"
                                             url="{{ path("app_board_index", { "id" : board.id } ) }}"></twig:BoardCard>
