@@ -1,0 +1,28 @@
+{% extends 'kanban/base.html.twig' %}
+
+{% block title %}{{ 'subcategory.list' | trans }}{% endblock %}
+
+{% block content %}
+
+    {% if subcategory.parent %}
+    {{ subcategory.parent.title }}
+    {% endif %}
+
+    <div class="my-4">
+        <h1 class="text-2xl font-bold">
+           {{ subcategory.title }}
+        </h1>
+
+        {% for child in subcategory.children  %}
+        <h1 class="text-2xl font-bold">
+            {{ child.title }}
+        </h1>
+        {% endfor %}
+        <twig:Button label="{{'action.create' | trans }}" url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+
+        {{ dump(subcategory) }}
+{#        <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>#}
+
+
+    </div>
+{% endblock %}

@@ -59,6 +59,7 @@ class BoardController extends AbstractController
         $board = $this->boardRepository->find($id);
         return $this->render('board/index.html.twig', [
             'board' => $board,
+            'boardId' => $board->getId(),
             ]);
     }
 

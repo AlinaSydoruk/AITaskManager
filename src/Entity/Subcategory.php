@@ -19,7 +19,7 @@ class Subcategory
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Board::class, inversedBy: "subcategories")]
@@ -37,14 +37,12 @@ class Subcategory
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: "subcategory")]
     private Collection $tasks;
 
-    #[ORM\OneToMany(targetEntity: Epic::class, mappedBy: "subcategory")]
-    private Collection $epics;
 
-    public function __construct()
+    public function __construct(Board $board)
     {
+        $this->board = $board;
         $this->children = new ArrayCollection();
         $this->tasks = new ArrayCollection();
-        $this->epics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -131,16 +129,5 @@ class Subcategory
     {
         $this->tasks = $tasks;
     }
-
-    public function getEpics(): Collection
-    {
-        return $this->epics;
-    }
-    public function setEpics(Collection $epics): void
-    {
-        $this->epics = $epics;
-    }
-
-
 
 }

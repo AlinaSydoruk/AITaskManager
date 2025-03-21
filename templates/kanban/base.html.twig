@@ -5,9 +5,7 @@
  {% block body %}
      {% include 'partial/_board_header.html.twig' %}
 
-
-
-     {% include'partial/_aside.html.twig' %}
+     {% include'partial/_aside.html.twig' with {'boardId': boardId} %}
 
      <div class="flex-grow px-6 sm:px-24 md:px-26 lg:px-28 xl:px-32 max-w-screen-xl mx-auto w-full pt-16 ">
          {% for message in app.flashes('success') %}
