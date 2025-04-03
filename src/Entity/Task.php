@@ -34,7 +34,7 @@ class Task
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank]
-    private ?string $approximateEstimate = null;
+    private ?int $approximateEstimate = 0;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $scheduledForDate = null;

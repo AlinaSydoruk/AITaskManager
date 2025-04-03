@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('board/{boardId}/subcategory', name: 'app_subcategory_')]
+#[Route('/board/{boardId}/subcategory', name: 'app_subcategory_')]
 class SubcategoryController extends AbstractController
 {
     public function __construct(

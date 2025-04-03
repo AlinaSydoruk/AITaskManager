@@ -20,4 +20,9 @@ class TaskService
         return $sortedByStatusTasks;
     }
 
+    public function getEstimateTimeInMinutes(int $days, int $hours , int $minutes ) :int
+    {
+        return $days * 24 * 60 + $hours * 60 + $minutes;
+    }
+
 }

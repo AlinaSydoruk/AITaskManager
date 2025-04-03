@@ -13,16 +13,32 @@
            {{ subcategory.title }}
         </h1>
 
+        <h3 class="text-2xl font-bold">{{ 'subcategory.categories' | trans }} </h3>
         {% for child in subcategory.children  %}
-        <h1 class="text-2xl font-bold">
+        <h4 class="text-2xl font-bold">
             {{ child.title }}
-        </h1>
+        </h4>
         {% endfor %}
-        <twig:Button label="{{'action.create' | trans }}" url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+
+        <h3 class="text-2xl font-bold">{{ 'subcategory.tasks' | trans }} </h3>
+
+        {% for task in subcategory.tasks  %}
+        <h4 class="text-2xl font-bold">
+            {{ tasks.title }}
+        </h4>
+        {% endfor %}
+
+        <twig:Button label="{{'action.create_subcategory' | trans }}" url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+
+        <twig:Button label="{{'action.create_task' | trans }}" url="{{ path('app_task_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+
 
         {{ dump(subcategory) }}
-{#        <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>#}
-
+        {% if subcategory.parent %}
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>%}
+        {% else %}
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_index' , {'id': boardId }) }}"></twig:Button>%}
+        {% endif %}
 
     </div>
 {% endblock %}
