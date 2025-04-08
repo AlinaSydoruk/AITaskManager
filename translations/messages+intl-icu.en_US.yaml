@@ -125,7 +125,7 @@ error.you_can_not_change_your_first_working_day_if_there_are_any_absences: "You 
 
 
 
-
+board.board: "Board"
 board.create_new_folder: "Create a new folder"
 board.folder_name: "Folder Name"
 board.folder_description: "Folder Description"

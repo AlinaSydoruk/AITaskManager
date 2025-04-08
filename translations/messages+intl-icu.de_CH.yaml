@@ -123,7 +123,7 @@ error.you_have_not_enough_vacation_days_for_this_absence: "Du hast nicht genüge
 error.you_can_not_take_vacation_before_first_working_day: "Du kannst keinen Urlaub vor deinem ersten Arbeitstag nehmen."
 error.you_can_not_change_your_first_working_day_if_there_are_any_absences: "Du kannst deinen ersten Arbeitstag nicht ändern, wenn bereits Abwesenheiten vorhanden sind."
 
-
+board.board: "Brett"
 board.create_new_folder: "Create a new folder"
 board.folder_name: "Folder Name"
 board.folder_description: "Folder Description"

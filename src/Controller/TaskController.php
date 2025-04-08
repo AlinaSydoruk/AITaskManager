@@ -43,15 +43,15 @@ class TaskController extends AbstractController
         $task = new Task();
 
         $parentSubcategory = null;
+
         if ($parentId){
             $parentSubcategory = $this->subcategoryRepository->find($parentId);
         }
         $board = $this->boardRepository->find($boardId);
-        if(!$board){
-            $this->addFlash('error', $this->translator->trans('error.folder_not_found'));
-            return $this->redirectToRoute('app_home');
+        if(!$board)
+        {
+            throw new \LogicException("Board can not be null");
         }
-        $task->setSubcategory($parentSubcategory);
         $task->setBoard($board);
 
         $form = $this->createForm(TaskFormType::class, $task);
@@ -59,6 +59,7 @@ class TaskController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $task = $form->getData();
+            $task->setSubcategory($parentSubcategory);
 
             $days = $form->get('approximateEstimateDays')->getData();
             $time = $form->get('approximateEstimateHours')->getData();
@@ -102,14 +103,52 @@ class TaskController extends AbstractController
 
 
 
-    #[Route('/{id}', name: 'index')]
-    public function index(string $id): Response
+    #[Route('/{id}', name: 'show')]
+    public function show(string $id, string $boardId): Response
     {
-        $board = $this->boardRepository->find($id);
+
+        $board = $this->boardRepository->find($boardId);
+        if(!$board)
+        {
+            throw new \LogicException("Board can not be null");
+        }
+
+        $task = $this->taskRepository->find($id);
+        if(!$task)
+        {
+            throw new \LogicException("Task can not be null");
+        }
+
+
         return $this->render('board/index.html.twig', [
             'board' => $board,
-            'boardId' => $board->getId(),
+            'task' => $task
             ]);
     }
 
+
+    #[Route('/{id}', name: 'delete')]
+    public function delete(string $id, string $boardId): Response
+    {
+
+        $board = $this->boardRepository->find($boardId);
+        if(!$board)
+        {
+            throw new \LogicException("Board can not be null");
+        }
+
+        $task = $this->taskRepository->find($id);
+        if(!$task)
+        {
+            throw new \LogicException("Task can not be null");
+        }
+        $subcategory = $task->getSubcategory();
+        $this->entityManager->remove($task);
+        $this->entityManager->flush();
+
+        return $this->render('board/index.html.twig', [
+            'board' => $board,
+            'subcategory' => $subcategory
+        ]);
+    }
 }

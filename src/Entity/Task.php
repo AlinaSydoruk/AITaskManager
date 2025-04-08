@@ -26,7 +26,7 @@ class Task
     #[Assert\NotBlank]
     private ?string $title = null;
 
-    #[ORM\Column(length: 1024)]
+    #[ORM\Column(length: 1024 , nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]

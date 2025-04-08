@@ -1,14 +1,23 @@
 <div class="inline-flex">
     {% if isActive %}
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.0816 11.9996L9.13184 7.04987L9.83895 6.34277L15.4958 11.9996L9.83895 17.6565L9.13184 16.9493L14.0816 11.9996Z" fill="black"/>
+        <div class="text-gray-600 flex items-center my-2">
+            <svg class="w-4 h-4 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"/>
             </svg>
-
-            <span class="fw-bold text-sm">{{ label }}</span>
+            <div class="mb-1">
+                {{ label }}
+            </div>
+        </div>
     {% else %}
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14.0816 11.9996L9.13184 7.04987L9.83895 6.34277L15.4958 11.9996L9.83895 17.6565L9.13184 16.9493L14.0816 11.9996Z" fill="#666666"/>
-            </svg>
-            <a href="{{ link }}"><span class="text-sm text-gray-600 ">{{ label }}</span></a>
+        <a href="{{ link }}">
+            <div class="text-gray-600 flex items-center gap-1 hover:gap-3 transition-all duration-300 my-2">
+                <svg class="w-4 h-4 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 8 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 13 5.7-5.326a.909.909 0 0 0 0-1.348L1 1"/>
+                </svg>
+                <div class="mb-1">
+                    {{ label }}
+                </div>
+            </div>
+        </a>
     {% endif %}
 </div>

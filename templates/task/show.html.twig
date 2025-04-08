@@ -22,7 +22,7 @@
             {% endfor %}
         {% endif %}
         <twig:BreadCrumbItem link="{{ false }}"
-                             label="{{ subcategory.title }} "
+                             label="{{ task.title }} "
                              isActive="{{ true }}"
         />
     </div>
@@ -30,20 +30,14 @@
 
     <div class="my-4">
 
-
-        <twig:MainHeader text=" {{ subcategory.title }}">
+        <twig:MainHeader text=" {{ task.title }}">
             <twig:block name="rightSide">
                 <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
+                    <twig:Button label="{{'action.edit' | trans }}" url="{{ path('app_task_edit' , {'boardId': boardId , 'id' : task.id}) }}"></twig:Button>
 
-                    <twig:Button label="{{'action.create_subcategory' | trans }}" url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
-
-                    <twig:Button label="{{'action.create_task' | trans }}" url="{{ path('app_task_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
-
-
+                    <twig:Button label="{{'action.delete' | trans }}" url="{{ path('app_task_delete' , {'boardId': boardId , 'id' : task.id}) }}"></twig:Button>
                 </div>
             </twig:block>
-
-
         </twig:MainHeader>
 
         <twig:Section title="{{ 'subcategory.categories' | trans }}" class="mx-4">
@@ -70,9 +64,9 @@
         </twig:Section>
 
         {% if subcategory.parent %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>%}
         {% else %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_index' , {'id': boardId }) }}"></twig:Button>
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_index' , {'id': boardId }) }}"></twig:Button>%}
         {% endif %}
 
     </div>

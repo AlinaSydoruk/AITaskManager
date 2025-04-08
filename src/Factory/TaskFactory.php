@@ -38,7 +38,7 @@ final class TaskFactory extends PersistentProxyObjectFactory
             'title' => self::faker()->sentence(5),
             'description' => self::faker()->paragraph(3),
             'deadline' => self::faker()->dateTimeBetween('+1 week', '+1 month'),
-            'approximateEstimate' => self::faker()->randomElement(['2h', '4h', '1d', '3d', '8h']),
+            'approximateEstimate' => self::faker()->numberBetween(5, 1024),
             'scheduledForDate' => self::faker()->dateTimeBetween('now', '+1 month'),
             'taskPriority' => self::faker()->randomElement(TaskPriority::cases()),
             'taskStatus' => self::faker()->randomElement(TaskStatus::cases()),
