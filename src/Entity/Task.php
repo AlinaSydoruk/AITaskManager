@@ -148,7 +148,6 @@ class Task
     public function setBoard(?Board $board): self
     {
         $this->board = $board;
-        $this->subcategory = null; // Clearing subcategory, if we bind to Board
         return $this;
     }
 
@@ -161,7 +160,6 @@ class Task
     public function setSubcategory(?Subcategory $subcategory): self
     {
         $this->subcategory = $subcategory;
-        $this->board = null; // Clearing the board, if we bind to Subcategory
         return $this;
     }
 

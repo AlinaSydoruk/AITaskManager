@@ -28,11 +28,13 @@ class SubcategoryController extends AbstractController
     #[Route('/create', name: 'create')]
     public function create(Request $request, int $boardId): Response
     {
+
         $parentId = $request->get('parentId') ?: null;
         $parent = null;
-        if ($parentId){
+        if ($parentId) {
             $parent = $this->subcategoryRepository->find($parentId);
         }
+
         $subcategory = new Subcategory($this->boardRepository->find($boardId));
         $form = $this->createForm(SubcategoryType::class, $subcategory);
         $form->handleRequest($request);
@@ -51,24 +53,70 @@ class SubcategoryController extends AbstractController
         return $this->render('subcategory/create.html.twig', [
             'form' => $form,
             'boardId' => $boardId,
-            'parentId' => $parentId
+            'parentId' => $parentId,
+            'subcategory'=> $parent
+        ]);
+    }
+
+    #[Route('/edit/{id}', name: 'edit')]
+    public function edit(Request $request, int $boardId, int $id): Response
+    {
+
+
+
+        return $this->render('subcategory/create.html.twig', [
+
         ]);
     }
 
 
+
+
     #[Route('/{id}', name: 'show')]
-    public function show(int $boardId,int $id): Response
+    public function show(int $boardId, ?int $id=null): Response
     {
-        $subcategory = $this->subcategoryRepository->findWithChildren($id);
-
-        if (!$subcategory) {
-            $this->addFlash('error', $this->translator->trans('error.folder not found'));
-            return $this->redirectToRoute('app_home');
+        $board = $this->boardRepository->find($boardId);
+        if (!$board) {
+            return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
         }
-
+        if ($id) {
+            $subcategory = $this->subcategoryRepository->findWithChildren($id);
+            if (!$subcategory) {
+                return new Response("Subcategory with id : $id does not exist", Response::HTTP_NOT_FOUND);
+            }
+        } else {
+            $subcategory = $this->subcategoryRepository->findRootByBoard($board);
+        }
         return $this->render('subcategory/show.html.twig', [
             'subcategory' => $subcategory,
             'boardId' => $boardId,
+        ]);
+    }
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(int $boardId, int $id): Response
+    {
+        $board = $this->boardRepository->find($boardId);
+        if (!$board) {
+            return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
+        }
+
+        $subcategory = $this->subcategoryRepository->find($id);
+        $subcategoryParent = $subcategory->getParent();
+        if (!$subcategory) {
+            return new Response("Subcategory with id : $id does not exist", Response::HTTP_NOT_FOUND);
+        }
+        $this->entityManager->remove($subcategory);
+        $this->entityManager->flush();
+
+        if ($subcategoryParent) {
+            return $this->redirectToRoute('app_subcategory_show',[
+                'subcategory' => $subcategoryParent->getId(),
+                'boardId' => $boardId,
+            ]);
+        }
+        return $this->redirectToRoute('app_board_show', [
+            'id' => $boardId,
         ]);
     }
 }

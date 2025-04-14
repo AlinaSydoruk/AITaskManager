@@ -5,9 +5,40 @@
 {% block content %}
     <div class="my-4 ">
 
-        <div class="my-4">
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem
+                link="{{ path('app_board_show' , {'id': boardId })}}"
+                label=" {{ 'board.board' | trans() }} "
+                isActive="{{ false }}"
+        />
+        {% if subcategory.parent %}
+            {% set parents = subcategory_parent_chain(subcategory) %}
+            {% for parent in parents %}
+                <twig:BreadCrumbItem
+                        link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
+                        label="{{ parent.title }}"
+                        isActive="{{ false }}"
+                />
+            {% endfor %}
+
+        {% endif %}
+        <twig:BreadCrumbItem
+                link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.id}) }}"
+                label="{{ subcategory.title }}"
+                isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem link="{{ false }}"
+                             label="{{ 'action.create' |trans  }} "
+                             isActive="{{ true }}"
+        />
+    </div>
+
+
+
+
+    <div class="my-4">
             <div class="mt-2">
-                <twig:MainHeader text="{{ 'board.create_new_folder' | trans }} ">
+                <twig:MainHeader text="{{ 'board.create_category' | trans }} ">
                 </twig:MainHeader>
             </div>
         </div>
@@ -37,11 +68,10 @@
             </div>
         </div>
 
-        <twig:Button url="{{ path('app_home') }}"
-                     label="{{ 'action.back' | trans }}"
-        >
-        </twig:Button>
 
-    </div>
+
+        <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.id}) }}"></twig:Button>
+
+
 
 {% endblock content %}

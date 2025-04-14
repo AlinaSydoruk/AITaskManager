@@ -23,7 +23,7 @@
                     <div class="grid grid-cols-2 md:grid-cols-3 gap-8 ">
                         {% for board in boards %}
                             <twig:BoardCard color="{{ board.color }}" title="{{ board.title }}"
-                                            url="{{ path("app_board_index", { "id" : board.id } ) }}"></twig:BoardCard>
+                                            url="{{ path("app_board_show", { "id" : board.id } ) }}"></twig:BoardCard>
                         {% endfor %}
                         <twig:BoardCard color="gray-300"
                                         url="{{ path("app_board_create") }}">

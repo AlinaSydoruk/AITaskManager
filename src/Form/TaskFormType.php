@@ -37,27 +37,19 @@ class TaskFormType extends AbstractType
             ->add('title', TextType::class, [
                 'label' => 'task.title',
             ])
+            ->add('description', TextareaType::class, [
+                'label' => 'task.description',
+                'required' => false,
+            ])
             ->add('deadline', DateType::class, [
                 'label' => 'task.deadline',
                 'required' => false,
-            ])
-            ->add('approximateEstimateDays', IntegerType::class, [
-                'label' => 'task.approximate_estimate_days',
-                'attr' => [
-                    'class' => 'py-2.5 px-4 w-full ',
-                    'min' => 0
-                ],
-                'row_attr' => ['class' => ' mt-2 '],
-                'mapped' => false,
-            ])
-            ->add('approximateEstimateHours', TimeType::class, [
-                'label' => 'task.approximate_estimate_hours',
-                'attr' => ['class' => 'border-2 py-2.5 px-4 w-36'],
-                'row_attr' => ['class' => 'w-full flex flex-col mt-2 items-end text-right'],
-                'mapped' => false,
+                'widget' => 'single_text',
             ])
             ->add('scheduledForDate', DateType::class, [
                 'label' => 'task.scheduled_for_date',
+                'required' => false,
+                'widget' => 'single_text',
             ])
             ->add('taskPriority', EnumType::class, [
                 'class' => TaskPriority::class,
@@ -87,15 +79,12 @@ class TaskFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('description', TextareaType::class, [
-                'label' => 'task.description',
-                'required' => false,
+            ->add('estimate', EstimateType::class, [
+                'label' => false,
+                'mapped' => false,
             ])
-            ->add('subcategory', EntityType::class, [
-                'class' => Subcategory::class,
-                'required' => false,
-                'attr' => ['type' => 'hidden'],
-                'choice_label' => 'id',
+            ->add('subcategory', HiddenType::class, [
+                'mapped' => false,
             ]);
     }
 

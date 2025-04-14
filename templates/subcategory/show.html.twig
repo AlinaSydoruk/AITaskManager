@@ -7,7 +7,7 @@
     <div class="my-4">
         <twig:BreadCrumbHome/>
         <twig:BreadCrumbItem
-                link="{{ path('app_board_index' , {'id': boardId })}}"
+                link="{{ path('app_board_show' , {'id': boardId })}}"
                 label=" {{ 'board.board' | trans() }} "
                 isActive="{{ false }}"
         />
@@ -48,31 +48,38 @@
 
         <twig:Section title="{{ 'subcategory.categories' | trans }}" class="mx-4">
             <twig:block name="content">
-                {% for child in subcategory.children  %}
-                    <a href="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : child.id}) }}">
-                        <twig:Row title="{{ child.title }}" class="px-4"></twig:Row>
-                    </a>
-                {% endfor %}
+                {% if subcategory.children|length > 0 %}
+                    {% for child in subcategory.children %}
+                        <a href="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : child.id}) }}">
+                            <twig:Row title="{{ child.title }}" class="px-4"></twig:Row>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <p class="px-4 text-gray-500 italic">{{ 'subcategory.no_subcategories' | trans }}</p>
+                {% endif %}
             </twig:block>
         </twig:Section>
 
 
-
-
-        <twig:Section title="{{ 'subcategory.tasks' | trans }}"  class="mx-4">
+        <twig:Section title="{{ 'subcategory.tasks' | trans }}" class="mx-4">
             <twig:block name="content">
-                {% for task in subcategory.tasks  %}
-                    <a>
-                        <twig:Row title="{{ task.title }}" class="px-4"></twig:Row>
-                    </a>
-                {% endfor %}
+                {% if subcategory.tasks|length > 0 %}
+                    {% for task in subcategory.tasks %}
+                        <a href="{{ path('app_task_show' , {'boardId' : boardId, 'id' : task.id } ) }}">
+                            <twig:Row title="{{ task.title }}" class="px-4"></twig:Row>
+                        </a>
+                    {% endfor %}
+                {% else %}
+                    <p class="px-4 text-gray-500 italic">{{ 'subcategory.no_tasks' | trans }}</p>
+                {% endif %}
             </twig:block>
         </twig:Section>
+
 
         {% if subcategory.parent %}
             <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>
         {% else %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_index' , {'id': boardId }) }}"></twig:Button>
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>
         {% endif %}
 
     </div>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Domain\User\Model\User;
 use App\Entity\Board;
+use App\Entity\Subcategory;
 use App\Form\BoardType;
 use App\Form\SubcategoryType;
 use App\Repository\BoardRepository;
@@ -36,13 +37,15 @@ class BoardController extends AbstractController
         $user = $security->getUser();
 
         $board = new Board($user);
+        $board->addSubcategory(new Subcategory($board))->setTitle('Categories');
+
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($board);
             $this->entityManager->flush();
-            $this->addFlash('success', $this->translator->trans('message.employee_has_been_created'));
+            $this->addFlash('success', $this->translator->trans('message.board_has_been_created'));
             return $this->redirectToRoute('app_home');
         }
 
@@ -53,11 +56,11 @@ class BoardController extends AbstractController
 
 
 
-    #[Route('/{id}', name: 'index')]
-    public function index(string $id): Response
+    #[Route('/{id}', name: 'show')]
+    public function show(string $id): Response
     {
         $board = $this->boardRepository->find($id);
-        return $this->render('board/index.html.twig', [
+        return $this->render('board/show.html.twig', [
             'board' => $board,
             'boardId' => $board->getId(),
             ]);

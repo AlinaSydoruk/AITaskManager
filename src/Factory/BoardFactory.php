@@ -3,6 +3,7 @@
 namespace App\Factory;
 
 use App\Entity\Board;
+use App\Entity\Subcategory;
 use App\Entity\User;
 use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
 
@@ -45,7 +46,11 @@ final class BoardFactory extends PersistentProxyObjectFactory
      */
     protected function initialize(): static
     {
-        return $this;
+        return $this->afterInstantiate(function(Board $board) {
+            $rootCategory = new Subcategory($board);
+            $rootCategory->setTitle('Categories');
+            $board->addSubcategory($rootCategory);
+        });
 
     }
 

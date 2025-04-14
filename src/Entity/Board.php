@@ -27,7 +27,7 @@ class Board
     /**
      * @var Collection<int, Subcategory>
      */
-    #[ORM\OneToMany(targetEntity: Subcategory::class, mappedBy: 'board', orphanRemoval: true )]
+    #[ORM\OneToMany(targetEntity: Subcategory::class, mappedBy: 'board', cascade: ['persist'], orphanRemoval: true)]
     private Collection $subcategories;
 
     /**

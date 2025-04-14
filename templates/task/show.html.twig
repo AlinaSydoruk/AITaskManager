@@ -7,20 +7,29 @@
     <div class="my-4">
         <twig:BreadCrumbHome/>
         <twig:BreadCrumbItem
-                link="{{ path('app_board_index' , {'id': boardId })}}"
+                link="{{ path('app_board_show' , {'id': boardId })}}"
                 label=" {{ 'board.board' | trans() }} "
                 isActive="{{ false }}"
         />
-        {% if subcategory.parent %}
-            {% set parents = subcategory_parent_chain(subcategory) %}
-            {% for parent in parents %}
-                <twig:BreadCrumbItem
-                        link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
-                        label="{{ parent.title }}"
-                        isActive="{{ false }}"
-                />
-            {% endfor %}
+        {% if task.subcategory %}
+
+            {% if task.subcategory.parent %}
+                {% set parents = subcategory_parent_chain(task.subcategory) %}
+                {% for parent in parents %}
+                    <twig:BreadCrumbItem
+                            link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
+                            label="{{ parent.title }}"
+                            isActive="{{ false }}"
+                    />
+                {% endfor %}
+            {% endif %}
+            <twig:BreadCrumbItem
+                    link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : task.subcategory.id}) }}"
+                    label="{{ task.subcategory.title }}"
+                    isActive="{{ false }}"
+            />
         {% endif %}
+
         <twig:BreadCrumbItem link="{{ false }}"
                              label="{{ task.title }} "
                              isActive="{{ true }}"
@@ -40,33 +49,57 @@
             </twig:block>
         </twig:MainHeader>
 
-        <twig:Section title="{{ 'subcategory.categories' | trans }}" class="mx-4">
+        <twig:Section title="{{ 'task.details' | trans }}" class="mx-4">
             <twig:block name="content">
-                {% for child in subcategory.children  %}
-                    <a href="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : child.id}) }}">
-                        <twig:Row title="{{ child.title }}" class="px-4"></twig:Row>
-                    </a>
-                {% endfor %}
+                <div class="space-y-2 text-gray-700">
+                    {% if task.description %}
+                        <p class="italic"> {{ task.description }}</p>
+                    {% endif %}
+                </div>
+                <twig:InformationRow title="{{ 'task.priority' | trans }}">
+                    <twig:block name="value">{{ task.taskPriority.getTranslationKey | trans }}</twig:block>
+                </twig:InformationRow>
+
+                <twig:InformationRow title="{{ 'task.status' | trans }}">
+                    <twig:block name="value">{{ task.taskStatus.getTranslationKey | trans }}</twig:block>
+                </twig:InformationRow>
+
+                <twig:InformationRow title="{{ 'task.deadline' | trans }}">
+                    <twig:block name="value">{{ task.deadline ? task.deadline|date('Y-m-d') : '-' }}</twig:block>
+                </twig:InformationRow>
+
+                <twig:InformationRow title="{{ 'task.scheduled_for_date' | trans }}">
+                    <twig:block name="value">{{ task.scheduledForDate ? task.scheduledForDate|date('Y-m-d') : '-' }}</twig:block>
+                </twig:InformationRow>
+
+                <twig:InformationRow title="{{ 'task.estimate' | trans }}">
+                    <twig:block name="value">
+                        {% set estimate = minutes_to_estimate_parts(task.approximateEstimate) %}
+
+                        {% if estimate[0] > 0 %}{{ estimate[0] }} {{ 'days' | trans }}{% endif %}
+                        {% if estimate[1] > 0 or estimate[2] > 0 %}
+                            {{ estimate[1] }}h {{ estimate[2] }}min
+                        {% endif %}
+                        {% if estimate[0] == 0 and estimate[1] == 0 and estimate[2] == 0 %}
+                            0 {{ 'estimate.minutes' | trans }}
+                        {% endif %}
+
+
+                    </twig:block>
+                </twig:InformationRow>
+
             </twig:block>
         </twig:Section>
 
 
 
 
-        <twig:Section title="{{ 'subcategory.tasks' | trans }}"  class="mx-4">
-            <twig:block name="content">
-                {% for task in subcategory.tasks  %}
-                    <a>
-                        <twig:Row title="{{ task.title }}" class="px-4"></twig:Row>
-                    </a>
-                {% endfor %}
-            </twig:block>
-        </twig:Section>
 
-        {% if subcategory.parent %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>%}
+
+        {% if subcategory %}
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.id}) }}"></twig:Button>
         {% else %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_index' , {'id': boardId }) }}"></twig:Button>%}
+            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>
         {% endif %}
 
     </div>

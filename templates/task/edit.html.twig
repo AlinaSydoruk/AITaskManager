@@ -1,0 +1,90 @@
+{% extends 'kanban/base_content.html.twig' %}
+
+{% block title %}{{ 'task.edit_task' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="my-4">
+
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem
+                link="{{ path('app_board_show' , {'id': boardId })}}"
+                label=" {{ 'board.board' | trans() }} "
+                isActive="{{ false }}"
+        />
+        {% if task.subcategory %}
+
+            {% if task.subcategory.parent %}
+                {% set parents = subcategory_parent_chain(task.subcategory) %}
+                {% for parent in parents %}
+                    <twig:BreadCrumbItem
+                            link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
+                            label="{{ parent.title }}"
+                            isActive="{{ false }}"
+                    />
+                {% endfor %}
+            {% endif %}
+            <twig:BreadCrumbItem
+                    link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : task.subcategory.id}) }}"
+                    label="{{ task.subcategory.title }}"
+                    isActive="{{ false }}"
+            />
+        {% endif %}
+
+        <twig:BreadCrumbItem
+                link="{{ path('app_task_show' , {'boardId': boardId , 'id' : task.id}) }}"
+                label="{{ task.title }}"
+                isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem link="{{ false }}"
+                             label="{{ "action.edit" | trans }}"
+                             isActive="{{ true }}"
+        />
+
+
+
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'task.edit_task' | trans }}">
+            </twig:MainHeader>
+        </div>
+
+        <div class="my-4">
+            <div class="max-w-md mx-auto">
+
+                {{ form_start(form) }}
+
+                {{ form_errors(form) }}
+
+                {{ form_row(form.title) }}
+                {{ form_row(form.description) }}
+                {{ form_row(form.deadline) }}
+
+                <div class="mt-4 font-medium text-sm text-gray-700">
+                    {{ 'task.approximate_estimate' | trans }}
+                </div>
+
+                <div class="flex justify-between">
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.estimate.days) }}
+                    </div>
+                    {{ form_row(form.estimate.time) }}
+                </div>
+
+                {{ form_row(form.scheduledForDate) }}
+                {{ form_row(form.taskPriority) }}
+                {{ form_row(form.taskStatus) }}
+
+                {{ form_row(form.subcategory) }}
+
+                <div class="my-4">
+                    <twig:Button label="{{ 'action.save' | trans }}" url="{{ false }}" />
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+
+            <twig:Button url="{{ path('app_task_show', {'boardId': boardId, 'id': task.id}) }}" label="{{ 'action.back' | trans }}" />
+
+    </div>
+{% endblock %}

@@ -4,7 +4,6 @@ namespace App\DataFixtures;
 
 
 use App\Factory\BoardFactory;
-use App\Factory\TaskFactory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 

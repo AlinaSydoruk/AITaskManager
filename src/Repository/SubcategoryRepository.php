@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Board;
 use App\Entity\Subcategory;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -24,6 +25,16 @@ class SubcategoryRepository extends ServiceEntityRepository
             ->addSelect('c')
             ->where('s.id = :id')
             ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findRootByBoard(Board $board): ?Subcategory
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.board = :board')
+            ->andWhere('s.parent IS NULL')
+            ->setParameter('board', $board)
             ->getQuery()
             ->getOneOrNullResult();
     }
