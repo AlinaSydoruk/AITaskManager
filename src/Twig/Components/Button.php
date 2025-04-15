@@ -17,6 +17,7 @@ class Button
 
     public ?string $attributes = null;
 
+    public ?string $type = null;
 
 
 

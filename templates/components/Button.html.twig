@@ -2,7 +2,7 @@
     {% if url|default(null) %}
         <a href="{{ url }}"
     {% else %}
-        <button type="submit"
+    <button type="{{ type|default('submit') }}"
     {% endif %}
 
     {% block attributes %} {% endblock %}

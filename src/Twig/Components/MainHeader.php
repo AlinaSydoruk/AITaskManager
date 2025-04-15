@@ -13,4 +13,6 @@ class MainHeader
     public ?string $subheading = null;
 
     public string $class = '';
+
+    public ?string $description = null;
 }

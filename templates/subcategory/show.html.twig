@@ -7,7 +7,7 @@
     <div class="my-4">
         <twig:BreadCrumbHome/>
         <twig:BreadCrumbItem
-                link="{{ path('app_board_show' , {'id': boardId })}}"
+                link="{{ path('app_board_show' , {'id': boardId }) }}"
                 label=" {{ 'board.board' | trans() }} "
                 isActive="{{ false }}"
         />
@@ -31,28 +31,95 @@
     <div class="my-4">
 
 
-        <twig:MainHeader text=" {{ subcategory.title }}">
+        <twig:MainHeader text=" {{ subcategory.title }}" description="{{ subcategory.description }}">
             <twig:block name="rightSide">
                 <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
 
-                    <twig:Button label="{{'action.create_subcategory' | trans }}" url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+                    <twig:Button label="{{ 'action.create_subcategory' | trans }}"
+                                 url="{{ path('app_subcategory_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
 
-                    <twig:Button label="{{'action.create_task' | trans }}" url="{{ path('app_task_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
+                    <twig:Button label="{{ 'action.create_task' | trans }}"
+                                 url="{{ path('app_task_create' , {'boardId': boardId , 'parentId' : subcategory.id}) }}"></twig:Button>
 
 
                 </div>
             </twig:block>
-
-
         </twig:MainHeader>
+
 
         <twig:Section title="{{ 'subcategory.categories' | trans }}" class="mx-4">
             <twig:block name="content">
                 {% if subcategory.children|length > 0 %}
                     {% for child in subcategory.children %}
-                        <a href="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : child.id}) }}">
-                            <twig:Row title="{{ child.title }}" class="px-4"></twig:Row>
-                        </a>
+                        <div class="flex flex-row ">
+                            <a href="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : child.id}) }}"
+                               class="flex-grow">
+                                <twig:Row title="{{ child.title }}" class="px-4"></twig:Row>
+                            </a>
+
+                            <div class=" flex flex-grow-0 flex-row  w-24">
+
+                                    <div class="w-1/2 flex justify-center items-center border-e-2 border-primary">
+                                        <a href="{{ path('app_subcategory_edit', { 'boardId': boardId ,"id" : child.id}) }}">
+                                            <svg width="16" height="17" viewBox="0 0 16 17" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M11.5909 1.6267C11.7763 1.42801 11.9964 1.2704 12.2387 1.16287C12.481 1.05534 12.7407 1 13.003 1C13.2652 1 13.5249 1.05534 13.7672 1.16287C14.0095 1.2704 14.2296 1.42801 14.4151 1.6267C14.6005 1.82538 14.7476 2.06126 14.848 2.32086C14.9483 2.58045 15 2.85869 15 3.13968C15 3.42066 14.9483 3.6989 14.848 3.95849C14.7476 4.21809 14.6005 4.45397 14.4151 4.65266L4.88331 14.8653L1 16L2.05909 11.8393L11.5909 1.6267Z"
+                                                      stroke="#1E1E1E" stroke-linecap="round" stroke-linejoin="round"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="w-1/2 flex justify-center items-center">
+
+
+                                        <button data-modal-target="popup-modal-subcategory-{{ child.id }}"
+                                                data-modal-toggle="popup-modal-subcategory-{{ child.id }}"
+                                                type="button">
+                                            <svg width="15" height="15" viewBox="0 0 15 15" fill="none"
+                                                 xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2.8125 15C2.29687 15 1.85547 14.8368 1.48828 14.5104C1.12109 14.184 0.9375 13.7917 0.9375 13.3333V2.5H0V0.833333H4.6875V0H10.3125V0.833333H15V2.5H14.0625V13.3333C14.0625 13.7917 13.8789 14.184 13.5117 14.5104C13.1445 14.8368 12.7031 15 12.1875 15H2.8125ZM12.1875 2.5H2.8125V13.3333H12.1875V2.5ZM4.6875 11.6667H6.5625V4.16667H4.6875V11.6667ZM8.4375 11.6667H10.3125V4.16667H8.4375V11.6667Z"
+                                                      fill="#B3261E"/>
+                                            </svg>
+                                        </button>
+
+                                        <div id="popup-modal-subcategory-{{ child.id }}" tabindex="-1"
+                                             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                                            <div class="relative p-4 w-full max-w-md max-h-full">
+                                                <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+                                                    <div class="p-4 md:p-5 text-center">
+                                                        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200 p-4"
+                                                             aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                             fill="none" viewBox="0 0 20 20">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                  stroke-linejoin="round" stroke-width="2"
+                                                                  d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                                                        </svg>
+                                                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">{{ 'warning.delete_subcategory_confirmation' | trans }}</h3>
+
+                                                        <div class="flex justify-between px-6 ">
+                                                            <twig:Button label="{{ 'action.delete' | trans }}"
+                                                                         url="{{ path('app_subcategory_delete', { 'boardId': boardId ,"id" : child.id}) }}"
+                                                                         class="text-red-500 p-4 bg-red-100 border-2 border-red-500">
+                                                                <twig:block name="attributes">
+                                                                    data-modal-hide="popup-modal-subcategory-{{ child.id }}"
+                                                                </twig:block>
+                                                            </twig:Button>
+                                                            <twig:Button  type="button" label="{{ 'action.close' | trans }}">
+                                                                <twig:block name="attributes">
+                                                                    data-modal-hide="popup-modal-subcategory-{{ child.id }}"
+                                                                </twig:block>
+                                                            </twig:Button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                        </div>
+
+
                     {% endfor %}
                 {% else %}
                     <p class="px-4 text-gray-500 italic">{{ 'subcategory.no_subcategories' | trans }}</p>
@@ -77,9 +144,11 @@
 
 
         {% if subcategory.parent %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>
+            <twig:Button label="{{ 'action.back' | trans }}"
+                         url="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.parent.id}) }}"></twig:Button>
         {% else %}
-            <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>
+            <twig:Button label="{{ 'action.back' | trans }}"
+                         url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>
         {% endif %}
 
     </div>

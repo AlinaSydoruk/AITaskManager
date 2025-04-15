@@ -3,38 +3,37 @@
 {% block title %}{{ 'task.board' | trans }}{% endblock %}
 
 {% block content %}
-    <div class="my-4" data-controller="task">
         <twig:BreadCrumbHome/>
-        <div class="my-4">
-            <twig:MainHeader text="{{ 'task.board' | trans }}">
-                {#<twig:block name="rightSide">
-                    <twig:Button url="{{ path('app_task_create') }}"
-                                 label="{{ 'action.add_task' | trans }}"
-                                 class="w-full"
-                    ></twig:Button>
-                </twig:block>#}
-            </twig:MainHeader>
-        </div>
+        <twig:BreadCrumbItem
+                link="{{ false}}"
+                label="{{  board.title }}"
+                isActive="{{ true }}"
+        />
 
-        <div class="grid grid-cols-5 gap-4">
-            {% for status in taskStatuses %}
-                <div class="bg-gray-100 p-4 rounded-lg shadow-lg">
-                    <h2 class="text-lg font-bold">{{ status.value | trans }}</h2>
-                    <div class="task-list min-h-32 p-2 bg-white rounded-lg"
-                         data-status="{{ status.value }}"
-                         data-action="dragover->task#allowDrop drop->task#drop">
-                        {% for task in tasks[status.value]?? []  %}
 
-                            <div class="task bg-gray-500 text-black p-2 my-2 rounded-lg cursor-move"
-                                 draggable="true"
-                                 data-task-id="{{ task.id }}"
-                                 data-action="dragstart->task#drag">
-                                {{ task.title }}
-                            </div>
-                        {% endfor %}
-                    </div>
+    <div data-controller="kanban" class="flex space-x-4 p-6">
+        {% for status, tasks in tasksByStatus %}
+            <div class="flex-1 bg-gray-100 p-4 rounded shadow" data-kanban-target="column" data-status="{{ status }}">
+                <h2 class="font-bold text-lg mb-4">{{ status|trans }}</h2>
+                <div class="space-y-2 min-h-[200px]" data-kanban-target="taskContainer" data-status="{{ status }}">
+                    {% for task in tasks %}
+                        <div class="p-3 bg-white shadow rounded cursor-move"
+                             data-kanban-target="task"
+                             data-task-id="{{ task.id }}"
+                             draggable="true">
+                            {{ task.title }}
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
-        </div>
+            </div>
+        {% endfor %}
     </div>
+
+
+
+
+
+
+
+
 {% endblock %}

@@ -44,3 +44,8 @@ services:
     App\Controller\LocaleController:
         arguments:
             $defaultLocale: '%app.default_locale%'
+
+
+    App\Service\TwigGlobalBoardsSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }

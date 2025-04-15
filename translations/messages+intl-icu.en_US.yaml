@@ -124,8 +124,10 @@ error.you_can_not_take_vacation_before_first_working_day: "You cannot take vacat
 error.you_can_not_change_your_first_working_day_if_there_are_any_absences: "You cannot change your first working day if there are any absences."
 
 
-
+welcome.no_boards: "You don't have any boards yet"
 board.board: "Board"
+boards.boards: "Boards"
+board.add_new_board: "Add new board"
 board.folder_name: "Category Name"
 board.folder_description: "Category Description"
 error.folder_not_found: "Category not found"
@@ -166,5 +168,8 @@ subcategory.no_subcategories: "Looks like there are no subcategories"
 subcategory.tasks: "Tasks"
 action.create_subcategory: "Create Subcategory"
 action.create_task: "Create Task"
+action.save: "Save"
+action.close_menu: "Close menu"
 estimate.minutes: "Minutes"
 message.board_has_been_created: "New board has been created."
+warning.delete_subcategory_confirmation: "Are you sure you want to delete this subcategory? All subcategories of this category will be deleted."

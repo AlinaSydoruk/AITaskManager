@@ -1,9 +1,15 @@
 <div class="my-4 md:my-6 lg:my-8 ">
     <div class=" flex" >
         <div class="flex-1">
-            <h1 class="font-bold text-2xl">
-                {{ text }}
-            </h1>
+            <div>
+                <h1 class="font-bold text-2xl">
+                    {{ text }}
+                </h1>
+
+                {% if description %}
+                    <p class="text-lg me-4 italic text-gray-700"> {{ description }}</p>
+                {% endif %}
+            </div>
         </div>
         <div class="flex-2">
             {% block rightSide %}

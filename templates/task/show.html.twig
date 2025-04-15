@@ -39,7 +39,7 @@
 
     <div class="my-4">
 
-        <twig:MainHeader text=" {{ task.title }}">
+        <twig:MainHeader text=" {{ task.title }}" description="{{ task.description }}">
             <twig:block name="rightSide">
                 <div class="flex flex-col justify-end space-y-2 sm:space-y-0 sm:space-x-2 sm:flex-row">
                     <twig:Button label="{{'action.edit' | trans }}" url="{{ path('app_task_edit' , {'boardId': boardId , 'id' : task.id}) }}"></twig:Button>
@@ -51,11 +51,7 @@
 
         <twig:Section title="{{ 'task.details' | trans }}" class="mx-4">
             <twig:block name="content">
-                <div class="space-y-2 text-gray-700">
-                    {% if task.description %}
-                        <p class="italic"> {{ task.description }}</p>
-                    {% endif %}
-                </div>
+
                 <twig:InformationRow title="{{ 'task.priority' | trans }}">
                     <twig:block name="value">{{ task.taskPriority.getTranslationKey | trans }}</twig:block>
                 </twig:InformationRow>

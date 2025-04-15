@@ -5,7 +5,9 @@
  {% block body %}
      {% include 'partial/_board_header.html.twig' %}
 
-     {% include'partial/_aside.html.twig' with {'boardId': boardId} %}
+     {% include'partial/_aside.html.twig' with  {'boardId': boardId|default(null)} %}
+
+     {% include 'partial/_boards.html.twig' with {'boards': boards|default([])} %}
 
      {% block top %}{% endblock %}
      <div class="flex-grow px-6 sm:pl-24 pt-16 ">

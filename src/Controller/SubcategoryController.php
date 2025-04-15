@@ -61,11 +61,35 @@ class SubcategoryController extends AbstractController
     #[Route('/edit/{id}', name: 'edit')]
     public function edit(Request $request, int $boardId, int $id): Response
     {
+        $subcategory = $this->subcategoryRepository->find($id);
+
+        if (!$subcategory) {
+            return new Response("Subcategory with id : $id does not exist", Response::HTTP_NOT_FOUND);
+        }
+
+        $board = $this->boardRepository->find($boardId);
+        if (!$board) {
+            return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
+        }
 
 
+        $form = $this->createForm(SubcategoryType::class, $subcategory);
+        $form->handleRequest($request);
 
-        return $this->render('subcategory/create.html.twig', [
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->entityManager->flush();
 
+            return $this->redirectToRoute('app_subcategory_show', [
+                'id' => $subcategory->getId(),
+                'boardId' => $boardId,
+            ]);
+        }
+
+        return $this->render('subcategory/edit.html.twig', [
+            'form' => $form,
+            'boardId' => $boardId,
+            'parentId' => $subcategory->getParent()?->getId(),
+            'subcategory' => $subcategory,
         ]);
     }
 

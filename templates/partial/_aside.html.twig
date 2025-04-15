@@ -1,18 +1,15 @@
 <aside id="default-sidebar" class="fixed z-40 top-16  left-0 pt-4 w-26 h-screen mb-20 pt-8  transition-transform -translate-x-full bg-white border-r bg-primary border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700" aria-label="Sidebar">
     <div class=" px-1 sm:px-2 pb-4 overflow-y-auto   bg-gray-800">
         <ul class="space-y-2 font-medium">
-            <li>
-                <a href="{{ path('app_subcategory_show', {'boardId' : boardId   } ) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-
-                    <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M22 19.6V2.8C22 2.05739 21.7103 1.3452 21.1945 0.820101C20.6788 0.294999 19.9793 0 19.25 0L2.75 0C2.02065 0 1.32118 0.294999 0.805456 0.820101C0.289731 1.3452 0 2.05739 0 2.8L0 23.8C0 24.9139 0.434597 25.9822 1.20818 26.7698C1.98177 27.5575 3.03098 28 4.125 28H20.625C20.9897 28 21.3394 27.8525 21.5973 27.59C21.8551 27.3274 22 26.9713 22 26.6C22 26.2287 21.8551 25.8726 21.5973 25.61C21.3394 25.3475 20.9897 25.2 20.625 25.2H19.25V22.4C19.9793 22.4 20.6788 22.105 21.1945 21.5799C21.7103 21.0548 22 20.3426 22 19.6ZM5.5 2.8H8.25V19.6H5.5V2.8ZM16.5 25.2H4.125C3.76033 25.2 3.41059 25.0525 3.15273 24.79C2.89487 24.5274 2.75 24.1713 2.75 23.8C2.75 23.4287 2.89487 23.0726 3.15273 22.81C3.41059 22.5475 3.76033 22.4 4.125 22.4H16.5V25.2Z" fill="#D1F5E7"/>
-                    </svg>
-
-
-                    {#  <span class="ms-3">{{ 'board.dashboard' | trans }}</span> #}
-                </a>
-            </li>
-
+            {% if boardId is defined and boardId %}
+                <li>
+                    <a href="{{ path('app_subcategory_show', {'boardId': boardId}) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg width="22" height="28" viewBox="0 0 22 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 19.6V2.8C22 2.05739 21.7103 1.3452 21.1945 0.820101C20.6788 0.294999 19.9793 0 19.25 0L2.75 0C2.02065 0 1.32118 0.294999 0.805456 0.820101C0.289731 1.3452 0 2.05739 0 2.8L0 23.8C0 24.9139 0.434597 25.9822 1.20818 26.7698C1.98177 27.5575 3.03098 28 4.125 28H20.625C20.9897 28 21.3394 27.8525 21.5973 27.59C21.8551 27.3274 22 26.9713 22 26.6C22 26.2287 21.8551 25.8726 21.5973 25.61C21.3394 25.3475 20.9897 25.2 20.625 25.2H19.25V22.4C19.9793 22.4 20.6788 22.105 21.1945 21.5799C21.7103 21.0548 22 20.3426 22 19.6ZM5.5 2.8H8.25V19.6H5.5V2.8ZM16.5 25.2H4.125C3.76033 25.2 3.41059 25.0525 3.15273 24.79C2.89487 24.5274 2.75 24.1713 2.75 23.8C2.75 23.4287 2.89487 23.0726 3.15273 22.81C3.41059 22.5475 3.76033 22.4 4.125 22.4H16.5V25.2Z" fill="#D1F5E7"/>
+                        </svg>
+                    </a>
+                </li>
+            {% endif %}
             <li>
                 <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg width="28" height="26" viewBox="0 0 30 28" fill="none" xmlns="http://www.w3.org/2000/svg">

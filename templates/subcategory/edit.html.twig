@@ -1,0 +1,61 @@
+{% extends 'kanban/base_content.html.twig' %}
+
+{% block title %}{{ 'subcategory.edit' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="my-4 ">
+
+        <twig:BreadCrumbHome/>
+        <twig:BreadCrumbItem
+                link="{{ path('app_board_show' , {'id': boardId })}}"
+                label="{{ 'board.board' | trans }}"
+                isActive="{{ false }}"
+        />
+        {% if subcategory.parent %}
+            {% set parents = subcategory_parent_chain(subcategory) %}
+            {% for parent in parents %}
+                <twig:BreadCrumbItem
+                        link="{{ path('app_subcategory_show', {'boardId': boardId, 'id': parent.id}) }}"
+                        label="{{ parent.title }}"
+                        isActive="{{ false }}"
+                />
+            {% endfor %}
+        {% endif %}
+        <twig:BreadCrumbItem
+                link="{{ path('app_subcategory_show', {'boardId': boardId, 'id': subcategory.id}) }}"
+                label="{{ subcategory.title }}"
+                isActive="{{ false }}"
+        />
+        <twig:BreadCrumbItem
+                link="{{ false }}"
+                label="{{ 'action.edit' | trans }}"
+                isActive="{{ true }}"
+        />
+    </div>
+
+    <div class="my-4">
+        <div class="mt-2">
+            <twig:MainHeader text="{{ 'subcategory.edit' | trans }}" />
+        </div>
+    </div>
+
+    <div class="my-4">
+        <div class="max-w-md mx-auto">
+            {{ form_start(form) }}
+
+            {{ form_errors(form) }}
+
+            {{ form_row(form.title) }}
+            {{ form_row(form.description) }}
+
+            <div class="my-4">
+                <twig:Button label="{{ 'action.save' | trans }}" url="{{ false }}" />
+            </div>
+
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <twig:Button label="{{ 'action.back' | trans }}"
+                 url="{{ path('app_subcategory_show', {'boardId': boardId, 'id': subcategory.parent.id}) }}" />
+{% endblock %}

@@ -9,6 +9,7 @@ use App\Form\BoardType;
 use App\Form\SubcategoryType;
 use App\Repository\BoardRepository;
 
+use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\OptimisticLockException;
@@ -26,6 +27,7 @@ class BoardController extends AbstractController
         private BoardRepository                   $boardRepository,
         private EntityManagerInterface            $entityManager,
         private readonly TranslatorInterface      $translator,
+        private readonly TaskService              $taskService
     )
     {
     }
@@ -37,7 +39,9 @@ class BoardController extends AbstractController
         $user = $security->getUser();
 
         $board = new Board($user);
-        $board->addSubcategory(new Subcategory($board))->setTitle('Categories');
+        $rootSubcategory = new Subcategory($board);
+
+        $board->addSubcategory($rootSubcategory->setTitle('Categories'));
 
         $form = $this->createForm(BoardType::class, $board);
         $form->handleRequest($request);
@@ -55,6 +59,24 @@ class BoardController extends AbstractController
     }
 
 
+    #[Route('/{id}/kanban', name: 'app_board_kanban')]
+    public function kanban(int $id): Response
+    {
+        $board = $this->boardRepository->find($id);
+        if (!$board) {
+            return new Response("Board with id : $id does not exist", Response::HTTP_NOT_FOUND);
+        }
+
+        $groupedTasks = $this->taskService->getSortedTasksByStatus( $board->getTasks());
+
+        return $this->render('kanban/index.html.twig', [
+            'tasksByStatus' => $groupedTasks,
+        ]);
+    }
+
+
+
+
 
     #[Route('/{id}', name: 'show')]
     public function show(string $id): Response
@@ -64,6 +86,17 @@ class BoardController extends AbstractController
             'board' => $board,
             'boardId' => $board->getId(),
             ]);
+    }
+
+
+    #[Route('/', name: 'index')]
+    public function home(): Response
+    {
+        $allBoards = $this->getUser()->getBoards();
+
+        return $this->render('partial/_boards.html.twig',[
+            'boards' => $allBoards,
+        ]);
     }
 
 }

@@ -1,11 +1,13 @@
 <a href="{{ url }}">
-    <div style=" word-break:break-all; "
-         class=" w-36 h-36 p-4  overflow-ellipsis overflow-hidden flex justify-center items-center   border-2 rounded-lg shadow-sm hover:bg-gray-100   {{ class|default(' ') }} ">
+    <div class="flex items-center gap-1 hover:gap-3 transition-all duration-300 py-2 overflow-ellipsis overflow-hidden  hover:bg-gray-700   {{ class|default(' ') }} ">
 
-        {% if title %}
-            <h2 class="mb-2 text-center font-bold tracking-tight text-gray-900  ">{{ title }}</h2>
-        {% else %}
-            {% block title %}{% endblock %}
-        {% endif %}
+        <svg class="w-6 h-6  text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+             fill="currentColor" viewBox="0 0 10 16">
+            <path d="M3.414 1A2 2 0 0 0 0 2.414v11.172A2 2 0 0 0 3.414 15L9 9.414a2 2 0 0 0 0-2.828L3.414 1Z"/>
+        </svg>
+
+        <div class="text-center font-bold text-white">
+            {{ title }}
+        </div>
     </div>
 </a>

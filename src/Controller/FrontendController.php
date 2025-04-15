@@ -25,9 +25,6 @@ class FrontendController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function home(): Response
     {
-        $allBoards = $this->boardRepository->findAll();
-        return $this->render("welcome.html.twig",[
-            'boards' =>$allBoards
-        ]);
+        return $this->render("welcome.html.twig");
     }
 }
