@@ -41,16 +41,37 @@ class TaskFormType extends AbstractType
                 'label' => 'task.description',
                 'required' => false,
             ])
-            ->add('deadline', DateType::class, [
-                'label' => 'task.deadline',
+            ->add('deadline_date', DateType::class, [
+                'label' => 'task.due_date',
                 'required' => false,
                 'widget' => 'single_text',
+                'mapped' =>false
             ])
-            ->add('scheduledForDate', DateType::class, [
+            ->add('deadline_time', TimeType::class, [
+                'label' => 'task.deadline_time',
+                'input' => 'timestamp',
+                'widget' => 'choice',
+                'attr' => ['class' => 'border-2 py-2.5 px-4 w-36'],
+                'row_attr' => ['class' => 'w-full flex flex-col mt-2 items-end text-right'],
+                'required' => false,
+                'mapped' =>false
+            ])
+
+
+            ->add('scheduled_date', DateType::class, [
                 'label' => 'task.scheduled_for_date',
                 'required' => false,
                 'widget' => 'single_text',
+                'mapped' =>false
             ])
+            ->add('scheduled_time', TimeType::class, [
+                'label' => 'task.scheduled_for_time',
+                'input' => 'timestamp',
+                'widget' => 'choice',
+                'mapped' => false,
+                'required' => false,
+            ])
+
             ->add('taskPriority', EnumType::class, [
                 'class' => TaskPriority::class,
                 'choice_label' => function ($choice) {

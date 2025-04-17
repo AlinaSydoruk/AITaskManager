@@ -48,13 +48,35 @@ class DashboardController extends AbstractController
     #[Route('/calendar', name: 'calendar')]
     public function calendar(): Response
     {
+        $userTasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
 
-        $tasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
+        // Запланированные задачи
+        $scheduledTasks = array_filter($userTasks, fn($task) => $task->getScheduledForDate() !== null);
+
+        $tasks = array_values(array_map(function ($task) {
+            return [
+                'title' => $task->getTitle(),
+                'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
+                'estimateMinutes' => (int) $task->getApproximateEstimate(),
+            ];
+        }, $scheduledTasks));
+
+        // Незапланированные задачи – преобразуем тоже в массивы
+        $unscheduled = array_values(array_map(function ($task) {
+            return [
+                'title' => $task->getTitle(),
+                'estimateMinutes' => (int) $task->getApproximateEstimate(),
+            ];
+        }, array_filter($userTasks, fn($task) => $task->getScheduledForDate() === null)));
 
         return $this->render('dashboard/calendar.html.twig', [
             'tasks' => $tasks,
+            'unscheduledTasks' => $unscheduled,
         ]);
     }
+
+
+
 
 
 

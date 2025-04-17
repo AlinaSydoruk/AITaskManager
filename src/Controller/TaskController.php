@@ -59,14 +59,38 @@ class TaskController extends AbstractController
             $task = $form->getData();
             $task->setBoard($board);
 
-            // 👇 Установка подкатегории
+            //  set subcategory
             $subcategoryId = $form->get('subcategory')->getData();
             $subcategory = $this->subcategoryRepository->find($subcategoryId);
             if ($subcategory) {
                 $task->setSubcategory($subcategory);
             }
 
-            // 👇 Получаем данные из вложенного EstimateType
+            // deadline
+            $deadline_date = $form->get('deadline_date')->getData();
+            $deadline_time = $form->get('deadline_time')->getData();
+
+            if($deadline_date && $deadline_time) {
+                $deadline = \DateTime::createFromFormat('Y-m-d H:i:s',
+                    $deadline_date->format('Y-m-d') . ' ' . date('H:i:s', $deadline_time)
+                );
+
+                $task->setDeadline($deadline);
+            }
+
+            // scheduled for
+            $scheduledDate = $form->get('scheduled_date')->getData();
+            $scheduledTime = $form->get('scheduled_time')->getData();
+
+            if ($scheduledDate && $scheduledTime) {
+                $scheduled = \DateTime::createFromFormat('Y-m-d H:i:s',
+                    $scheduledDate->format('Y-m-d') . ' ' . date('H:i:s', $scheduledTime)
+                );
+
+                $task->setScheduledForDate($scheduled);
+            }
+
+            // EstimateType
             $estimate = $form->get('estimate')->getData();
             $days = (int)($estimate['days'] ?? 0);
             $time = $estimate['time'] ?? null;
@@ -83,7 +107,7 @@ class TaskController extends AbstractController
             $this->entityManager->persist($task);
             $this->entityManager->flush();
 
-            // 👇 Перенаправление
+
             if ($subcategory) {
                 return $this->redirectToRoute('app_subcategory_show', [
                     'id' => $subcategory->getId(),
@@ -134,6 +158,16 @@ class TaskController extends AbstractController
             (new \DateTime())->setTime($hours, $minutes)
         );
 
+        if ($task->getDeadline()) {
+            $form->get('deadline_date')->setData($task->getDeadline());
+            $form->get('deadline_time')->setData($task->getDeadline()->getTimestamp());
+        }
+
+        if ($task->getScheduledForDate()) {
+            $form->get('scheduled_date')->setData($task->getScheduledForDate());
+            $form->get('scheduled_time')->setData($task->getScheduledForDate()->getTimestamp());
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -146,6 +180,32 @@ class TaskController extends AbstractController
                 $subcategory = $this->subcategoryRepository->find($subcategoryId);
                 $task->setSubcategory($subcategory);
             }
+
+            // deadline
+            $deadline_date = $form->get('deadline_date')->getData();
+            $deadline_time = $form->get('deadline_time')->getData();
+
+            if($deadline_date && $deadline_time) {
+                $deadline = \DateTime::createFromFormat('Y-m-d H:i:s',
+                    $deadline_date->format('Y-m-d') . ' ' . date('H:i:s', $deadline_time)
+                );
+
+                $task->setDeadline($deadline);
+            }
+
+            // scheduled for
+            $scheduledDate = $form->get('scheduled_date')->getData();
+            $scheduledTime = $form->get('scheduled_time')->getData();
+
+            if ($scheduledDate && $scheduledTime) {
+                $scheduled = \DateTime::createFromFormat('Y-m-d H:i:s',
+                    $scheduledDate->format('Y-m-d') . ' ' . date('H:i:s', $scheduledTime)
+                );
+
+                $task->setScheduledForDate($scheduled);
+            }
+
+
 
             // Обновляем estimate
             $estimate = $form->get('estimate')->getData();

@@ -56,9 +56,19 @@
 
                 {{ form_row(form.title) }}
                 {{ form_row(form.description) }}
-                {{ form_row(form.deadline) }}
 
-                <div class="mt-4 font-medium text-sm text-gray-700">
+
+
+
+                <div class="flex justify-between">
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.deadline_date) }}
+                    </div>
+                    {{ form_row(form.deadline_time) }}
+                </div>
+
+
+                <div class="mt-4 font-medium text-sm text-gray-500">
                     {{ 'task.approximate_estimate' | trans }}
                 </div>
 
@@ -69,7 +79,15 @@
                     {{ form_row(form.estimate.time) }}
                 </div>
 
-                {{ form_row(form.scheduledForDate) }}
+
+
+                <div class="flex justify-between">
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.scheduled_date) }}
+                    </div>
+                    {{ form_row(form.scheduled_time) }}
+                </div>
+
                 {{ form_row(form.taskPriority) }}
                 {{ form_row(form.taskStatus) }}
 

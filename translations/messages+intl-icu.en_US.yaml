@@ -124,6 +124,7 @@ error.you_can_not_take_vacation_before_first_working_day: "You cannot take vacat
 error.you_can_not_change_your_first_working_day_if_there_are_any_absences: "You cannot change your first working day if there are any absences."
 
 
+dashboard.unscheduled_tasks: "Unscheduled tasks"
 welcome.no_boards: "You don't have any boards yet"
 board.board: "Board"
 boards.boards: "Boards"

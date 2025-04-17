@@ -1,4 +1,4 @@
- <nav class="fixed border-gray-200 px-4 lg:px-6 py-2.5 bg-gray-800 w-full">
+ <nav class="fixed border-gray-200 z-20 px-4 lg:px-6 py-2.5  bg-gray-800 w-full">
         <div class="flex flex-wrap items-center justify-between max-w-screen-xl mx-auto">
             <a href="{{ path("app_home") }}" class="flex items-center">
                 <img class="h-8 w-auto" src="{{ asset("images/logo_sandbox.png") }}"  alt="Sandbox">
@@ -17,7 +17,7 @@
 
                 <!-- Dropdown locale -->
                 <div id="dropdownHover"
-                     class="z-10 hidden bg-gray-800 divide-y divide-gray-500 rounded-lg shadow-sm w-44 ">
+                     class="z-30 hidden bg-gray-800 divide-y divide-gray-500 rounded-lg shadow-sm w-44 ">
                     <ul class="py-2 text-sm " aria-labelledby="dropdownHoverButton">
 
                         {% for localeOption in app.enabled_locales %}

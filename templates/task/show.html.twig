@@ -61,11 +61,11 @@
                 </twig:InformationRow>
 
                 <twig:InformationRow title="{{ 'task.deadline' | trans }}">
-                    <twig:block name="value">{{ task.deadline ? task.deadline|date('Y-m-d') : '-' }}</twig:block>
+                    <twig:block name="value">{{ task.deadline ? task.deadline|date('Y-m-d, H:i') : '-' }}</twig:block>
                 </twig:InformationRow>
 
                 <twig:InformationRow title="{{ 'task.scheduled_for_date' | trans }}">
-                    <twig:block name="value">{{ task.scheduledForDate ? task.scheduledForDate|date('Y-m-d') : '-' }}</twig:block>
+                    <twig:block name="value">{{ task.scheduledForDate ? task.scheduledForDate|date('Y-m-d, H:i') : '-' }}</twig:block>
                 </twig:InformationRow>
 
                 <twig:InformationRow title="{{ 'task.estimate' | trans }}">

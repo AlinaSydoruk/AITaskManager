@@ -62,4 +62,19 @@ class TaskService
         return $tasks;
     }
 
+    public function getUnscheduledTasks(User $user):array
+    {
+        $unscheduledTasks=[];
+        $boards = $this->boardRepository->findByUser($user);
+        foreach ($boards as $board) {
+            foreach ($board->getTasks() as $task) {
+                if (!$task->getScheduledForDate()) {
+                    $unscheduledTasks[] = $task;
+                }
+
+            }
+        }
+        return $unscheduledTasks;
+    }
+
 }

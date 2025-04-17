@@ -6,6 +6,7 @@
     <div
             data-controller="calendar"
             data-calendar-tasks-value='{{ tasks|json_encode|e('html_attr') }}'
+            data-calendar-unscheduled-tasks-value='{{ unscheduledTasks|json_encode|e('html_attr') }}'
             class="p-4"
     >
         <!-- Навигация по неделям -->
@@ -15,18 +16,55 @@
             <button data-action="calendar#nextWeek" class="bg-gray-200 px-3 py-1 rounded">→</button>
         </div>
 
+
+        <div class="flex justify-end" data-calendar-target="toggleButton">
+            <twig:Button label="{{ 'dashboard.unscheduled_tasks' | trans }}">
+                <twig:block name="attributes"> data-action="calendar#toggleUnscheduled"</twig:block>
+            </twig:Button>
+        </div>
+
+
         <!-- Названия дней недели -->
-        <div class="grid grid-cols-8 text-center font-semibold border-b">
-            <div class="h-10"></div>  {# Пусто под временем #}
-            {% for day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] %}
-                <div class="h-10 flex items-center justify-center">{{ day }}</div>
-            {% endfor %}
+        <div class="flex gap-4">
+            <!-- Календарь -->
+            <div class="overflow-x-auto grow">
+                <!-- Дни -->
+                <div class="min-w-[900px] grid grid-cols-8 text-center font-semibold border-b">
+                    <div class="h-10"></div>
+                    {% for day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] %}
+                        <div class="h-10 flex items-center justify-center">{{ day }}</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Сетка -->
+                <div class="min-w-[900px] grid grid-cols-8 overflow-y-auto max-h-[75vh] border-t"
+                     data-calendar-target="weekGrid">
+                    {# JS отрисует #}
+                </div>
+            </div>
+
+            <!-- Панель незапланированных -->
+            <div
+                    class="w-72 border-l pl-4 pr-2 transition-all duration-300"
+                    data-calendar-target="unscheduledPanel"
+                    hidden
+            >
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-md font-semibold">Unscheduled Tasks</h3>
+                    <button data-action="calendar#closeUnscheduled"
+                            class="text-sm text-primary">
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1.4 14L0 12.6L5.6 7L0 1.4L1.4 0L7 5.6L12.6 0L14 1.4L8.4 7L14 12.6L12.6 14L7 8.4L1.4 14Z" fill="#1D1B20"/>
+                        </svg>
+
+                    </button>
+                </div>
+                <ul data-calendar-target="unscheduledList" class="text-sm text-gray-800 space-y-2">
+                    {# JS заполняет #}
+                </ul>
+            </div>
         </div>
-
-
-        <div class="grid grid-cols-8 overflow-auto max-h-[75vh] border-t" data-calendar-target="weekGrid">
-            {# Контент отрисует JS #}
-        </div>
-
-    </div>
 {% endblock %}
+
+
+

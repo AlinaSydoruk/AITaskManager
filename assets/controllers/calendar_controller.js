@@ -2,9 +2,11 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-    static targets = ["weekLabel", "weekGrid"];
+    static targets = ["weekLabel", "weekGrid", "unscheduledPanel", "unscheduledList", "toggleButton"];
+
     static values = {
-        tasks: Array
+        tasks: Array,
+        unscheduledTasks: Array
     };
 
     connect() {
@@ -20,6 +22,37 @@ export default class extends Controller {
     nextWeek() {
         this.currentDate.setDate(this.currentDate.getDate() + 7);
         this.renderWeek();
+    }
+
+    toggleUnscheduled() {
+        const panel = this.unscheduledPanelTarget;
+        const button = this.toggleButtonTarget;
+
+        const isHidden = panel.hasAttribute("hidden");
+
+        if (isHidden) {
+            panel.removeAttribute("hidden");
+            button.classList.add("hidden"); // Скрываем кнопку
+            this.renderUnscheduled();
+        } else {
+            panel.setAttribute("hidden", "true");
+            button.classList.remove("hidden"); // Показываем кнопку
+        }
+    }
+    closeUnscheduled() {
+        this.unscheduledPanelTarget.setAttribute("hidden", "true");
+        this.toggleButtonTarget.classList.remove("hidden");
+    }
+
+
+
+    renderUnscheduled() {
+        this.unscheduledListTarget.innerHTML = this.unscheduledTasksValue.map(t => `
+            <li class="bg-gray-100 rounded p-2 shadow-sm">
+                <div class="font-semibold">${t.title}</div>
+                <div class="text-xs text-gray-500">${t.estimateMinutes} min</div>
+            </li>
+        `).join('');
     }
 
     renderWeek() {

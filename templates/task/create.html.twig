@@ -53,7 +53,13 @@
 
                 {{ form_row(form.description) }}
 
-                {{ form_row(form.deadline) }}
+
+                <div class="flex justify-between">
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.deadline_date) }}
+                    </div>
+                    {{ form_row(form.deadline_time) }}
+                </div>
 
                 <div class="mt-4">
                     {{ 'task.approximate_estimate' | trans }}
@@ -69,7 +75,12 @@
 
                 </div>
 
-                {{ form_row(form.scheduledForDate) }}
+                <div class="flex justify-between">
+                    <div class="flex-shrink w-64">
+                        {{ form_row(form.scheduled_date) }}
+                    </div>
+                    {{ form_row(form.scheduled_time) }}
+                </div>
 
                 {{ form_row(form.taskPriority) }}
 
