@@ -90,6 +90,25 @@ class DashboardController extends AbstractController
     }
 
 
+    #[Route('/calendar/events', name: 'calendar_events')]
+    public function calendarEvents(): JsonResponse
+    {
+        $tasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
+
+        $events = array_map(function(Task $task) {
+            return [
+                'id' => $task->getId(),
+                'title' => $task->getTitle(),
+                'start' => $task->getScheduledForDate()?->format('Y-m-d\TH:i:s'),
+                'end' => $task->getDeadline()?->format('Y-m-d\TH:i:s'),
+            ];
+        }, $tasks);
+
+        return new JsonResponse($events);
+    }
+
+
+
 
 
 }

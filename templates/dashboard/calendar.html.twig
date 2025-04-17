@@ -1,0 +1,32 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}{{ 'calendar.calendar' | trans }}{% endblock %}
+
+{% block content %}
+    <div
+            data-controller="calendar"
+            data-calendar-tasks-value='{{ tasks|json_encode|e('html_attr') }}'
+            class="p-4"
+    >
+        <!-- Навигация по неделям -->
+        <div class="flex justify-between items-center mb-4">
+            <button data-action="calendar#prevWeek" class="bg-gray-200 px-3 py-1 rounded">←</button>
+            <h2 data-calendar-target="weekLabel" class="text-xl font-bold"></h2>
+            <button data-action="calendar#nextWeek" class="bg-gray-200 px-3 py-1 rounded">→</button>
+        </div>
+
+        <!-- Названия дней недели -->
+        <div class="grid grid-cols-8 text-center font-semibold border-b">
+            <div class="h-10"></div>  {# Пусто под временем #}
+            {% for day in ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] %}
+                <div class="h-10 flex items-center justify-center">{{ day }}</div>
+            {% endfor %}
+        </div>
+
+
+        <div class="grid grid-cols-8 overflow-auto max-h-[75vh] border-t" data-calendar-target="weekGrid">
+            {# Контент отрисует JS #}
+        </div>
+
+    </div>
+{% endblock %}
