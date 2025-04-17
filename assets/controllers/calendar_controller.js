@@ -11,6 +11,8 @@ export default class extends Controller {
 
     connect() {
         this.currentDate = new Date();
+        this.constructor.instance = this;
+        window.calendarController = this;
         this.renderWeek();
     }
 
@@ -47,13 +49,18 @@ export default class extends Controller {
 
 
     renderUnscheduled() {
-        this.unscheduledListTarget.innerHTML = this.unscheduledTasksValue.map(t => `
-            <li class="bg-gray-100 rounded p-2 shadow-sm">
-                <div class="font-semibold">${t.title}</div>
-                <div class="text-xs text-gray-500">${t.estimateMinutes} min</div>
-            </li>
-        `).join('');
+        this.unscheduledListTarget.innerHTML = this.unscheduledTasksValue.map((t, index) => `
+        <li class="bg-gray-100 rounded p-2 shadow-sm cursor-move"
+            draggable="true"
+            data-task-index="${index}"
+            ondragstart="event.dataTransfer.setData('taskIndex', ${index})">
+            <div class="font-semibold">${t.title}</div>
+            <div class="text-xs text-gray-500">${t.estimateMinutes} min</div>
+        </li>
+    `).join('');
     }
+
+
 
     renderWeek() {
         const startOfWeek = new Date(this.currentDate);
@@ -97,7 +104,10 @@ export default class extends Controller {
                     return taskHour === hour;
                 });
 
-                column += `<div class="h-16 border-b relative">`;
+                column += `<div class="h-16 border-b relative"
+    ondragover="event.preventDefault()"
+    ondrop="window.handleDrop(event, '${dayISO}', ${hour})">`;
+
 
                 column += hourTasks.map(t => {
                     const start = new Date(t.scheduledFor);
@@ -128,4 +138,38 @@ export default class extends Controller {
 
         this.weekGridTarget.innerHTML = gridHtml;
     }
+
 }
+window.handleDrop = async (event, dayISO, hour) => {
+    const taskIndex = event.dataTransfer.getData('taskIndex');
+    if (taskIndex === undefined) return;
+
+    const controller = window.calendarController;
+    const task = controller.unscheduledTasksValue[taskIndex];
+
+    const scheduledDate = new Date(`${dayISO}T${hour.toString().padStart(2, '0')}:00`);
+
+    // 👇 Вместо toISOString, сохраняем локальное время в ISO-формате
+    const scheduledFor = `${dayISO}T${scheduledDate.getHours().toString().padStart(2, '0')}:00:00`;
+
+    task.scheduledFor = scheduledFor;
+
+    try {
+        await fetch(`/dashboard/task/${task.id}/schedule`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({ scheduledFor })
+        });
+    } catch (e) {
+        console.error("Failed to save task:", e);
+    }
+
+    controller.tasksValue = [...controller.tasksValue, task];
+    controller.unscheduledTasksValue = controller.unscheduledTasksValue.filter((_, i) => i != taskIndex);
+
+    controller.renderWeek();
+    controller.renderUnscheduled();
+};

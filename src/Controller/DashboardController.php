@@ -55,19 +55,22 @@ class DashboardController extends AbstractController
 
         $tasks = array_values(array_map(function ($task) {
             return [
+                'id' => $task->getId(),
                 'title' => $task->getTitle(),
                 'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
                 'estimateMinutes' => (int) $task->getApproximateEstimate(),
             ];
         }, $scheduledTasks));
 
-        // Незапланированные задачи – преобразуем тоже в массивы
+
         $unscheduled = array_values(array_map(function ($task) {
             return [
+                'id' => $task->getId(),
                 'title' => $task->getTitle(),
                 'estimateMinutes' => (int) $task->getApproximateEstimate(),
             ];
         }, array_filter($userTasks, fn($task) => $task->getScheduledForDate() === null)));
+
 
         return $this->render('dashboard/calendar.html.twig', [
             'tasks' => $tasks,
@@ -75,6 +78,29 @@ class DashboardController extends AbstractController
         ]);
     }
 
+
+    #[Route('/task/{id}/schedule', name: 'task_schedule', methods: ['POST'])]
+    public function scheduleTask(
+        Request $request,
+        Task $task,
+        EntityManagerInterface $em
+    ): JsonResponse {
+        $data = json_decode($request->getContent(), true);
+
+        if (!isset($data['scheduledFor'])) {
+            return new JsonResponse(['error' => 'Missing scheduledFor'], 400);
+        }
+
+        try {
+            $scheduledFor = new \DateTimeImmutable($data['scheduledFor'], new \DateTimeZone('UTC'));
+            $task->setScheduledForDate($scheduledFor);
+            $em->flush();
+
+            return new JsonResponse(['success' => true]);
+        } catch (\Exception $e) {
+            return new JsonResponse(['error' => 'Invalid date format'], 400);
+        }
+    }
 
 
 
