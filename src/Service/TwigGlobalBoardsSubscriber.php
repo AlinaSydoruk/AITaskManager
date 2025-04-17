@@ -11,15 +11,13 @@ use Twig\Environment;
 
 class TwigGlobalBoardsSubscriber implements EventSubscriberInterface
 {
-    private BoardRepository $boardRepository;
-    private Environment $twig;
-    private Security $security;
 
-    public function __construct(BoardRepository $boardRepository, Environment $twig, Security $security)
+    public function __construct(
+        private readonly BoardRepository $boardRepository,
+        private readonly Environment     $twig,
+        private readonly Security        $security,
+    )
     {
-        $this->boardRepository = $boardRepository;
-        $this->twig = $twig;
-        $this->security = $security;
     }
 
     public function onKernelController(ControllerEvent $event): void

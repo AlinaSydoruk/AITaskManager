@@ -1,14 +1,9 @@
-{% extends 'profile.html.twig' %}
+{% extends 'dashboard/base.html.twig' %}
 
 {% block title %}{{ 'task.board' | trans }}{% endblock %}
 
 {% block content %}
-        <twig:BreadCrumbHome/>
-        <twig:BreadCrumbItem
-                link="{{ false}}"
-                label="{{  board.title }}"
-                isActive="{{ true }}"
-        />
+
 
 
     <div data-controller="kanban" class="flex space-x-4 p-6">
@@ -17,12 +12,14 @@
                 <h2 class="font-bold text-lg mb-4">{{ status|trans }}</h2>
                 <div class="space-y-2 min-h-[200px]" data-kanban-target="taskContainer" data-status="{{ status }}">
                     {% for task in tasks %}
-                        <div class="p-3 bg-white shadow rounded cursor-move"
+                    <a href="{{ path('app_task_show' , {'boardId' : task.board.id, 'id' : task.id } ) }}" >
+                       <div class="p-4 my-2 bg-white shadow rounded"
                              data-kanban-target="task"
                              data-task-id="{{ task.id }}"
                              draggable="true">
                             {{ task.title }}
                         </div>
+                        </a>
                     {% endfor %}
                 </div>
             </div>

@@ -59,7 +59,7 @@ class BoardController extends AbstractController
     }
 
 
-    #[Route('/{id}/kanban', name: 'app_board_kanban')]
+    #[Route('/{id}/dashboard', name: 'app_board_kanban')]
     public function kanban(int $id): Response
     {
         $board = $this->boardRepository->find($id);
@@ -69,7 +69,7 @@ class BoardController extends AbstractController
 
         $groupedTasks = $this->taskService->getSortedTasksByStatus( $board->getTasks());
 
-        return $this->render('kanban/index.html.twig', [
+        return $this->render('dashboard/kanban.html.twig', [
             'tasksByStatus' => $groupedTasks,
         ]);
     }

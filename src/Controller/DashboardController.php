@@ -3,11 +3,16 @@
 namespace App\Controller;
 
 
+use App\Entity\Enom\TaskStatus;
+use App\Entity\Task;
 use App\Repository\BoardRepository;
 use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,7 +25,8 @@ class DashboardController extends AbstractController
         private EntityManagerInterface            $entityManager,
         private readonly TranslatorInterface      $translator,
         private readonly TaskService              $taskService,
-        private readonly TaskRepository           $taskRepository
+        private readonly TaskRepository           $taskRepository,
+        private readonly Security                 $security,
     )
     {
     }
@@ -30,11 +36,11 @@ class DashboardController extends AbstractController
     #[Route('/kanban', name: 'kanban')]
     public function kanban(): Response
     {
-        $tasks = $this->taskRepository->findBy(['user' => $this->getUser()]);
 
+        $tasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
         $grouped = $this->taskService->getSortedTasksByStatus($tasks);
 
-        return $this->render('kanban/index.html.twig', [
+        return $this->render('dashboard/kanban.html.twig', [
             'tasksByStatus' => $grouped,
         ]);
     }
@@ -52,5 +58,16 @@ class DashboardController extends AbstractController
             'boardId' => $board->getId(),
             ]);
     }
+
+    #[Route('/task/{id}/update-status', name: 'task_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Task $task): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $task->setTaskStatus(TaskStatus::from($data['status']));
+        $this->entityManager->flush();
+
+        return new JsonResponse(['success' => true]);
+    }
+
 
 }

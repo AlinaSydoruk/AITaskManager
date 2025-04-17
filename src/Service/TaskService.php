@@ -3,9 +3,22 @@
 namespace App\Service;
 
 use App\Entity\Enom\TaskStatus;
+use App\Entity\User;
+use App\Repository\BoardRepository;
+use App\Repository\TaskRepository;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class TaskService
 {
+    public function __construct(
+        private BoardRepository                   $boardRepository,
+        private readonly TranslatorInterface      $translator,
+        private readonly TaskRepository           $taskRepository,
+        private readonly Security                 $security,
+    )
+    {
+    }
 
     public function getSortedTasksByStatus(array $tasks):array
     {
@@ -36,5 +49,17 @@ class TaskService
         return [$days, $hours, $minutes];
     }
 
+    public function getAllTasksBelongToUser(User $user) : array
+    {
+        $tasks=[];
+        $boards = $this->boardRepository->findByUser($user);
+        foreach ($boards as $board) {
+            foreach ($board->getTasks() as $task) {
+                $tasks[] = $task;
+            }
+        }
+
+        return $tasks;
+    }
 
 }
