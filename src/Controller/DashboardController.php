@@ -45,6 +45,17 @@ class DashboardController extends AbstractController
         ]);
     }
 
+    #[Route('/calendar', name: 'calendar')]
+    public function calendar(): Response
+    {
+
+        $tasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
+
+        return $this->render('dashboard/calendar.html.twig', [
+            'tasks' => $tasks,
+        ]);
+    }
+
 
 
 
@@ -59,15 +70,26 @@ class DashboardController extends AbstractController
             ]);
     }
 
+
+
     #[Route('/task/{id}/update-status', name: 'task_update_status', methods: ['POST'])]
-    public function updateStatus(Request $request, Task $task): JsonResponse
+    public function updateStatus(Request $request, Task $task, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        $task->setTaskStatus(TaskStatus::from($data['status']));
-        $this->entityManager->flush();
+        $newStatus = $data['status'] ?? null;
+
+        if (!$newStatus || !TaskStatus::tryFrom($newStatus)) {
+            return new JsonResponse(['error' => 'Invalid status'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $task->setTaskStatus(TaskStatus::from($newStatus));
+        $em->persist($task);
+        $em->flush();
 
         return new JsonResponse(['success' => true]);
     }
+
+
 
 
 }

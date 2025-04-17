@@ -6,25 +6,42 @@
 
 
 
-    <div data-controller="kanban" class="flex space-x-4 p-6">
-        {% for status, tasks in tasksByStatus %}
-            <div class="flex-1 bg-gray-100 p-4 rounded shadow" data-kanban-target="column" data-status="{{ status }}">
-                <h2 class="font-bold text-lg mb-4">{{ status|trans }}</h2>
-                <div class="space-y-2 min-h-[200px]" data-kanban-target="taskContainer" data-status="{{ status }}">
-                    {% for task in tasks %}
-                    <a href="{{ path('app_task_show' , {'boardId' : task.board.id, 'id' : task.id } ) }}" >
-                       <div class="p-4 my-2 bg-white shadow rounded"
-                             data-kanban-target="task"
-                             data-task-id="{{ task.id }}"
-                             draggable="true">
-                            {{ task.title }}
+    <div data-controller="kanban">
+        <div class="overflow-x-auto px-4 my-4">
+            <div class="flex gap-4 min-w-fit max-w-max mx-auto">
+                {% for status, tasks in tasksByStatus %}
+                    <div class="flex flex-col w-80 bg-gray-100 p-4 rounded min-h-[300px] flex-shrink-0">
+                        <h2 class="font-bold text-lg mb-3 text-center">{{ status|trans }}</h2>
+
+                        <div class="space-y-2 flex-1"
+                             data-kanban-target="column"
+                             data-status="{{ status }}">
+                            {% for task in tasks %}
+                                <div
+                                        class=" bg-white rounded shadow cursor-pointer transition"
+                                        data-task-id="{{ task.id }}">
+                                    <a href="{{ path('app_task_show', {'boardId': task.board.id, 'id': task.id }) }}">
+                                        <div class="p-4 my-2">
+                                            {{ task.title }}
+                                        </div>
+
+                                    </a>
+                                </div>
+
+                            {% endfor %}
                         </div>
-                        </a>
-                    {% endfor %}
-                </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
+
+
+
+
+
+
+
 
 
 
