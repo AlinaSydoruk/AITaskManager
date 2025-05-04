@@ -35,14 +35,15 @@ final class TaskFactory extends PersistentProxyObjectFactory
     protected function defaults(): array|callable
     {
         return [
-            'title' => self::faker()->sentence(5),
+            'title' => self::faker()->sentence(1),
             'description' => self::faker()->paragraph(3),
             'deadline' => self::faker()->dateTimeBetween('+1 week', '+1 month'),
-            'approximateEstimate' => self::faker()->numberBetween(5, 1024),
+            'approximateEstimate' => self::faker()->numberBetween(15, 1024),
             'scheduledForDate' => self::faker()->dateTimeBetween('now', '+1 month'),
             'taskPriority' => self::faker()->randomElement(TaskPriority::cases()),
             'taskStatus' => self::faker()->randomElement(TaskStatus::cases()),
             'board' => BoardFactory::randomOrCreate(),
+            'userId'=> UserFactory::randomOrCreate()->getId()
         ];
     }
 

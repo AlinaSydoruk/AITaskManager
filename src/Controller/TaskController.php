@@ -14,12 +14,13 @@ use App\Repository\TaskRepository;
 use App\Service\TaskService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/board/{boardId}', name: 'app_task_')]
+#[Route('/board/task', name: 'app_task_')]
 class TaskController extends AbstractController
 {
     public function __construct(
@@ -29,19 +30,24 @@ class TaskController extends AbstractController
         private EntityManagerInterface         $entityManager,
         private readonly TranslatorInterface   $translator,
         private readonly SubcategoryRepository $subcategoryRepository,
+
     )
     {
     }
 
     #[Route('/create', name: 'create')]
-    public function create(Request $request, int $boardId): Response
+    public function create(Request $request): Response
     {
-        $parentId = $request->get('parentId') ?: null;
-        $task = new Task();
+        $boardId = $request->query->get('boardId');
 
-        $board = $this->boardRepository->find($boardId);
-        if (!$board) {
-            return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
+        $parentId = $request->get('parentId') ?: null;
+        $task = new Task($this->getUser()->getId());
+        $board =null;
+        if($boardId) {
+            $board = $this->boardRepository->find($boardId);
+            if (!$board) {
+                return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
+            }
         }
 
         $form = $this->createForm(TaskFormType::class, $task);
@@ -61,10 +67,13 @@ class TaskController extends AbstractController
 
             //  set subcategory
             $subcategoryId = $form->get('subcategory')->getData();
-            $subcategory = $this->subcategoryRepository->find($subcategoryId);
-            if ($subcategory) {
-                $task->setSubcategory($subcategory);
+            if ($subcategoryId){
+                $subcategory = $this->subcategoryRepository->find($subcategoryId);
+                if ($subcategory) {
+                    $task->setSubcategory($subcategory);
+                }
             }
+
 
             // deadline
             $deadline_date = $form->get('deadline_date')->getData();
@@ -115,9 +124,13 @@ class TaskController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('app_board_show', [
-                'id' => $boardId,
-            ]);
+            if($boardId) {
+                return $this->redirectToRoute('app_board_show', [
+                    'id' => $boardId,
+                ]);
+            }else{
+                return $this->redirectToRoute('app_home');
+            }
         }
 
         return $this->render('task/create.html.twig', [
@@ -130,17 +143,19 @@ class TaskController extends AbstractController
 
 
     #[Route('/{id}/edit', name: 'edit')]
-    public function edit(Request $request, int $boardId, int $id): Response
+    public function edit(Request $request, int $id): Response
     {
+        $boardId = $request->query->get('boardId');
         $task = $this->taskRepository->find($id);
 
         if (!$task) {
             return new Response("Task with id: $id does not exist", Response::HTTP_NOT_FOUND);
         }
-
-        $board = $this->boardRepository->find($boardId);
-        if (!$board) {
-            return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
+        if($boardId) {
+            $board = $this->boardRepository->find($boardId);
+            if (!$board) {
+                return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
+            }
         }
 
 
@@ -231,9 +246,16 @@ class TaskController extends AbstractController
                 ]);
             }
 
-            return $this->redirectToRoute('app_board_show', [
-                'id' => $boardId,
-            ]);
+            if($boardId) {
+                return $this->redirectToRoute('app_board_show', [
+                    'id' => $boardId,
+                ]);
+            }else{
+                return $this->redirectToRoute('app_task_show', [
+                    'id' => $id,
+                    'boardId' => null,
+                ]);
+            }
         }
 
         return $this->render('task/edit.html.twig', [
@@ -246,11 +268,14 @@ class TaskController extends AbstractController
 
 
     #[Route('/{id}', name: 'show')]
-    public function show(string $id, string $boardId): Response
+    public function show(string $id, Request $request) : Response
     {
-        $board = $this->boardRepository->find($boardId);
-        if (!$board) {
-            return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
+        $boardId = $request->query->get('boardId');
+        if($boardId){
+            $board = $this->boardRepository->find($boardId);
+            if (!$board) {
+                return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
+            }
         }
 
         $task = $this->taskRepository->find($id);
@@ -267,11 +292,12 @@ class TaskController extends AbstractController
 
 
     #[Route('/delete/{id}', name: 'delete')]
-    public function delete(string $id, string $boardId): Response
+    public function delete(string $id,  Request $request): Response
     {
-
-        $board = $this->boardRepository->find($boardId);
-
+        $boardId = $request->query->get('boardId');
+        if($boardId) {
+            $board = $this->boardRepository->find($boardId);
+        }
         $task = $this->taskRepository->find($id);
         if (!$task) {
             return new Response("Task with id : $id does not exist", Response::HTTP_NOT_FOUND);

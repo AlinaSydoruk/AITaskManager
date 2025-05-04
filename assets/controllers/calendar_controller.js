@@ -6,7 +6,8 @@ export default class extends Controller {
 
     static values = {
         tasks: Array,
-        unscheduledTasks: Array
+        unscheduledTasks: Array,
+        boardId: String
     };
 
     connect() {
@@ -123,14 +124,15 @@ export default class extends Controller {
 
                     return `
    <div
-    class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm cursor-move calendar-task"
-    draggable="true"
-    data-scheduled-task-id="${t.id}" style="top: ${top}px; height: ${height}px;"
->
-    <div class="font-semibold">${t.title}</div>
-    <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
-</div>
-
+        class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm calendar-task"
+        draggable="true"
+        data-scheduled-task-id="${t.id}"
+        style="top: ${top}px; height: ${height}px; cursor: pointer;"
+        onclick="window.location.href='/board/task/' + ${t.id} + '?boardId=' + ${t.boardId}"
+    >
+        <div class="font-semibold">${t.title}</div>
+        <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
+    </div>
 `;
 
                 }).join('');

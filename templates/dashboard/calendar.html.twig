@@ -7,6 +7,7 @@
             data-controller="calendar"
             data-calendar-tasks-value='{{ tasks|json_encode|e('html_attr') }}'
             data-calendar-unscheduled-tasks-value='{{ unscheduledTasks|json_encode|e('html_attr') }}'
+            data-calendar-board-id-value="{{ boardId }}"
             class="p-4"
     >
         <!-- Навигация по неделям -->

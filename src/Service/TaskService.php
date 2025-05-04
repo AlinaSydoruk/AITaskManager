@@ -51,15 +51,7 @@ class TaskService
 
     public function getAllTasksBelongToUser(User $user) : array
     {
-        $tasks=[];
-        $boards = $this->boardRepository->findByUser($user);
-        foreach ($boards as $board) {
-            foreach ($board->getTasks() as $task) {
-                $tasks[] = $task;
-            }
-        }
-
-        return $tasks;
+        return $this->taskRepository->findAllByUserId($user->getId());
     }
 
     public function getUnscheduledTasks(User $user):array

@@ -6,6 +6,7 @@
     <div class="my-4">
 
         <twig:BreadCrumbHome/>
+        {% if boardId %}
         <twig:BreadCrumbItem
                 link="{{ path('app_board_show' , {'id': boardId })}}"
                 label=" {{ 'board.board' | trans() }} "
@@ -30,11 +31,20 @@
             />
         {% endif %}
 
+
         <twig:BreadCrumbItem
                 link="{{ path('app_task_show' , {'boardId': boardId , 'id' : task.id}) }}"
                 label="{{ task.title }}"
                 isActive="{{ false }}"
         />
+
+        {% else %}
+            <twig:BreadCrumbItem
+                    link="{{ path('app_task_show' , { 'id' : task.id}) }}"
+                    label="{{ task.title }}"
+                    isActive="{{ false }}"
+            />
+        {% endif %}
         <twig:BreadCrumbItem link="{{ false }}"
                              label="{{ "action.edit" | trans }}"
                              isActive="{{ true }}"
@@ -101,8 +111,11 @@
             </div>
         </div>
 
-
-            <twig:Button url="{{ path('app_task_show', {'boardId': boardId, 'id': task.id}) }}" label="{{ 'action.back' | trans }}" />
-
+        {% if boardId %}
+            <twig:Button url="{{ path('app_task_show', {'boardId': boardId, 'id': task.id}) }}"
+                         label="{{ 'action.back' | trans }}"/>
+        {% else %}
+            <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_home') }}"></twig:Button>
+        {% endif %}
     </div>
 {% endblock %}

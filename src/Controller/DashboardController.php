@@ -59,6 +59,7 @@ class DashboardController extends AbstractController
                 'title' => $task->getTitle(),
                 'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
                 'estimateMinutes' => (int) $task->getApproximateEstimate(),
+                'boardId' => $task->getBoard()?->getId(),
             ];
         }, $scheduledTasks));
 
@@ -69,12 +70,13 @@ class DashboardController extends AbstractController
                 'title' => $task->getTitle(),
                 'estimateMinutes' => (int) $task->getApproximateEstimate(),
             ];
-        }, array_filter($userTasks, fn($task) => $task->getScheduledForDate() === null)));
+        }, array_filter($userTasks, fn($task) => !$task->getScheduledForDate())));
 
 
         return $this->render('dashboard/calendar.html.twig', [
             'tasks' => $tasks,
             'unscheduledTasks' => $unscheduled,
+            'boardId' => null,
         ]);
     }
 
@@ -154,9 +156,5 @@ class DashboardController extends AbstractController
 
         return new JsonResponse($events);
     }
-
-
-
-
 
 }

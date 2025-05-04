@@ -6,28 +6,30 @@
     <div class="my-4 ">
 
         <twig:BreadCrumbHome/>
-        <twig:BreadCrumbItem
-                link="{{ path('app_board_show' , {'id': boardId }) }}"
-                label=" {{ 'board.board' | trans() }} "
-                isActive="{{ false }}"
-        />
+        {% if boardId %}
+            <twig:BreadCrumbItem
+                    link="{{ path('app_board_show' , {'id': boardId }) }}"
+                    label=" {{ 'board.board' | trans() }} "
+                    isActive="{{ false }}"
+            />
 
 
-        {% if subcategory.parent %}
-            {% set parents = subcategory_parent_chain(subcategory) %}
-            {% for parent in parents %}
-                <twig:BreadCrumbItem
-                        link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
-                        label="{{ parent.title }}"
-                        isActive="{{ false }}"
-                />
-            {% endfor %}
+            {% if subcategory.parent %}
+                {% set parents = subcategory_parent_chain(subcategory) %}
+                {% for parent in parents %}
+                    <twig:BreadCrumbItem
+                            link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : parent.id}) }}"
+                            label="{{ parent.title }}"
+                            isActive="{{ false }}"
+                    />
+                {% endfor %}
+            {% endif %}
+            <twig:BreadCrumbItem
+                    link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.id}) }}"
+                    label="{{ subcategory.title }}"
+                    isActive="{{ false }}"
+            />
         {% endif %}
-        <twig:BreadCrumbItem
-                link="{{ path('app_subcategory_show' , {'boardId': boardId , 'id' : subcategory.id}) }}"
-                label="{{ subcategory.title }}"
-                isActive="{{ false }}"
-        />
 
         <twig:BreadCrumbItem link="{{ false }}"
                              label="{{ "action.create" | trans }}"
@@ -95,10 +97,17 @@
             </div>
         </div>
 
-        {% if parentId %}
-            <twig:Button url="{{ path('app_subcategory_show' , {'boardId' : boardId, "id" : parentId}) }}" label="{{ 'action.back' | trans }}"></twig:Button>
+        {% if boardId %}
+            {% if parentId %}
+                <twig:Button url="{{ path('app_subcategory_show' , {'boardId' : boardId, "id" : parentId}) }}"
+                             label="{{ 'action.back' | trans }}"></twig:Button>
             {% else %}
-                <twig:Button label="{{'action.back' | trans }}" url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>%}
+                <twig:Button label="{{ 'action.back' | trans }}"
+                             url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>%}
+            {% endif %}
+
+        {% else %}
+            <twig:Button url="{{ path('app_home') }}" label="{{ 'action.back' | trans }}"></twig:Button>
         {% endif %}
     </div>
 
