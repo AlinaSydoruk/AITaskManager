@@ -122,13 +122,18 @@ export default class extends Controller {
                     const height = Math.max(20, (duration / 60) * 64);
 
                     return `
-        <div class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm"
-             style="top: ${top}px; height: ${height}px;">
-            <div class="font-semibold">${t.title}</div>
-            <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
-        </div>
-    `;
-                }).join(''); //
+   <div
+    class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm cursor-move calendar-task"
+    draggable="true"
+    data-scheduled-task-id="${t.id}" style="top: ${top}px; height: ${height}px;"
+>
+    <div class="font-semibold">${t.title}</div>
+    <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
+</div>
+
+`;
+
+                }).join('');
 
                 column += `</div>`;
             }
@@ -137,22 +142,47 @@ export default class extends Controller {
         }
 
         this.weekGridTarget.innerHTML = gridHtml;
+        // навешиваем dragstart на таски внутри календаря
+        this.weekGridTarget.querySelectorAll(".calendar-task").forEach(el => {
+            el.addEventListener("dragstart", e => {
+                const id = el.dataset.scheduledTaskId;
+                e.dataTransfer.setData("scheduledTaskId", id);
+            });
+        });
     }
 
 }
 window.handleDrop = async (event, dayISO, hour) => {
-    const taskIndex = event.dataTransfer.getData('taskIndex');
-    if (taskIndex === undefined) return;
-
     const controller = window.calendarController;
-    const task = controller.unscheduledTasksValue[taskIndex];
+
+    const unscheduledIndex = event.dataTransfer.getData('taskIndex');
+    const scheduledTaskId = event.dataTransfer.getData('scheduledTaskId');
 
     const scheduledDate = new Date(`${dayISO}T${hour.toString().padStart(2, '0')}:00`);
-
-    // 👇 Вместо toISOString, сохраняем локальное время в ISO-формате
     const scheduledFor = `${dayISO}T${scheduledDate.getHours().toString().padStart(2, '0')}:00:00`;
 
-    task.scheduledFor = scheduledFor;
+    let task;
+
+    if (unscheduledIndex !== '') {
+        // Перетаскивание из панели
+        task = controller.unscheduledTasksValue[unscheduledIndex];
+        task.scheduledFor = scheduledFor;
+
+        controller.tasksValue = [...controller.tasksValue, task];
+        controller.unscheduledTasksValue = controller.unscheduledTasksValue.filter((_, i) => i != unscheduledIndex);
+    }  else if (scheduledTaskId !== '') {
+    const index = controller.tasksValue.findIndex(t => t.id == scheduledTaskId);
+    if (index === -1) return;
+
+    const updatedTask = { ...controller.tasksValue[index], scheduledFor };
+    controller.tasksValue = [
+        ...controller.tasksValue.slice(0, index),
+        updatedTask,
+        ...controller.tasksValue.slice(index + 1)
+    ];
+
+    task = updatedTask;
+}
 
     try {
         await fetch(`/dashboard/task/${task.id}/schedule`, {
@@ -164,11 +194,8 @@ window.handleDrop = async (event, dayISO, hour) => {
             body: JSON.stringify({ scheduledFor })
         });
     } catch (e) {
-        console.error("Failed to save task:", e);
+        console.error("Failed to update task:", e);
     }
-
-    controller.tasksValue = [...controller.tasksValue, task];
-    controller.unscheduledTasksValue = controller.unscheduledTasksValue.filter((_, i) => i != taskIndex);
 
     controller.renderWeek();
     controller.renderUnscheduled();

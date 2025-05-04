@@ -1,7 +1,9 @@
 <div class="my-2">
-    <h1 class="text-black font-bold text-xl mt-4 mb-2">
-        {{ title }}
-    </h1>
+    {% if title %}
+        <h1 class="text-black font-bold text-xl mt-4 mb-2">
+            {{ title }}
+        </h1>
+    {% endif %}
     <div class=" pb-4">
         <div class="{{ class|default('')}}" >
             {% block content %}{% endblock %}

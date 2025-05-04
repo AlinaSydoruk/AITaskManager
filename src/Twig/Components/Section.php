@@ -12,6 +12,4 @@ class Section
 
     public string $class = '';
 
-
-
 }

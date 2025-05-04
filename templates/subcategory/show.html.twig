@@ -47,7 +47,7 @@
         </twig:MainHeader>
 
 
-        <twig:Section title="{{ 'subcategory.categories' | trans }}" class="mx-4">
+        <twig:Section class="mx-4">
             <twig:block name="content">
                 {% if subcategory.children|length > 0 %}
                     {% for child in subcategory.children %}
