@@ -14,6 +14,7 @@
         "doctrine/orm": "^3.3",
         "gedmo/doctrine-extensions": "*",
         "nikic/php-parser": "^5.3",
+        "openai-php/symfony": "^0.10.2",
         "pagerfanta/doctrine-orm-adapter": "*",
         "pagerfanta/twig": "^4.7",
         "phpdocumentor/reflection-docblock": "^5.6",

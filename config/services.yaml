@@ -45,6 +45,11 @@ services:
         arguments:
             $defaultLocale: '%app.default_locale%'
 
+    App\Client\AI\OpenAIConfig:
+        arguments:
+            $key: '%env(OPENAI_API_KEY)%'
+            $organization: '%env(OPENAI_ORGANIZATION)%'
+
 
     App\Service\TwigGlobalBoardsSubscriber:
         tags:
