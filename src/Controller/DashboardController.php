@@ -48,30 +48,22 @@ class DashboardController extends AbstractController
     #[Route('/calendar', name: 'calendar')]
     public function calendar(): Response
     {
-        $userTasks = $this->taskService->getAllTasksBelongToUser($this->getUser());
+        $scheduledTasks = $this->taskService->getScheduledTasks($this->getUser());
+        $unscheduledTasks = $this->taskService->getUnscheduledTasks($this->getUser());
 
-        // Запланированные задачи
-        $scheduledTasks = array_filter($userTasks, fn($task) => $task->getScheduledForDate() !== null);
+        $tasks = array_map(fn($task) => [
+            'id' => $task->getId(),
+            'title' => $task->getTitle(),
+            'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
+            'estimateMinutes' => (int) $task->getApproximateEstimate(),
+            'boardId' => $task->getBoard()?->getId(),
+        ], $scheduledTasks);
 
-        $tasks = array_values(array_map(function ($task) {
-            return [
-                'id' => $task->getId(),
-                'title' => $task->getTitle(),
-                'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
-                'estimateMinutes' => (int) $task->getApproximateEstimate(),
-                'boardId' => $task->getBoard()?->getId(),
-            ];
-        }, $scheduledTasks));
-
-
-        $unscheduled = array_values(array_map(function ($task) {
-            return [
-                'id' => $task->getId(),
-                'title' => $task->getTitle(),
-                'estimateMinutes' => (int) $task->getApproximateEstimate(),
-            ];
-        }, array_filter($userTasks, fn($task) => !$task->getScheduledForDate())));
-
+        $unscheduled = array_map(fn($task) => [
+            'id' => $task->getId(),
+            'title' => $task->getTitle(),
+            'estimateMinutes' => (int) $task->getApproximateEstimate(),
+        ], $unscheduledTasks);
 
         return $this->render('dashboard/calendar.html.twig', [
             'tasks' => $tasks,

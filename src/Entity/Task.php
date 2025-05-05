@@ -39,15 +39,15 @@ class Task
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $scheduledForDate = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(enumType: TaskPriority::class)]
     #[Assert\NotBlank]
     private ?TaskPriority $taskPriority = null;
 
-    #[ORM\Column(length: 255, nullable: false)]
+    #[ORM\Column(nullable: false, enumType: TaskStatus::class)]
     #[Assert\NotBlank]
     private ?TaskStatus $taskStatus = null;
 
-    #[ORM\ManyToOne(targetEntity: Board::class, inversedBy: "tasks")]
+    #[ORM\ManyToOne(targetEntity: Board::class, cascade: ['persist'], inversedBy: "tasks")]
     #[ORM\JoinColumn(nullable: true)]
     private ?Board $board = null;
 
@@ -105,17 +105,16 @@ class Task
         return $this;
     }
 
-    public function getApproximateEstimate(): ?string
+    public function getApproximateEstimate(): ?int
     {
         return $this->approximateEstimate;
     }
 
-    public function setApproximateEstimate(string $approximateEstimate): static
+    public function setApproximateEstimate(?int $approximateEstimate): void
     {
         $this->approximateEstimate = $approximateEstimate;
-
-        return $this;
     }
+
 
     public function getScheduledForDate(): ?\DateTimeInterface
     {
