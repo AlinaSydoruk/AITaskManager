@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Client\AI\OpenAITaskClient;
 use App\Domain\User\Model\User;
 use App\Entity\Board;
 use App\Entity\Subcategory;
@@ -29,6 +30,7 @@ class TaskController extends AbstractController
         private TaskRepository                 $taskRepository,
         private EntityManagerInterface         $entityManager,
         private readonly TranslatorInterface   $translator,
+        private OpenAITaskClient               $taskClient,
         private readonly SubcategoryRepository $subcategoryRepository,
 
     )
@@ -40,10 +42,14 @@ class TaskController extends AbstractController
     {
         $boardId = $request->query->get('boardId');
 
+        if ($boardId === 'null' || $boardId === '') {
+            $boardId = null;
+        }
+
         $parentId = $request->get('parentId') ?: null;
         $task = new Task($this->getUser()->getId());
         $board =null;
-        if($boardId) {
+        if($boardId && is_numeric($boardId)) {
             $board = $this->boardRepository->find($boardId);
             if (!$board) {
                 return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
@@ -146,12 +152,16 @@ class TaskController extends AbstractController
     public function edit(Request $request, int $id): Response
     {
         $boardId = $request->query->get('boardId');
-        $task = $this->taskRepository->find($id);
 
+        if ($boardId === 'null' || $boardId === '') {
+            $boardId = null;
+        }
+
+        $task = $this->taskRepository->find($id);
         if (!$task) {
             return new Response("Task with id: $id does not exist", Response::HTTP_NOT_FOUND);
         }
-        if($boardId) {
+        if($boardId && is_numeric($boardId)) {
             $board = $this->boardRepository->find($boardId);
             if (!$board) {
                 return new Response("Board with id: $boardId does not exist", Response::HTTP_NOT_FOUND);
@@ -246,7 +256,7 @@ class TaskController extends AbstractController
                 ]);
             }
 
-            if($boardId) {
+            if($boardId && is_numeric($boardId)) {
                 return $this->redirectToRoute('app_board_show', [
                     'id' => $boardId,
                 ]);
@@ -270,8 +280,12 @@ class TaskController extends AbstractController
     #[Route('/{id}', name: 'show')]
     public function show(string $id, Request $request) : Response
     {
-        $boardId = $request->query->get('boardId');
-        if($boardId){
+        $boardId = $request->query->get('boardId', null);
+        if ($boardId === 'null' || $boardId === '') {
+            $boardId = null;
+        }
+
+        if($boardId && is_numeric($boardId)){
             $board = $this->boardRepository->find($boardId);
             if (!$board) {
                 return new Response("Board with id : $boardId does not exist", Response::HTTP_NOT_FOUND);
@@ -295,7 +309,10 @@ class TaskController extends AbstractController
     public function delete(string $id,  Request $request): Response
     {
         $boardId = $request->query->get('boardId');
-        if($boardId) {
+        if ($boardId === 'null' || $boardId === '') {
+            $boardId = null;
+        }
+        if($boardId && is_numeric($boardId)) {
             $board = $this->boardRepository->find($boardId);
         }
         $task = $this->taskRepository->find($id);
@@ -322,4 +339,32 @@ class TaskController extends AbstractController
         return $this->redirectToRoute('app_home');
 
     }
+
+
+    #[Route('/estimate/{id}', name: 'estimate')]
+    public function estimate(Request $request, int $id): Response
+    {
+        $task = $this->taskRepository->find($id);
+        if (!$task) {
+            return new Response("Task with id : $id does not exist", Response::HTTP_NOT_FOUND);
+        }
+        $estimateInMinutes = null;
+        try{
+            $estimateInMinutes = $this->taskClient->estimateTask($task);
+        }catch (\RuntimeException){
+            $this->addFlash('error',  $this->translator->trans('error.failed_to_estimate_task'));
+        }
+        $this->addFlash('success',  $this->translator->trans('message.task_estimated_successfully'));
+
+        $task->setApproximateEstimate($estimateInMinutes);
+        $this->entityManager->flush();
+
+        return $this->redirectToRoute('app_task_show',[
+            'boardId' => $request->query->get('boardId'),
+            'id' => $task->getId(),
+        ]);
+    }
+
+
+
 }

@@ -7,7 +7,9 @@ export default class extends Controller {
     static values = {
         tasks: Array,
         unscheduledTasks: Array,
-        boardId: String
+        boardId: String,
+        workdayStart: Number,
+        workdayEnd: Number
     };
 
     connect() {
@@ -82,16 +84,61 @@ export default class extends Controller {
 
         // Временная шкала
         let hours = `<div class="h-10"></div>`;
-        for (let hour = 7; hour <= 20; hour++) {
+        for (let hour = this.workdayStartValue; hour <= this.workdayEndValue; hour++) {
             const label = hour < 12 ? `${hour} AM` : hour === 12 ? `12 PM` : `${hour - 12} PM`;
             hours += `<div class="h-16 border-b text-right pr-2 text-xs pt-1">${label}</div>`;
         }
+
+
+        const renderedTasks = [];
+
+        for (const task of this.tasksValue) {
+            let remaining = task.estimateMinutes || 30;
+            let start = new Date(task.scheduledFor);
+
+            while (remaining > 0) {
+                const startHour = start.getHours();
+                const startMinutes = start.getMinutes();
+                const dayISO = start.toISOString().split('T')[0];
+
+                const workdayStart = 7 * 60;
+                const workdayEnd = 20 * 60;
+
+                const currentMinutes = startHour * 60 + startMinutes;
+                const availableToday = Math.max(0, workdayEnd - currentMinutes);
+                const duration = Math.min(remaining, availableToday);
+
+                if (duration <= 0) {
+                    // Если день закончился — переходим к следующему
+                    start.setDate(start.getDate() + 1);
+                    start.setHours(7, 0, 0, 0);
+                    continue;
+                }
+
+                renderedTasks.push({
+                    id: task.id,
+                    title: task.title,
+                    boardId: task.boardId,
+                    dayISO,
+                    start: new Date(start),
+                    duration
+                });
+
+                // Подготовка к следующему дню
+                remaining -= duration;
+                start.setDate(start.getDate() + 1);
+                start.setHours(7, 0, 0, 0);
+            }
+        }
+
+
+
         gridHtml += `<div class="bg-white sticky left-0 z-10">${hours}</div>`;
 
         // Колонки по дням
         for (const day of days) {
             const dayISO = day.toISOString().split('T')[0];
-            const dayTasks = tasks.filter(task => task.scheduledFor && task.scheduledFor.startsWith(dayISO));
+            const dayTasks = renderedTasks.filter(t => t.dayISO === dayISO);
 
             let column = `
             <div class="h-10 flex items-center justify-center text-xs text-gray-600 border-b bg-white sticky top-0 z-10">
@@ -99,9 +146,9 @@ export default class extends Controller {
             </div>
         `;
 
-            for (let hour = 7; hour <= 20; hour++) {
+            for (let hour = this.workdayStartValue; hour <= this.workdayEndValue; hour++) {
                 const hourTasks = dayTasks.filter(task => {
-                    const taskHour = new Date(task.scheduledFor).getHours();
+                    const taskHour = new Date(task.start).getHours();
                     return taskHour === hour;
                 });
 
@@ -111,31 +158,30 @@ export default class extends Controller {
 
 
                 column += hourTasks.map(t => {
-                    const start = new Date(t.scheduledFor);
-                    const duration = t.estimateMinutes || 30;
+                    const start = new Date(t.start);
+                    const duration = t.duration;
                     const end = new Date(start.getTime() + duration * 60000);
 
-                    const startStr = start.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
-                    const endStr = end.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+                    const startStr = start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    const endStr = end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    const startMinutes = start.getMinutes();
-                    const top = Math.floor((startMinutes / 60) * 64);
+                    const top = Math.floor((start.getMinutes() / 60) * 64);
                     const height = Math.max(20, (duration / 60) * 64);
 
                     return `
-   <div
-        class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm calendar-task"
-        draggable="true"
-        data-scheduled-task-id="${t.id}"
-        style="top: ${top}px; height: ${height}px; cursor: pointer;"
-        onclick="window.location.href='/board/task/' + ${t.id} + '?boardId=' + ${t.boardId}"
-    >
-        <div class="font-semibold">${t.title}</div>
-        <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
-    </div>
-`;
-
+        <div
+            class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm calendar-task"
+            draggable="true"
+            data-scheduled-task-id="${t.id}"
+            style="top: ${top}px; height: ${height}px; cursor: pointer;"
+            onclick="window.location.href='/board/task/' + ${t.id} + '?boardId=' + ${t.boardId}"
+        >
+            <div class="font-semibold">${t.title}</div>
+            <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
+        </div>
+    `;
                 }).join('');
+
 
                 column += `</div>`;
             }

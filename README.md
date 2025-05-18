@@ -17,6 +17,13 @@
    1. run `ddev php bin/console importmap:install`
    2. run `ddev php bin/console tailwind:build`
 
+
+## Create port forwarding to ngrok 
+   1. run in PowerShell `ngrok http <ddev_port>`
+   2. run `Invoke-WebRequest -Uri "https://api.telegram.org/bot<YOUR_BOT_TOKEN>/setWebhook" -Method POST -Body @{ url = 'https://<YOUR_NUMBER>.ngrok-free.app/bot/webhook' }`
+
+
+
 ## watch for changes to your assets/styles
 
 ```

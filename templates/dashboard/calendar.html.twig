@@ -8,6 +8,8 @@
             data-calendar-tasks-value='{{ tasks|json_encode|e('html_attr') }}'
             data-calendar-unscheduled-tasks-value='{{ unscheduledTasks|json_encode|e('html_attr') }}'
             data-calendar-board-id-value="{{ boardId }}"
+            data-calendar-workday-start-value="{{ app.user.workdayStartHour }}"
+            data-calendar-workday-end-value="{{ app.user.workdayEndHour }}"
             class="p-4"
     >
         <!-- Навигация по неделям -->

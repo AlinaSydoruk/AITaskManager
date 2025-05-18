@@ -40,6 +40,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $lastName = null;
 
+    #[ORM\Column(type: 'integer', options: ['default' => 8])]
+    private int $workdayStartHour = 8;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 20])]
+    private int $workdayEndHour = 20;
+
+    #[ORM\ManyToMany(targetEntity: TelegramChat::class, mappedBy: 'users')]
+    private Collection $telegramChats;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $telegramId = null;
 
     #[ORM\OneToMany(targetEntity: Board::class, mappedBy: 'user', orphanRemoval: true)]
     private Collection $boards;
@@ -159,5 +170,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getTelegramChats(): Collection
+    {
+        return $this->telegramChats;
+    }
+
+
+
+
+    public function getWorkdayStartHour(): int
+    {
+        return $this->workdayStartHour;
+    }
+
+    public function setWorkdayStartHour(int $workdayStartHour): void
+    {
+        $this->workdayStartHour = $workdayStartHour;
+    }
+
+    public function getWorkdayEndHour(): int
+    {
+        return $this->workdayEndHour;
+    }
+
+    public function setWorkdayEndHour(int $workdayEndHour): void
+    {
+        $this->workdayEndHour = $workdayEndHour;
+    }
+
+    public function getTelegramId(): ?string
+    {
+        return $this->telegramId;
+    }
+
+    public function setTelegramId(?string $telegramId): void
+    {
+        $this->telegramId = $telegramId;
+    }
+
+
+
+
 
 }

@@ -74,25 +74,61 @@
                     <twig:block name="value">{{ task.scheduledForDate ? task.scheduledForDate|date('Y-m-d, H:i') : '-' }}</twig:block>
                 </twig:InformationRow>
 
-                <twig:InformationRow title="{{ 'task.estimate' | trans }}">
-                    <twig:block name="value">
-                        {% set estimate = minutes_to_estimate_parts(task.approximateEstimate) %}
+                <twig:Section >
+                    <twig:block name="content">
 
-                        {% if estimate[0] > 0 %}{{ estimate[0] }} {{ 'days' | trans }}{% endif %}
-                        {% if estimate[1] > 0 or estimate[2] > 0 %}
-                            {{ estimate[1] }}h {{ estimate[2] }}min
-                        {% endif %}
-                        {% if estimate[0] == 0 and estimate[1] == 0 and estimate[2] == 0 %}
-                            0 {{ 'estimate.minutes' | trans }}
-                        {% endif %}
 
+                        <div class="flex-grow">
+                            <twig:InformationRow title="{{ 'task.estimate' | trans }}">
+                                <twig:block name="value">
+                                    <div class="flex justify-between">
+                                        <div class="">
+
+                                            {% set estimate = minutes_to_estimate_parts(task.approximateEstimate) %}
+
+                                            {% if estimate[0] > 0 or estimate[1] > 0 %}
+                                                {{ estimate[0] }}h {{ estimate[1] }}min
+                                            {% else %}
+                                                0 {{ 'estimate.minutes' | trans }}
+                                            {% endif %}
+
+
+
+                                        </div>
+                                        <div class="">
+
+                                            <div class=" flex flex-grow-0 flex-row  w-12">
+                                                <div class="flex justify-center items-center  border-primary">
+                                                    <a href="{{ path('app_task_estimate', { 'id': task.id , 'boardId': boardId }) }}">
+                                                        <svg width="22" height="23" viewBox="0 0 22 23" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M13 1V5" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M8 3L10 6" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M6 9H9" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M1 22L13 9" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M13 17V13" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M19 15L16 12" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M21 9H18" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                            <path d="M19 3L16 6" stroke="black" stroke-width="2" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                                        </svg>
+
+
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </twig:block>
+                            </twig:InformationRow>
+                        </div>
 
                     </twig:block>
-                </twig:InformationRow>
+                </twig:Section>
+
 
             </twig:block>
         </twig:Section>
 
+        {{ dump(task) }}
 
         {% if boardId %}
             {% if subcategory %}

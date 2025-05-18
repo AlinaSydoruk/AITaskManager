@@ -2,12 +2,29 @@
 
 namespace App\Client\AI;
 
-class OpenAIConfig
+readonly class  OpenAIConfig
 {
     public function __construct(
-        private readonly string $key,
-        private readonly string $organization,
+        private  string $key,
+        private  string $organization,
+        private  string $model,
     )
     {
     }
+
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+
+    public function getOrganization(): string
+    {
+        return $this->organization;
+    }
+
+    public function getModel(): string
+    {
+        return $this->model;
+    }
+
 }

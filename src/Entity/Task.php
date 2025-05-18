@@ -183,4 +183,19 @@ class Task
         return $this;
     }
 
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'board_title' => $this->board?->getTitle(),
+            'description' => $this->getDescription(),
+            'deadline' => $this->getDeadline()?->format('Y-m-d H:i'),
+            'estimate' => $this->getApproximateEstimate(),
+            'priority' => $this->getTaskPriority()?->value,
+            'status' => $this->getTaskStatus()?->value,
+            'scheduled_for' => $this->getScheduledForDate()?->format('Y-m-d H:i'),
+            'userId'=>$this->userId,
+        ];
+    }
 }

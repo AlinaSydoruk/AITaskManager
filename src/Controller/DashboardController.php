@@ -51,19 +51,19 @@ class DashboardController extends AbstractController
         $scheduledTasks = $this->taskService->getScheduledTasks($this->getUser());
         $unscheduledTasks = $this->taskService->getUnscheduledTasks($this->getUser());
 
-        $tasks = array_map(fn($task) => [
+        $tasks = array_values(array_map(fn($task) => [
             'id' => $task->getId(),
             'title' => $task->getTitle(),
             'scheduledFor' => $task->getScheduledForDate()->format('Y-m-d\TH:i:s'),
             'estimateMinutes' => (int) $task->getApproximateEstimate(),
             'boardId' => $task->getBoard()?->getId(),
-        ], $scheduledTasks);
+        ], $scheduledTasks));
 
-        $unscheduled = array_map(fn($task) => [
+        $unscheduled = array_values(array_map(fn($task) => [
             'id' => $task->getId(),
             'title' => $task->getTitle(),
             'estimateMinutes' => (int) $task->getApproximateEstimate(),
-        ], $unscheduledTasks);
+        ], $unscheduledTasks));
 
         return $this->render('dashboard/calendar.html.twig', [
             'tasks' => $tasks,

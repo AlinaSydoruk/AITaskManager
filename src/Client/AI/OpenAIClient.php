@@ -3,42 +3,29 @@
 namespace App\Client\AI;
 use OpenAI\Client;
 
-class OpenAIClient
+abstract class OpenAIClient
 {
     public function __construct(
-        private readonly Client $client,
-        private readonly OpenAIConfig $openAIConfig,
+        protected readonly Client         $client,
+        protected readonly OpenAIConfig   $openAIConfig,
+        protected readonly AIPrompts      $AIPrompts
     )
     {
     }
 
-    private function submit(array $messages):array
+    protected function submit(array $messages):array
     {
         $response = $this->client->chat()->create([
-            'model' => 'gpt-4o',
+            'model' => $this->openAIConfig->getModel(),
             'messages' =>$messages, ]);
-
         return json_decode($response->choices[0]->message->content, true);
     }
 
-    public function get(string $asRoleSystemContent, $asRoleUserContent):array
+    protected function buildMessage(string $systemContent, string $userContent):array
     {
-        $message = [
-            ['role' => 'system', 'content' => 'Ты — помощник для программиста. Отвечай кратко и по делу.'],
-            ['role' => 'user', 'content' => 'Что такое SOLID?'],
+        return  [
+            ['role' => 'system', 'content' => $systemContent],
+            ['role' => 'user', 'content' => $userContent],
         ];
-        return $this->submit($message);
-
     }
-
-    public function planTasks(array $tasks): array
-    {
-        $messages = [
-        ['role' => 'system', 'content' => 'Ты — ассистент по тайм-менеджменту.'],
-        ['role' => 'user', 'content' => 'Вот задачи: ' . json_encode($tasks)],
-    ];
-        return $this->submit($messages);
-    }
-
-
 }

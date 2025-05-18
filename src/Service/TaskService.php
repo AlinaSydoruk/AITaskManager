@@ -33,20 +33,18 @@ class TaskService
         return $sortedByStatusTasks;
     }
 
-    public function getEstimateTimeInMinutes(int $days, int $hours , int $minutes ) :int
+    public function getEstimateTimeInMinutes(int $days, int $hours, int $minutes): int
     {
-        return $days * 24 * 60 + $hours * 60 + $minutes;
+        // Игнорируем days и считаем только часы и минуты
+        return ($hours * 60) + $minutes;
     }
 
     public function convertMinutesToEstimateParts(int $totalMinutes): array
     {
-        $days = intdiv($totalMinutes, 1440); // 1440 = 24 * 60
-        $remainingMinutes = $totalMinutes % 1440;
+        $hours = intdiv($totalMinutes, 60);
+        $minutes = $totalMinutes % 60;
 
-        $hours = intdiv($remainingMinutes, 60);
-        $minutes = $remainingMinutes % 60;
-
-        return [$days, $hours, $minutes];
+        return [$hours, $minutes];
     }
 
     public function getAllTasksBelongToUser(User $user) : array
