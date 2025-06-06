@@ -1,0 +1,185 @@
+@startuml
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+left to right direction
+
+' ==== Классы с полями и методами ====
+
+class User {
+  - id : int
+  - email : string
+  - roles : array
+  - password : string
+  - firstName : string
+  - lastName : string
+  - workdayStartHour : int
+  - workdayEndHour : int
+  - telegramId : string
+  - telegramChats : Collection
+  - boards : Collection
+
+  + getId() : int
+  + getEmail() : string
+  + setEmail(email : string) : User
+  + getUserIdentifier() : string
+  + getRoles() : array
+  + setRoles(roles : array) : User
+  + getPassword() : string
+  + setPassword(password : string) : User
+  + eraseCredentials() : void
+  + getFirstName() : string
+  + setFirstName(firstName : string) : void
+  + getLastName() : string
+  + setLastName(lastName : string) : void
+  + getBoards() : Collection
+  + setBoards(boards : Collection) : void
+  + addBoard(board : Board) : User
+  + getTelegramChats() : Collection
+  + setTelegramChats(chats : Collection) : void
+  + getWorkdayStartHour() : int
+  + setWorkdayStartHour(hour : int) : void
+  + getWorkdayEndHour() : int
+  + setWorkdayEndHour(hour : int) : void
+  + getTelegramId() : string
+  + setTelegramId(id : string) : void
+}
+
+class TelegramChat {
+  - id : int
+  - title : string
+  - users : Collection
+
+  + __construct(id : int)
+  + getId() : int
+  + getTitle() : string
+  + setTitle(title : string) : TelegramChat
+  + getUsers() : Collection
+  + addUser(user : User) : TelegramChat
+}
+
+class Board {
+  - id : int
+  - title : string
+  - description : string
+  - color : string
+  - subcategories : Collection
+  - tasks : Collection
+  - user : User
+
+  + __construct(user : User)
+  + getId() : int
+  + getTitle() : string
+  + setTitle(title : string) : Board
+  + getDescription() : string
+  + setDescription(desc : string) : Board
+  + getColor() : string
+  + setColor(color : string) : Board
+  + getSubcategories() : Collection
+  + setSubcategories(subs : Collection) : void
+  + addSubcategory(sub : Subcategory) : Board
+  + getTasks() : Collection
+  + setTasks(tasks : Collection) : void
+  + getUser() : User
+  + setUser(user : User) : void
+}
+
+
+' ==== Subcategory ====
+
+class Subcategory {
+  - id : int
+  - title : string
+  - description : string
+  - board : Board
+  - parent : Subcategory
+  - children : Collection
+  - tasks : Collection
+
+  + __construct(board : Board)
+  + getId() : int
+  + getTitle() : string
+  + setTitle(title : string) : Subcategory
+  + getDescription() : string
+  + setDescription(desc : string) : Subcategory
+  + getBoard() : Board
+  + setBoard(board : Board) : void
+  + getParent() : Subcategory
+  + setParent(parent : Subcategory) : Subcategory
+  + getChildren() : Collection
+  + addChild(child : Subcategory) : Subcategory
+  + removeChild(child : Subcategory) : Subcategory
+  + getTasks() : Collection
+  + setTasks(tasks : Collection) : void
+}
+
+' ==== Task ====
+
+class Task {
+  - id : int
+  - title : string
+  - description : string
+  - deadline : DateTime
+  - approximateEstimate : int
+  - scheduledForDate : DateTime
+  - taskPriority : TaskPriority
+  - taskStatus : TaskStatus
+  - board : Board
+  - subcategory : Subcategory
+  - userId : int
+
+  + __construct(userId : int)
+  + getId() : int
+  + getTitle() : string
+  + setTitle(title : string) : Task
+  + getDescription() : string
+  + setDescription(desc : string) : Task
+  + getDeadline() : DateTime
+  + setDeadline(deadline : DateTime) : Task
+  + getApproximateEstimate() : int
+  + setApproximateEstimate(est : int) : void
+  + getScheduledForDate() : DateTime
+  + setScheduledForDate(date : DateTime) : Task
+  + getTaskPriority() : TaskPriority
+  + setTaskPriority(priority : TaskPriority) : void
+  + getTaskStatus() : TaskStatus
+  + setTaskStatus(status : TaskStatus) : void
+  + getBoard() : Board
+  + setBoard(board : Board) : Task
+  + getSubcategory() : Subcategory
+  + setSubcategory(subcategory : Subcategory) : Task
+  + getUserId() : int
+  + setUserId(id : int) : Task
+  + toArray() : array
+}
+
+' ==== ResetPasswordRequest ====
+
+class ResetPasswordRequest {
+  - id : int
+  - user : User
+  - expiresAt : DateTime
+  - selector : string
+  - hashedToken : string
+
+  + __construct(user : User, expiresAt : DateTime, selector : string, hashedToken : string)
+  + getId() : int
+  + getUser() : User
+}
+
+' ==== Связи ====
+
+Subcategory "1" --> "0..*" Task : tasks
+Subcategory "1" --> "0..*" Subcategory : children
+Subcategory "0..1" --> "1" Subcategory : parent
+Subcategory "1" --> "1" Board : board
+
+Task "1" --> "0..1" Subcategory : subcategory
+Task "1" --> "1" Board : board
+
+ResetPasswordRequest "1" --> "1" User : user
+
+User "0..*" -- "0..*" TelegramChat : telegramChats
+User "1" -- "0..*" Board : boards
+
+@enduml

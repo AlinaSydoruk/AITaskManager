@@ -84,9 +84,9 @@
 
                 <div class="flex justify-between">
                     <div class="flex-shrink w-64">
-                        {{ form_row(form.estimate.days) }}
+                        {{ form_row(form.estimate.hours) }}
                     </div>
-                    {{ form_row(form.estimate.time) }}
+                    {{ form_row(form.estimate.minutes) }}
                 </div>
 
 
@@ -115,7 +115,7 @@
             <twig:Button url="{{ path('app_task_show', {'boardId': boardId, 'id': task.id}) }}"
                          label="{{ 'action.back' | trans }}"/>
         {% else %}
-            <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_home') }}"></twig:Button>
+            <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_frontend') }}"></twig:Button>
         {% endif %}
     </div>
 {% endblock %}

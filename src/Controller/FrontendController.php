@@ -18,7 +18,7 @@ class FrontendController extends AbstractController
     #[Route('/', name: 'app_frontend')]
     public function index(): Response
     {
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_dashboard_calendar');
     }
 
 

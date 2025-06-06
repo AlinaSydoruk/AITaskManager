@@ -37,7 +37,7 @@ class SetTelegramWebhookCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $webhookUrl = 'https://1580-83-76-190-5.ngrok-free.app/bot/webhook';
+        $webhookUrl = 'https://bd45-83-76-190-5.ngrok-free.app/bot/webhook';
         $this->telegramBotClient->setWebhook($webhookUrl);
         $output->writeln("Webhook set to: $webhookUrl");
 

@@ -41,7 +41,7 @@ class LocaleController extends AbstractController
         if ($referer) {
             return $this->redirect($referer);
         } else {
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_frontend');
         }
     }
 }

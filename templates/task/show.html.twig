@@ -128,7 +128,7 @@
             </twig:block>
         </twig:Section>
 
-        {{ dump(task) }}
+
 
         {% if boardId %}
             {% if subcategory %}
@@ -139,7 +139,7 @@
                              url="{{ path('app_board_show' , {'id': boardId }) }}"></twig:Button>
             {% endif %}
         {% else %}
-            <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_home') }}"></twig:Button>
+            <twig:Button label="{{ 'action.back' | trans }}" url="{{ path('app_frontend') }}"></twig:Button>
         {% endif %}
 
     </div>

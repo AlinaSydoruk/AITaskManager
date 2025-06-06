@@ -1,11 +1,31 @@
 {% extends 'dashboard/base.html.twig' %}
 
-{% block title %}{{ 'profile.welcome' | trans }}{% endblock %}
+{% block title %}{{ 'task.statistics' | trans }}{% endblock %}
 
 {% block content %}
-    <div class="my-4 ">
+    <div class="my-4">
+        <h2 class="text-xl font-bold mb-4">{{ board.title }}</h2>
 
-
+        {% if totalTasks|default(0) == 0 %}
+            <div class="text-center text-black mt-8">
+                <p class="text-lg">{{ 'task.no_data_yet' | trans }}</p>
+                <p class="text-sm mt-2">{{ 'task.add_some_to_see_stats' | trans }}</p>
+            </div>
+        {% else %}
+            <div class="max-w-xs mx-auto">
+                <canvas
+                        id="taskChart"
+                        data-controller="chart"
+                        data-chart-done-value="{{ doneTasks|default(0) }}"
+                        data-chart-total-value="{{ totalTasks|default(0) }}"
+                        width="300"
+                        height="300"
+                        class="block mx-auto"
+                ></canvas>
+            </div>
+        {% endif %}
     </div>
 
-{% endblock content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+

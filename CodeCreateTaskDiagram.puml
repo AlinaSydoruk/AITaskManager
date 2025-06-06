@@ -1,0 +1,80 @@
+@startuml
+
+' === Controllers ===
+package "App\Controller" {
+    class TelegramWebhookController
+}
+
+' === Services ===
+package "App\Service" {
+    class BotTaskCreationService
+}
+
+' === AI Client ===
+package "App\Client\AI" {
+    class OpenAITaskClient
+    class OpenAIClient
+    class AIPrompts
+    class OpenAIConfig
+    class Client
+
+    OpenAITaskClient --|> OpenAIClient
+    OpenAIClient ..> AIPrompts
+    OpenAIClient ..> OpenAIConfig
+    OpenAIClient ..> Client
+}
+
+' === Telegram Client ===
+package "App\Client\Telegram" {
+    class TelegramClient
+    class TelegramBotClient
+    class TelegramConfig
+
+    TelegramBotClient --|> TelegramClient
+    TelegramBotClient ..> TelegramConfig
+}
+
+' === Entities ===
+package "App\Entity" {
+    class Task
+    class User
+    class TelegramChat
+}
+
+' === Repositories & Infra ===
+package "App\Repository" {
+    class UserRepository
+}
+
+class EntityManagerInterface
+class TranslatorInterface
+class TaskService
+
+' === Relationships ===
+
+TelegramWebhookController --> TelegramChat : getUsers()
+TelegramWebhookController --> BotTaskCreationService : createTasksForUsers()
+TelegramWebhookController --> OpenAITaskClient
+TelegramWebhookController --> TaskService
+TelegramWebhookController --> UserRepository
+TelegramWebhookController --> TranslatorInterface
+TelegramWebhookController --> EntityManagerInterface
+
+BotTaskCreationService --> OpenAITaskClient : messageToTask()
+BotTaskCreationService --> Task : creates
+BotTaskCreationService --> User
+BotTaskCreationService --> EntityManagerInterface
+
+OpenAITaskClient --> Task : estimateTask()
+OpenAITaskClient --> OpenAIClient : buildMessage()
+
+OpenAIClient --> AIPrompts
+OpenAIClient --> OpenAIConfig
+OpenAIClient --> Client
+
+TelegramWebhookController ..> TelegramBotClient : optional response
+TelegramBotClient --> TelegramConfig
+
+Task --> User : belongs to
+
+@enduml

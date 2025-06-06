@@ -1,0 +1,33 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}{{ 'telegram.debug.title' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="max-w-3xl mx-auto my-10">
+        <h2 class="text-2xl font-bold mb-6">{{ 'telegram.debug.heading' | trans }}</h2>
+        <p class="mb-4 text-gray-600">{{ 'telegram.debug.instruction' | trans }}</p>
+
+        {% if chats is empty %}
+            <p class="text-red-500">{{ 'telegram.debug.no_messages' | trans }}</p>
+        {% else %}
+            <table class="w-full table-auto border">
+                <thead class="bg-gray-100">
+                <tr>
+                    <th class="p-2 text-left">{{ 'telegram.debug.chat_id' | trans }}</th>
+                    <th class="p-2 text-left">{{ 'telegram.debug.chat_title' | trans }}</th>
+                    <th class="p-2 text-left">{{ 'telegram.debug.chat_type' | trans }}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for chat in chats %}
+                    <tr class="border-t">
+                        <td class="p-2 font-mono text-blue-600">{{ chat.id }}</td>
+                        <td class="p-2">{{ chat.title }}</td>
+                        <td class="p-2">{{ chat.type }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+    </div>
+{% endblock %}

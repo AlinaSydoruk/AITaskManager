@@ -13,13 +13,37 @@ abstract class OpenAIClient
     {
     }
 
-    protected function submit(array $messages):array
+    protected function submit(array $messages): array
     {
-        $response = $this->client->chat()->create([
-            'model' => $this->openAIConfig->getModel(),
-            'messages' =>$messages, ]);
-        return json_decode($response->choices[0]->message->content, true);
+
+        try {
+            $response = $this->client->chat()->create([
+                'model' => $this->openAIConfig->getModel(), // перевір, наприклад gpt-4-turbo чи gpt-3.5-turbo
+                'messages' => $messages,
+            ]);
+
+
+            $content = $response->choices[0]->message->content ?? null;
+
+            if (!$content) {
+                file_put_contents(__DIR__ . '/../../var/log/telegram_debug.log', "\n\n==== EMPTY CONTENT ====\n", FILE_APPEND);
+                throw new \RuntimeException('OpenAI did not return any message content.');
+            }
+
+            $decoded = json_decode($content, true);
+
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+                file_put_contents(__DIR__ . '/../../var/log/telegram_debug.log', "\n\n==== INVALID JSON ====\n$content", FILE_APPEND);
+                throw new \RuntimeException('Invalid JSON from OpenAI: ' . $content);
+            }
+
+            return $decoded;
+        } catch (\Throwable $e) {
+            file_put_contents(__DIR__ . '/../../var/log/telegram_debug.log', "\n\n==== EXCEPTION ====\n" . $e->getMessage(), FILE_APPEND);
+            throw $e;
+        }
     }
+
 
     protected function buildMessage(string $systemContent, string $userContent):array
     {

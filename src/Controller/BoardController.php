@@ -50,7 +50,7 @@ class BoardController extends AbstractController
             $this->entityManager->persist($board);
             $this->entityManager->flush();
             $this->addFlash('success', $this->translator->trans('message.board_has_been_created'));
-            return $this->redirectToRoute('app_home');
+            return $this->redirectToRoute('app_frontend');
         }
 
         return $this->render('board/create.html.twig', [
@@ -82,9 +82,19 @@ class BoardController extends AbstractController
     public function show(string $id): Response
     {
         $board = $this->boardRepository->find($id);
+
+        $tasks  = $board->getTasks();
+        $total = count($tasks);
+        $done = count(array_filter(
+            $tasks->toArray(),
+            fn($task) => $task->getTaskStatus()?->value === 'Done'
+        ));
+
         return $this->render('board/show.html.twig', [
             'board' => $board,
             'boardId' => $board->getId(),
+            'totalTasks' => $total,
+            'doneTasks' => $done,
             ]);
     }
 
@@ -98,5 +108,26 @@ class BoardController extends AbstractController
             'boards' => $allBoards,
         ]);
     }
+
+    #[Route('/{id}/profile', name: 'profile')]
+    public function profile(string $id): Response
+    {
+        $board = $this->boardRepository->find($id);
+        if (!$board) {
+            throw $this->createNotFoundException();
+        }
+
+        $tasks = $board->getTasks();
+        $total = count($tasks);
+        $done = count(array_filter($tasks->toArray(), fn($task) => $task->getStatus()?->getTitle() === 'Done'));
+
+        return $this->render('dashboard/profile.html.twig', [
+            'board' => $board,
+            'boardId' => $board->getId(),
+            'totalTasks' => $total,
+            'doneTasks' => $done,
+        ]);
+    }
+
 
 }

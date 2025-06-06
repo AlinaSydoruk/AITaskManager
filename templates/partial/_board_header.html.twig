@@ -7,7 +7,7 @@
                 </svg>
             </button>
 
-            <a href="{{ path("app_home") }}" class="flex items-center">
+            <a href="{{ path("app_frontend") }}" class="flex items-center">
                 <img class="h-8 w-auto" src="{{ asset("images/logo_sandbox.png") }}"  alt="Sandbox">
             </a>
             <div class="flex items-center lg:order-2">
@@ -62,7 +62,7 @@
                 <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
 
                     <li>
-                        <a  href="{{ path('app_home') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800" aria-current="page">{{ 'profile.home' | trans }}</a>
+                        <a  href="{{ path('app_frontend') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800" aria-current="page">{{ 'profile.home' | trans }}</a>
                     </li>
 
                     <li>
@@ -76,6 +76,13 @@
                     <li>
                         <a  href="{{ path('app_task_create') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800" aria-current="page">{{ 'profile.new_task' | trans }}</a>
                     </li>
+
+                    <li>
+                        <a  href="{{ path('app_telegram_subscribe') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800" aria-current="page">{{ 'profile.add_new_telegram_channel' | trans }}</a>
+                    </li>
+                  {#  <li>
+                        <a  href="{{ path('app_telegram_debug_chat_id') }}" class="text-white hover:bg-gray-50 font-medium rounded-lg text-md px-4 lg:px-5 py-2 lg:py-2.5 mr-2 hover:bg-gray-700 focus:outline-none focus:ring-gray-800" aria-current="page">{{ 'telegram.debug.chat_id' | trans }}</a>
+                    </li>#}
 
                 </ul>
             </div>

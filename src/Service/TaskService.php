@@ -33,7 +33,7 @@ class TaskService
         return $sortedByStatusTasks;
     }
 
-    public function getEstimateTimeInMinutes(int $days, int $hours, int $minutes): int
+    public function getEstimateTimeInMinutes(int $hours, int $minutes): int
     {
         // Игнорируем days и считаем только часы и минуты
         return ($hours * 60) + $minutes;

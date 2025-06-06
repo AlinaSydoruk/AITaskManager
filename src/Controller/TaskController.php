@@ -107,16 +107,11 @@ class TaskController extends AbstractController
 
             // EstimateType
             $estimate = $form->get('estimate')->getData();
-            $days = (int)($estimate['days'] ?? 0);
-            $time = $estimate['time'] ?? null;
 
-            $hours = $minutes = 0;
-            if ($time instanceof \DateTimeInterface) {
-                $hours = (int)$time->format('H');
-                $minutes = (int)$time->format('i');
-            }
+            $hours = (int)($estimate['hours'] ?? 0);
+            $minutes = (int)($estimate['minutes'] ?? 0);
 
-            $estimatedTime = $this->taskService->getEstimateTimeInMinutes($days, $hours, $minutes);
+            $estimatedTime = $this->taskService->getEstimateTimeInMinutes($hours, $minutes);
             $task->setApproximateEstimate((string)$estimatedTime);
 
             $this->entityManager->persist($task);
@@ -135,7 +130,7 @@ class TaskController extends AbstractController
                     'id' => $boardId,
                 ]);
             }else{
-                return $this->redirectToRoute('app_home');
+                return $this->redirectToRoute('app_frontend');
             }
         }
 
@@ -176,12 +171,10 @@ class TaskController extends AbstractController
         }
 
         $estimateMinutes = (int)$task->getApproximateEstimate();
-        [$days, $hours, $minutes] = $this->taskService->convertMinutesToEstimateParts($estimateMinutes);
+        [$hours, $minutes] = $this->taskService->convertMinutesToEstimateParts($estimateMinutes);
 
-        $form->get('estimate')->get('days')->setData($days);
-        $form->get('estimate')->get('time')->setData(
-            (new \DateTime())->setTime($hours, $minutes)
-        );
+        $form->get('estimate')->get('hours')->setData($hours);
+        $form->get('estimate')->get('minutes')->setData($minutes);
 
         if ($task->getDeadline()) {
             $form->get('deadline_date')->setData($task->getDeadline());
@@ -234,16 +227,11 @@ class TaskController extends AbstractController
 
             // Обновляем estimate
             $estimate = $form->get('estimate')->getData();
-            $days = (int)($estimate['days'] ?? 0);
-            $time = $estimate['time'] ?? null;
 
-            $hours = $minutes = 0;
-            if ($time instanceof \DateTimeInterface) {
-                $hours = (int)$time->format('H');
-                $minutes = (int)$time->format('i');
-            }
+            $hours = (int)($estimate['hours'] ?? 0);
+            $minutes = (int)($estimate['minutes'] ?? 0);
 
-            $estimatedTime = $this->taskService->getEstimateTimeInMinutes($days, $hours, $minutes);
+            $estimatedTime = $this->taskService->getEstimateTimeInMinutes( $hours, $minutes);
             $task->setApproximateEstimate((string)$estimatedTime);
 
             $this->entityManager->flush(); // persist не нужен — объект уже в БД
@@ -331,12 +319,12 @@ class TaskController extends AbstractController
                 'boardId' => $boardId,
             ]);
         }
-        if ($board) {
+        if ($boardId) {
             return $this->redirectToRoute('app_board_show', [
                 'id' => $boardId,
             ]);
         }
-        return $this->redirectToRoute('app_home');
+        return $this->redirectToRoute('app_frontend');
 
     }
 

@@ -11,21 +11,24 @@ class EstimateType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('days', IntegerType::class, [
-                'label' => 'task.approximate_estimate_days',
+            ->add('hours', IntegerType::class, [
+                'label' => 'hours',
+                'required' => false,
                 'attr' => [
-                    'class' => 'py-2.5 px-4 w-full ',
-                    'min' => 0
+                    'min' => 0,
+                    'class' => 'py-2.5 px-4 w-24'
                 ],
-                'row_attr' => ['class' => ' mt-2 '],
-
+                'row_attr' => ['class' => 'mb-2']
             ])
-            ->add('time', TimeType::class, [
-                'label' => 'task.approximate_estimate_hours',
-                'input' => 'datetime',
-                'widget' => 'single_text',
-                'attr' => ['class' => 'border-2 py-2.5 px-4 w-36'],
-                'row_attr' => ['class' => 'w-full flex flex-col mt-2 items-end text-right'],
+            ->add('minutes', IntegerType::class, [
+                'label' => 'minutes',
+                'required' => false,
+                'attr' => [
+                    'min' => 0,
+                    'max' => 59,
+                    'class' => 'py-2.5 px-4 w-24'
+                ],
+                'row_attr' => ['class' => 'mb-2']
             ]);
     }
 

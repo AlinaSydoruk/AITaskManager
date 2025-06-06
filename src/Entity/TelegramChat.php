@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 class TelegramChat
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'bigint')]
     private ?int $id ;
 
@@ -32,14 +31,6 @@ class TelegramChat
     public function getUsers(): Collection
     { return $this->users; }
 
-    public function addUser(User $user): self
-    {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-        }
-        return $this;
-    }
-
 
     public function getTitle(): ?string
     {
@@ -52,4 +43,15 @@ class TelegramChat
 
         return $this;
     }
+
+    public function addUser(User $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->getTelegramChats()->add($this);
+        }
+
+        return $this;
+    }
+
 }

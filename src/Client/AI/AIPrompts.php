@@ -36,6 +36,9 @@ TEXT;
   "deadline": "YYYY-MM-DD HH:MM" | null,
   "estimate": 45
 }
+
+Не используй Markdown, не оборачивай JSON в тройные кавычки ```.
+Ответ должен содержать только чистый JSON, без пояснений.
 TEXT;
 
 

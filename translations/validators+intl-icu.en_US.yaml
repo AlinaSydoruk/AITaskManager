@@ -117,3 +117,27 @@ error.invalid_end_of_year_format_expected_d-m: "Invalid END_OF_YEAR format, expe
 error.you_have_not_enough_vacation_days_for_this_absence: "You do not have enough vacation days for this absence. Available vacation days: {availableVacationDays}, required: {durationInDays}"
 error.you_can_not_take_vacation_before_first_working_day: "You cannot take vacation before your first working day."
 error.you_can_not_change_your_first_working_day_if_there_are_any_absences: "You cannot change your first working day if there are any absences."
+form.telegram_chat.chat_id: "Telegram Chat ID"
+form.telegram_chat.chat_title: "Chat title"
+form.telegram_chat.teacher_id: "Teacher ID (Telegram)"
+task.title: "Title"
+task.description: "Description"
+
+task.due_date: "Due Date"
+task.deadline_time: "Deadline Time"
+
+task.approximate_estimate: "Approximate Estimate"
+task.estimate_hours: "hours"
+task.estimate_minutes: "minutes"
+
+task.scheduled_for_date: "Scheduled For Date"
+task.scheduled_for_time: "Scheduled For Time"
+
+task.priority: "Priority"
+task.status: "Status"
+
+action.save: "Save"
+
+
+task.edit_task: "Edit task"
+

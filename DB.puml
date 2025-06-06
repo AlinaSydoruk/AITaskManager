@@ -1,0 +1,68 @@
+@startuml
+
+class Board {
+  +int id
+  +string title
+  +string description
+  +string color
+}
+
+class Subcategory {
+  +int id
+  +string title
+  +string description
+}
+
+class Task {
+  +int id
+  +string title
+  +string description
+  +datetime deadline
+  +int approximateEstimate
+  +datetime scheduledForDate
+  +TaskPriority taskPriority
+  +TaskStatus taskStatus
+  +int userId
+}
+
+class User {
+  +int id
+  +string email
+  +string[] roles
+  +string password
+  +string firstName
+  +string lastName
+  +int workdayStartHour
+  +int workdayEndHour
+  +string telegramId
+}
+
+class ResetPasswordRequest {
+  +int id
+  +DateTime expiresAt
+  +string selector
+  +string hashedToken
+}
+
+class TelegramChat {
+  +bigint id
+  +string title
+}
+
+Board "1" --> "*" Subcategory : contains
+Board "1" --> "*" Task : contains
+User "1" <-- "*" Board : owns
+ResetPasswordRequest "*" --> "1" User : belongs to
+
+Subcategory "*" --> "1" Board : belongs to
+Subcategory "1" --> "*" Subcategory : children
+Subcategory "*" --> "1" Subcategory : parent
+Subcategory "1" --> "*" Task : contains
+
+Task "*" --> "1" Board : optional
+Task "*" --> "1" Subcategory : optional
+Task o--> User : userId (not a FK)
+
+User "*" -- "*" TelegramChat : member of
+
+@enduml

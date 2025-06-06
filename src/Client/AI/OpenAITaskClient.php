@@ -27,12 +27,25 @@ class OpenAITaskClient extends OpenAIClient
 
     public function messageToTask(string $message): array
     {
+        file_put_contents(
+        __DIR__ . '/../../var/log/telegram_debug.log',
+        "\n\n==== REQEST ====\n" ,
+        FILE_APPEND
+    );
         $prompt = $this->buildMessage(
             systemContent: $this->AIPrompts::MESSAGE_TO_TASK,
             userContent: 'Вот текст, содержащий задание: ' . $message,
         );
 
+
         $response = $this->submit($prompt);
+
+        file_put_contents(
+            __DIR__ . '/../../var/log/telegram_debug.log',
+            "\n\n==== PARSED RESPONSE ====\n" . json_encode($response, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            FILE_APPEND
+        );
+
 
         if (
             isset($response['title']) &&
@@ -46,7 +59,9 @@ class OpenAITaskClient extends OpenAIClient
                 'estimate' => (int)$response['estimate'],
             ];
         }
-
+        file_put_contents(__DIR__ . '/../../var/log/telegram_debug.log', print_r([
+            'OpenAI response does not contain a valid task object'
+        ], true), FILE_APPEND);
         throw new \RuntimeException('OpenAI response does not contain a valid task object.');
     }
 

@@ -443,8 +443,8 @@
             <table class="email-content" width="100%" cellpadding="0" cellspacing="0" role="presentation">
                 <tr>
                     <td class="email-masthead">
-                        <a href="{{ path('app_home') }}" class="f-fallback email-masthead_name">
-                            {{ 'profile.sandbox' | trans }}
+                        <a href="{{ path('app_frontend') }}" class="f-fallback email-masthead_name">
+                            Student Assistant
                         </a>
                     </td>
                 </tr>
@@ -456,8 +456,8 @@
                             <tr>
                                 <td class="content-cell">
                                     <div class="f-fallback">
-                                        <h1> {{ 'email.greeting' | trans({'name': user_name })}}</h1>
-                                        <p>{{ 'email.password_reset_instruction' | trans }}</p>
+                                        <h1> Hello {{ user_email }}</h1>
+                                        <p>You requested a password reset for your account</p>
 
                                         <!-- Action -->
                                         <table class="body-action" align="center" width="100%" cellpadding="0" cellspacing="0" role="presentation">
@@ -477,12 +477,14 @@
                                         </table>
                                         <p>
                                             <strong>
-                                                {{ 'security.password_reset_link_expiration' | trans({'expirationTime': resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle')}) }}
+                                                This password reset link will expire {{ resetToken.expirationMessageKey|trans(resetToken.expirationMessageData, 'ResetPasswordBundle') }}.
                                             </strong>
                                         </p>
 
-                                        <p> {{ 'email.cheers' | trans }}
-                                            <br>{{ 'email.team_signature' | trans({'company': 'profile.sandbox' | trans }) }}</p>
+                                        <p>
+                                            Best regards,<br>
+                                            The Student Assistant Team
+                                        </p>
                                     </div>
                                 </td>
                             </tr>

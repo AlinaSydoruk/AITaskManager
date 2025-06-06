@@ -38,9 +38,10 @@
                 <label for="_remember_me">{{ 'security.remember_me' | trans }}</label>
             </div>
 
-
-            <twig:Button label="{{ 'security.sign_in' | trans }}" url="{{ false }}"></twig:Button>
-
+            <div class="flex justify-between">
+                <twig:Button label="{{ 'security.sign_in' | trans }}" url="{{ false }}"></twig:Button>
+                <twig:Button label="{{ 'security.sign_up' | trans }}" url="{{ path("app_register") }}"></twig:Button>
+            </div>
         </form>
         <div class="my-4">
             <a href="{{ path('app_forgot_password_request') }}"

@@ -170,15 +170,17 @@ export default class extends Controller {
 
                     return `
         <div
-            class="absolute left-1 right-1 bg-green-200 text-gray-900 text-xs rounded px-2 py-1 shadow-sm calendar-task"
-            draggable="true"
-            data-scheduled-task-id="${t.id}"
-            style="top: ${top}px; height: ${height}px; cursor: pointer;"
-            onclick="window.location.href='/board/task/' + ${t.id} + '?boardId=' + ${t.boardId}"
-        >
-            <div class="font-semibold">${t.title}</div>
-            <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
-        </div>
+    class="absolute left-1 right-1 bg-green-200 text-gray-900 text-[11px] leading-tight rounded px-1 py-0.5 shadow-sm calendar-task overflow-hidden"
+    draggable="true"
+    data-scheduled-task-id="${t.id}"
+    style="top: ${top}px; height: ${height}px; cursor: pointer;"
+    onclick="window.location.href='/board/task/' + ${t.id} + '?boardId=' + ${t.boardId}"
+    title="${t.title}"
+>
+    <div class="font-semibold truncate">${t.title}</div>
+    <div class="opacity-80 text-[10px]">${startStr} – ${endStr}</div>
+</div>
+
     `;
                 }).join('');
 

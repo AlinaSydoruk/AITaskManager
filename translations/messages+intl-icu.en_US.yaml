@@ -10,8 +10,10 @@ profile.welcome: "Welcome"
 profile.privacy_policy: "Privacy Policy"
 profile.contact: "Contact"
 profile.copyright_and_year: "© 2024"
-profile.sandbox: "Sandbox"
+
 welcome.you_are_logged_in_as: "You are logged in as"
+
+
 symbol.dash: " - "
 employee.id: "{id}"
 employee.employee: "Employee"
@@ -178,3 +180,47 @@ profile.new_task: "New Task"
 error.failed_to_estimate_task: "Failed to estimate task"
 message.task_estimated_successfully: "Successfully estimated task"
 
+security.please_sign_up: "Please sign up"
+security.agree_terms: "I agree to the terms and conditions"
+security.already_have_account: "Already have an account?"
+security.sign_up: "Sign up"
+
+board.title: "Title"
+board.description: "Description"
+board.color: "Color"
+board.create_board: "Create board"
+
+task.statistics: "Task statistics"
+task.no_data_yet: "No tasks yet"
+task.add_some_to_see_stats: "Create tasks to view your progress"
+
+flash.telegram_chat_connected: "Telegram chat successfully connected!"
+form.telegram_chat.chat_id: "Telegram Chat ID"
+form.telegram_chat.chat_title: "Chat title"
+form.telegram_chat.teacher_id: "Teacher ID (Telegram)"
+
+
+telegram.subscribe: "Subscribe Telegram Chat"
+telegram.connect_heading: "Connect Telegram Chat"
+telegram.save_button: "Save"
+profile.add_new_telegram_channel: "Add Channel"
+flash.telegram_chat_and_teacher_connected: "Chat and teacher successfully connected!"
+
+telegram.debug.title: "Telegram Chat Debug"
+telegram.debug.heading: "Telegram Chat ID Debug"
+telegram.debug.instruction: "Write anything in the group or to the bot, then refresh this page."
+telegram.debug.no_messages: "No messages yet. Try again later."
+telegram.debug.chat_id: "Chat ID"
+telegram.debug.chat_title: "Title"
+telegram.debug.chat_type: "Type"
+
+
+
+task.due_date: "Due Date"
+task.deadline_time: "Deadline Time"
+
+task.estimate_hours: "hours"
+task.estimate_minutes: "minutes"
+
+task.scheduled_for_time: "Scheduled For Time"
+task.edit_task: "Edit task"

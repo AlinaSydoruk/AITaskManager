@@ -42,4 +42,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
          $this->submit("POST" , $url, $body);
      }
 
-}
+     public function getUpdates(): array
+     {
+         $url = $this->getTelegramBotApiUrl() . "/getUpdates";
+
+         try {
+             $response = $this->submit("GET", $url, []);
+             return $response->toArray(); // автоматично декодує JSON
+         } catch (\Throwable $e) {
+             return ['error' => $e->getMessage()];
+         }
+     }
+ }

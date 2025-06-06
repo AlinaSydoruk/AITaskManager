@@ -1,0 +1,391 @@
+@startuml
+
+package "App\\Client\\AI" {
+
+    class AIPrompts {
+        +TASK_ESTIMATE : string
+        +MESSAGE_TO_TASK : string
+        +planTasks(tasks : array) : array
+    }
+
+    abstract class OpenAIClient {
+        -client : Client
+        -openAIConfig : OpenAIConfig
+        -AIPrompts : AIPrompts
+
+        +__construct(Client, OpenAIConfig, AIPrompts)
+        #submit(messages : array) : array
+        #buildMessage(systemContent : string, userContent : string) : array
+    }
+
+    AIPrompts ..> OpenAIClient : calls submit()
+    OpenAIClient --> Client : uses
+    OpenAIClient --> OpenAIConfig : uses
+    OpenAIClient --> AIPrompts : uses
+}
+
+package "App\\Client\\AI" {
+
+    class OpenAIConfig {
+        -key : string
+        -organization : string
+        -model : string
+
+        +__construct(key : string, organization : string, model : string)
+        +getKey() : string
+        +getOrganization() : string
+        +getModel() : string
+    }
+
+    class OpenAITaskClient {
+        +estimateTask(task : Task) : int
+        +messageToTask(message : string) : array
+    }
+
+    OpenAITaskClient --|> OpenAIClient : extends
+    OpenAITaskClient ..> Task : uses
+    OpenAITaskClient ..> AIPrompts : uses
+    OpenAITaskClient ..> OpenAIClient : calls submit(), buildMessage()
+
+    OpenAIClient --> OpenAIConfig : uses
+    OpenAIClient --> AIPrompts : uses
+}
+
+
+package "App\\Client\\Telegram" {
+
+    abstract class TelegramClient {
+        -httpClient : HttpClientInterface
+        -telegramConfig : TelegramConfig
+
+        +__construct(httpClient : HttpClientInterface, telegramConfig : TelegramConfig)
+        #submit(method : string, url : string, body : array) : ResponseInterface
+    }
+
+    class TelegramBotClient {
+        -getTelegramBotApiUrl() : string
+        +sendMessage(chatId : int, text : string) : void
+        +setWebhook(url : string) : void
+    }
+
+    TelegramBotClient --|> TelegramClient : extends
+    TelegramClient --> HttpClientInterface : uses
+    TelegramClient --> TelegramConfig : uses
+    TelegramBotClient ..> TelegramClient : calls submit()
+}
+
+
+package "App\\Client\\Telegram" {
+
+    class TelegramConfig {
+        -accessToken : string
+        -apiUrl : string
+
+        +__construct(accessToken : string, apiUrl : string)
+        +getAccessToken() : string
+        +getApiUrl() : string
+    }
+
+    TelegramClient --> TelegramConfig : uses
+}
+
+package "App\\Controller" {
+
+    class BoardController {
+        -boardRepository : BoardRepository
+        -entityManager : EntityManagerInterface
+        -translator : TranslatorInterface
+        -taskService : TaskService
+
+        +__construct(...)
+        +create(request : Request, security : Security) : Response
+        +kanban(id : int) : Response
+        +show(id : string) : Response
+        +home() : Response
+    }
+
+    BoardController --> BoardRepository : uses
+    BoardController --> EntityManagerInterface : uses
+    BoardController --> TranslatorInterface : uses
+    BoardController --> TaskService : uses
+    BoardController ..> Board : creates
+    BoardController ..> Subcategory : creates
+    BoardController ..> BoardType : uses
+    BoardController ..> Security : uses
+    BoardController ..> Request : uses
+    BoardController ..> Response : returns
+}
+
+
+package "App\\Controller" {
+
+    class DashboardController {
+        -boardRepository : BoardRepository
+        -entityManager : EntityManagerInterface
+        -translator : TranslatorInterface
+        -taskService : TaskService
+        -taskRepository : TaskRepository
+        -security : Security
+
+        +__construct(...)
+        +kanban() : Response
+        +calendar() : Response
+        +scheduleTask(request : Request, task : Task, em : EntityManagerInterface) : JsonResponse
+        +updateStatus(request : Request, task : Task, em : EntityManagerInterface) : JsonResponse
+        +calendarEvents() : JsonResponse
+        +show(id : string) : Response
+    }
+
+    ' --- Используемые зависимости ---
+    DashboardController --> BoardRepository : uses
+    DashboardController --> TaskRepository : uses
+    DashboardController --> TaskService : uses
+    DashboardController --> TranslatorInterface : uses
+    DashboardController --> EntityManagerInterface : uses
+    DashboardController --> Security : uses
+    DashboardController ..> Task : operates on
+    DashboardController ..> Board : fetches
+    DashboardController ..> Request : uses
+    DashboardController ..> Response : returns
+    DashboardController ..> JsonResponse : returns
+    DashboardController ..> TaskStatus : parses enum
+}
+
+package "App\\Controller" {
+
+    class FrontendController {
+        -boardRepository : BoardRepository
+
+        +__construct(boardRepository : BoardRepository)
+        +index() : Response
+        +home() : Response
+    }
+
+    class LocaleController {
+        -security : Security
+        -entityManager : EntityManagerInterface
+        -defaultLocale : string
+
+        +__construct(...)
+        +change(locale : string, request : Request) : RedirectResponse
+    }
+
+    ' Связи для FrontendController
+    FrontendController --> BoardRepository : uses
+    FrontendController ..> Response : returns
+
+    ' Связи для LocaleController
+    LocaleController --> Security : uses
+    LocaleController --> EntityManagerInterface : uses
+    LocaleController ..> Request : uses
+    LocaleController ..> RedirectResponse : returns
+    LocaleController ..> Language : parses enum
+}
+
+package "App\\Controller" {
+
+    class RegistrationController {
+        +register(request : Request, hasher : UserPasswordHasherInterface, em : EntityManagerInterface) : Response
+    }
+
+    class ResetPasswordController {
+        +request(request : Request, mailer : MailerInterface, translator : TranslatorInterface) : Response
+        +checkEmail() : Response
+        +reset(request : Request, passwordHasher : UserPasswordHasherInterface, translator : TranslatorInterface, token : string) : Response
+        -processSendingPasswordResetEmail(email : string, mailer : MailerInterface, translator : TranslatorInterface) : RedirectResponse
+    }
+
+    ResetPasswordController ..> ResetPasswordControllerTrait : uses
+}
+
+' ===== Зависимости RegistrationController =====
+RegistrationController --> User : creates
+RegistrationController --> EntityManagerInterface : uses
+RegistrationController --> UserPasswordHasherInterface : uses
+RegistrationController --> RegistrationFormType : uses
+RegistrationController ..> Request : uses
+RegistrationController ..> Response : returns
+
+' ===== Зависимости ResetPasswordController =====
+ResetPasswordController --> EntityManagerInterface : uses
+ResetPasswordController --> ResetPasswordHelperInterface : uses
+ResetPasswordController --> TranslatorInterface : uses
+ResetPasswordController --> MailerInterface : uses
+ResetPasswordController --> UserPasswordHasherInterface : uses
+ResetPasswordController --> User : uses
+ResetPasswordController --> ResetPasswordRequestFormType : uses
+ResetPasswordController --> ChangePasswordFormType : uses
+ResetPasswordController --> TemplatedEmail : uses
+ResetPasswordController --> Address : uses
+ResetPasswordController --> RedirectResponse : returns
+ResetPasswordController ..> Request : uses
+ResetPasswordController ..> Response : returns
+
+
+
+package "App\\Controller" {
+
+    class SecurityController {
+        +login(authenticationUtils : AuthenticationUtils) : Response
+        +logout() : void
+    }
+
+    class SubcategoryController {
+        -subcategoryRepository : SubcategoryRepository
+        -entityManager : EntityManagerInterface
+        -translator : TranslatorInterface
+        -boardRepository : BoardRepository
+
+        +__construct(...)
+        +create(request : Request, boardId : int) : Response
+        +edit(request : Request, boardId : int, id : int) : Response
+        +show(boardId : int, id : int) : Response
+        +delete(boardId : int, id : int) : Response
+    }
+
+    ' === Связи SecurityController ===
+    SecurityController --> AuthenticationUtils : uses
+    SecurityController ..> Response : returns
+
+    ' === Связи SubcategoryController ===
+    SubcategoryController --> SubcategoryRepository : uses
+    SubcategoryController --> BoardRepository : uses
+    SubcategoryController --> EntityManagerInterface : uses
+    SubcategoryController --> TranslatorInterface : uses
+    SubcategoryController ..> Subcategory : creates/modifies
+    SubcategoryController ..> SubcategoryType : uses
+    SubcategoryController ..> Request : uses
+    SubcategoryController ..> Response : returns
+}
+package "App\\Controller" {
+
+    class TaskController {
+        -boardRepository : BoardRepository
+        -taskService : TaskService
+        -taskRepository : TaskRepository
+        -entityManager : EntityManagerInterface
+        -translator : TranslatorInterface
+        -taskClient : OpenAITaskClient
+        -subcategoryRepository : SubcategoryRepository
+
+        +__construct(...)
+        +create(request : Request) : Response
+        +edit(request : Request, id : int) : Response
+        +show(id : string, request : Request) : Response
+        +delete(id : string, request : Request) : Response
+        +estimate(request : Request, id : int) : Response
+    }
+
+    ' === Зависимости TaskController ===
+    TaskController --> BoardRepository : uses
+    TaskController --> TaskService : uses
+    TaskController --> TaskRepository : uses
+    TaskController --> EntityManagerInterface : uses
+    TaskController --> TranslatorInterface : uses
+    TaskController --> OpenAITaskClient : uses
+    TaskController --> SubcategoryRepository : uses
+
+    TaskController ..> Task : creates/updates
+    TaskController ..> Board : fetches
+    TaskController ..> Subcategory : fetches
+    TaskController ..> TaskFormType : uses
+    TaskController ..> Request : uses
+    TaskController ..> Response : returns
+}
+
+package "App\\Controller" {
+
+    class TelegramWebhookController {
+        -openAITaskClient : OpenAITaskClient
+        -entityManager : EntityManagerInterface
+        -userRepository : UserRepository
+        -translator : TranslatorInterface
+        -taskService : TaskService
+        -taskCreationService : BotTaskCreationService
+        -logger : LoggerInterface
+
+        +__construct(...)
+        +handle(request : Request) : JsonResponse
+    }
+
+    TelegramWebhookController --> OpenAITaskClient : uses
+    TelegramWebhookController --> EntityManagerInterface : uses
+    TelegramWebhookController --> UserRepository : uses
+    TelegramWebhookController --> TranslatorInterface : uses
+    TelegramWebhookController --> TaskService : uses
+    TelegramWebhookController --> BotTaskCreationService : uses
+    TelegramWebhookController --> LoggerInterface : logs
+    TelegramWebhookController ..> TelegramChat : queries
+    TelegramWebhookController ..> Request : reads
+    TelegramWebhookController ..> JsonResponse : returns
+}
+
+
+package "App\\Entity\\Enom" {
+
+    enum TaskPriority {
+        +low = "Low"
+        +medium = "Medium"
+        +high = "High"
+        +critical = "Critical"
+        +getTranslationKey() : string
+    }
+
+    enum TaskStatus {
+        +toDo = "To Do"
+        +inProgress = "In Progress"
+        +done = "Done"
+        +getTranslationKey() : string
+    }
+
+    enum TaskSubstatus {
+        +scheduled = "Scheduled"
+        +blocked = "Blocked"
+        +canceled = "Canceled"
+        +needsImprovement = "Needs Improvement"
+        +onHold = "On Hold"
+        +getTranslationKey() : string
+    }
+
+
+}
+
+package "App\\Entity" {
+class Board {
+    - id : int
+    - title : string
+    - description : string
+    - color : string
+    - subcategories : Collection<Subcategory>
+    - tasks : Collection<Task>
+    - user : User
+
+    + __construct(user: User)
+    + getId() : int
+    + getTitle() : string
+    + setTitle(title: string) : Board
+    + getDescription() : string
+    + setDescription(description: string) : Board
+    + getColor() : string
+    + setColor(color: string) : Board
+    + getSubcategories() : Collection<Subcategory>
+    + setSubcategories(subcategories: Collection<Subcategory>) : void
+    + addSubcategory(subcategory: Subcategory) : Board
+    + getTasks() : Collection<Task>
+    + setTasks(tasks: Collection<Task>) : void
+    + getUser() : User
+    + setUser(user: User) : void
+
+
+class Subcategory
+class Task
+class User
+
+Board "1" --> "*" Subcategory : has
+Board "1" --> "*" Task : contains
+Board "*" --> "1" User : belongs to
+
+}
+
+
+@enduml

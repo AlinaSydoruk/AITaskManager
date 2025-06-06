@@ -70,10 +70,10 @@
 
                 <div class="flex justify-between">
                     <div class="flex-shrink w-64">
-                        {{ form_row(form.estimate.days) }}
+                        {{ form_row(form.estimate.hours) }}
                     </div>
 
-                    {{ form_row(form.estimate.time) }}
+                    {{ form_row(form.estimate.minutes) }}
 
                 </div>
 
@@ -107,7 +107,7 @@
             {% endif %}
 
         {% else %}
-            <twig:Button url="{{ path('app_home') }}" label="{{ 'action.back' | trans }}"></twig:Button>
+            <twig:Button url="{{ path('app_frontend') }}" label="{{ 'action.back' | trans }}"></twig:Button>
         {% endif %}
     </div>
 

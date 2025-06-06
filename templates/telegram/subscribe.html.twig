@@ -1,0 +1,25 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}{{ 'telegram.subscribe' | trans }}{% endblock %}
+
+{% block content %}
+    <div class="flex items-center justify-center my-8">
+        <div class="w-full max-w-md p-6 bg-white shadow-md rounded">
+            <h2 class="text-2xl font-bold my-6 text-center">{{ 'telegram.connect_heading' | trans }}</h2>
+
+            {{ form_start(form) }}
+            <div class="space-y-4">
+                {{ form_row(form.chat_id) }}
+                {{ form_row(form.chat_title) }}
+                {{ form_row(form.teacher_id) }}
+            </div>
+
+            <div class="mt-6 text-center">
+
+                    <twig:Button label="{{ 'telegram.save_button' | trans }}"></twig:Button>
+
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
