@@ -224,3 +224,4 @@ task.estimate_minutes: "minutes"
 
 task.scheduled_for_time: "Scheduled For Time"
 task.edit_task: "Edit task"
+common.locale_short.uk_UA: "Українська"

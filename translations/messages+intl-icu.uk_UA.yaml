@@ -227,3 +227,4 @@ telegram.debug.no_messages: "Повідомлень ще немає. Спроб�
 telegram.debug.chat_id: "Chat ID"
 telegram.debug.chat_title: "Назва"
 telegram.debug.chat_type: "Тип"
+common.locale_short.uk_UA: "Українська"

@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 
-use App\Entity\Language;
+use App\Entity\Enom\Language;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -30,12 +30,6 @@ class LocaleController extends AbstractController
     {
         $language = Language::tryFrom($locale)? :$this->defaultLocale;
         $request->getSession()->set('_locale', $language->value);
-        $user = $this->security->getUser();
-        if($user){
-            $user->setLocale($language->value);
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-        }
 
         $referer = $request->headers->get('referer');
         if ($referer) {

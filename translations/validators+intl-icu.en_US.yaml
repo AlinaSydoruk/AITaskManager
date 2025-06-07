@@ -137,6 +137,7 @@ task.priority: "Priority"
 task.status: "Status"
 
 action.save: "Save"
+common.locale_short.uk_UA: "Українська"
 
 
 task.edit_task: "Edit task"
