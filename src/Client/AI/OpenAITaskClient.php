@@ -11,7 +11,7 @@ class OpenAITaskClient extends OpenAIClient
     {
         $message = $this->buildMessage(
             systemContent: $this->AIPrompts::TASK_ESTIMATE,
-            userContent: 'Вот задача которую необходимо оценить по времени' . json_encode($task->toArray(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
+            userContent: 'Ось завдання, яке потрібно оцінити за часом.' . json_encode($task->toArray(), JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT),
         );
         $response = $this->submit($message);
         if (isset($response['estimate'])) {
@@ -34,7 +34,7 @@ class OpenAITaskClient extends OpenAIClient
     );
         $prompt = $this->buildMessage(
             systemContent: $this->AIPrompts::MESSAGE_TO_TASK,
-            userContent: 'Вот текст, содержащий задание: ' . $message,
+            userContent: 'Ось повідомлення від користувача: ' . $message,
         );
 
 

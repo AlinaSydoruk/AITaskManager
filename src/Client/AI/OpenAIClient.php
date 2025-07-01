@@ -18,7 +18,7 @@ abstract class OpenAIClient
 
         try {
             $response = $this->client->chat()->create([
-                'model' => $this->openAIConfig->getModel(), // перевір, наприклад gpt-4-turbo чи gpt-3.5-turbo
+                'model' => $this->openAIConfig->getModel(),
                 'messages' => $messages,
             ]);
 

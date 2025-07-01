@@ -48,7 +48,7 @@ class TelegramWebhookController extends AbstractController
 
         $data = json_decode($raw, true);
 
-        // ✅ Ловим только сообщения (а не service events)
+
         if (!isset($data['message']) || !isset($data['message']['text'])) {
             return new JsonResponse(['info' => 'Not a text message'], 200);
         }
@@ -59,7 +59,7 @@ class TelegramWebhookController extends AbstractController
         $chatType = $data['message']['chat']['type'] ?? null;
 
 
-        // ✅ Не останавливаем webhook на ошибке валидации — возвращаем 200
+
         if (!$message || !$fromId || !$chatType || !$chatId) {
             $this->logger->warning('Invalid message structure', ['data' => $data]);
             return new JsonResponse(['info' => 'Invalid structure'], 200);
@@ -108,14 +108,8 @@ class TelegramWebhookController extends AbstractController
             ]);
         } catch (\Throwable $e) {
             $this->logger->error('Webhook processing failed', ['exception' => $e]);
-            // ⚠️ Даже при ошибке — вернуть 200, чтобы Telegram не дублировал update
+            
             return new JsonResponse(['info' => 'Error, but acknowledged'], 200);
         }
     }
-
-
-
-
-
-
 }

@@ -4,29 +4,19 @@ skinparam dpi 300
 skinparam ClassAttributeIconSize 0
 skinparam ClassPadding 5
 skinparam linetype ortho
-
-' === Client Modules ===
+' === AI Clients ===
 package "App.Client.AI" {
     class OpenAIClient
     class OpenAITaskClient
-    class AIPrompts
-    class OpenAIConfig
-    class Client
-
     OpenAITaskClient --|> OpenAIClient
-    OpenAIClient ..> AIPrompts
-    OpenAIClient ..> OpenAIConfig
     OpenAIClient ..> Client
-    OpenAITaskClient ..> TaskAnchor1
 }
 
+' === Telegram Clients ===
 package "App.Client.Telegram" {
     class TelegramClient
     class TelegramBotClient
-    class TelegramConfig
-
     TelegramBotClient --|> TelegramClient
-    TelegramBotClient ..> TelegramConfig
 }
 
 ' === Controllers ===
@@ -55,22 +45,11 @@ package "App.Entity" {
     class TelegramChat
 }
 
-' Anchor to split Task dependency
-class TaskAnchor1 << (A,#white) >>
-class TaskAnchor2 << (A,#white) >>
+' === Symfony & Core Interfaces ===
+class Security
+class UserPasswordHasherInterface
 
-TaskAnchor1 --> Task
-TaskAnchor2 --> Task
-
-' === Forms ===
-package "App.Form" {
-    class BoardType
-    class RegistrationFormType
-    class ResetPasswordRequestFormType
-    class ChangePasswordFormType
-}
-
-' === Repositories & Services ===
+' === Repositories ===
 package "App.Repository" {
     class BoardRepository
     class SubcategoryRepository
@@ -78,6 +57,7 @@ package "App.Repository" {
     class UserRepository
 }
 
+' === Services ===
 package "App.Service" {
     class TaskService
     class BotTaskCreationService
@@ -85,81 +65,51 @@ package "App.Service" {
     class TwigGlobalBoardsSubscriber
 }
 
-class EntityManagerInterface
-class TranslatorInterface
-class Security
-interface EventSubscriberInterface
-class RequestEvent
-class UserPasswordHasherInterface
 
-' === Helpers ===
-package "App.Helper" {
-    class SubcategoryHelper
-    class SubcategoryHelperExtension
-    class TaskHelperExtension
-}
-
-' === Relationships ===
-
-' --- Controllers usage ---
+' === Controllers use cases ===
 BoardController ..> Board
 BoardController ..> Subcategory
 BoardController ..> BoardRepository
-BoardController ..> EntityManagerInterface
-BoardController ..> TranslatorInterface
 BoardController ..> TaskService
 BoardController ..> Security
-BoardController ..> BoardType
 
 DashboardController ..> BoardRepository
-DashboardController ..> EntityManagerInterface
-DashboardController ..> TranslatorInterface
 DashboardController ..> TaskService
 DashboardController ..> TaskRepository
 DashboardController ..> Security
-DashboardController ..> TaskAnchor2
+DashboardController ..> Task
 DashboardController ..> TaskStatus
 
 FrontendController ..> BoardRepository
 
-RegistrationController ..> EntityManagerInterface
 RegistrationController ..> UserPasswordHasherInterface
 RegistrationController ..> User
-RegistrationController ..> RegistrationFormType
 
-ResetPasswordController ..> ResetPasswordRequestFormType
-ResetPasswordController ..> ChangePasswordFormType
 ResetPasswordController ..> User
 
 SubcategoryController ..> SubcategoryRepository
-SubcategoryController ..> EntityManagerInterface
-SubcategoryController ..> TranslatorInterface
 SubcategoryController ..> BoardRepository
 
 TaskController ..> BoardRepository
 TaskController ..> TaskService
 TaskController ..> TaskRepository
-TaskController ..> EntityManagerInterface
-TaskController ..> TranslatorInterface
 TaskController ..> OpenAITaskClient
 TaskController ..> SubcategoryRepository
 
 TelegramWebhookController ..> OpenAITaskClient
-TelegramWebhookController ..> EntityManagerInterface
 TelegramWebhookController ..> UserRepository
-TelegramWebhookController ..> TranslatorInterface
 TelegramWebhookController ..> TaskService
 TelegramWebhookController ..> BotTaskCreationService
 
-' --- Domain relationships ---
+' === Domain Relationships ===
 Board --> "1" User : belongs to
 Board --> "*" Subcategory : contains
 Board --> "*" Task : has
-User "1" o-- "*" Board : owns >
-User "*" o-- "*" TelegramChat : member of >
+User "1" o-- "*" Board : owns
+User "*" o-- "*" TelegramChat : has
 
 ResetPasswordRequest --> User : references
-Subcategory --> Board : belongs to
+Subcategory --> Board
 Subcategory --> "0..1" Subcategory : parent
 Subcategory --> "*" Subcategory : children
 Subcategory --> "*" Task : contains
@@ -167,27 +117,20 @@ Task --> Board
 Task --> Subcategory
 Task --> TaskPriority
 Task --> TaskStatus
+Task --> TaskSubstatus
 
-' --- Services ---
+' === Services and Subscribers ===
 BotTaskCreationService --> OpenAITaskClient
-BotTaskCreationService --> EntityManagerInterface
-BotTaskCreationService --> TaskAnchor1
+BotTaskCreationService --> Task
 BotTaskCreationService --> User
 
-LocaleSubscriber ..|> EventSubscriberInterface
-LocaleSubscriber --> RequestEvent
-
-SubcategoryHelper --> Subcategory
-SubcategoryHelperExtension --> SubcategoryHelper
-SubcategoryHelperExtension --> Subcategory
-
-TaskService --> BoardRepository
-TaskService --> TaskRepository
-TaskService --> TranslatorInterface
-TaskService --> Security
-TaskService --> User
 
 TwigGlobalBoardsSubscriber --> BoardRepository
 TwigGlobalBoardsSubscriber --> Security
+
+TaskService --> BoardRepository
+TaskService --> TaskRepository
+TaskService --> Security
+TaskService --> User
 
 @enduml
